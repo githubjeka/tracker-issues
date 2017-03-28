@@ -1,7 +1,5 @@
 <?php
 
-namespace tracker\migrations;
-
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
