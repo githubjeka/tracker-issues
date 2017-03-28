@@ -1,0 +1,11 @@
+{
+    "id": "tracker_issue",
+    "name": "Tracker issues",
+    "description": "Issue tracking system.",
+    "keywords": ["task", "todo", "issue", "tracker"],
+    "version": "1.0.0",
+    "humhub": {
+        "minVersion": "1.2.0-beta.3"
+    },
+    "screenshots": ["assets/screen1.jpg", "assets/screen2.jpg"]
+}
