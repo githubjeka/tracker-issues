@@ -32,13 +32,14 @@ class IssueController extends ContentContainerController
 
     public function actionShow()
     {
-        $issues = Issue::find()
-            ->contentContainer($this->contentContainer)
-            ->readable()
-            ->all();
+        $dataProviders = new \yii\data\ActiveDataProvider([
+            'query' => Issue::find()
+                ->contentContainer($this->contentContainer)
+                ->readable(),
+        ]);
 
         return $this->render('show', [
-            'issues' => $issues,
+            'dataProviders' => $dataProviders,
             'contentContainer' => $this->contentContainer,
             'canCreateNewIssue' => $this->canUserDo(new \tracker\permissions\CreateIssue()),
         ]);

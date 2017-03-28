@@ -23,6 +23,7 @@ return [
     'Adopted in work' => '',
     'Assigned Users' => '',
     'Assignee' => '',
+    'Creator' => '',
     'Date' => '',
     'Deadline' => '',
     'Deadline Date' => '',

@@ -17,8 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Creator' => 'Создатель',
     '<strong>Describe</strong> new issue' => '<strong>Опишите</strong> новую задачу',
-    '<strong>Edit</strong> issue' =>  '<strong>Изменить</strong> задачу',
+    '<strong>Edit</strong> issue' => '<strong>Изменить</strong> задачу',
     'Adopted' => 'Принято',
     'Adopted in work' => 'Принято в работу',
     'Assigned Users' => 'Ответственные',
