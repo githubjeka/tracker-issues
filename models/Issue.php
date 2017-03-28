@@ -101,6 +101,7 @@ class Issue extends ContentActiveRecord
             'deadline' => \Yii::t('TrackerIssuesModule.views', 'Deadline'),
             'status' => \Yii::t('TrackerIssuesModule.views', 'Status'),
             'visibility' => \Yii::t('TrackerIssuesModule.views', 'Visibility'),
+            'priority' => \Yii::t('TrackerIssuesModule.views', 'Priority'),
         ];
     }
 }

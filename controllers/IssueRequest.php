@@ -2,6 +2,7 @@
 
 namespace tracker\controllers;
 
+use tracker\enum\IssuePriorityEnum;
 use tracker\enum\IssueStatusEnum;
 use tracker\enum\IssueVisibilityEnum;
 
@@ -18,6 +19,7 @@ class IssueRequest extends \yii\base\Model
     public $assignedUsers = [];
     public $status = IssueStatusEnum::TYPE_DRAFT;
     public $visibility = IssueVisibilityEnum::TYPE_PROTECTED;
+    public $priority = IssuePriorityEnum::TYPE_NORMAL;
 
     public function rules()
     {
@@ -25,6 +27,7 @@ class IssueRequest extends \yii\base\Model
             ['assignedUsers', 'default', 'value' => []],
             ['status', 'default', 'value' => IssueStatusEnum::TYPE_DRAFT],
             ['visibility', 'default', 'value' => IssueVisibilityEnum::TYPE_PROTECTED],
+            ['priority', 'default', 'value' => IssuePriorityEnum::TYPE_NORMAL],
             [['id', 'title'], 'required'],
             ['description', 'safe'],
             ['title', 'string', 'max' => 255],
@@ -32,6 +35,7 @@ class IssueRequest extends \yii\base\Model
             ['deadlineTime', 'time', 'format' => 'php:H:m'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList())],
             ['visibility', 'in', 'range' => array_keys(IssueVisibilityEnum::getList())],
+            ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
             ['assignedUsers', 'safe'],
         ];
     }
@@ -47,6 +51,7 @@ class IssueRequest extends \yii\base\Model
             'status' => \Yii::t('TrackerIssuesModule.views', 'Status'),
             'assignedUsers' => \Yii::t('TrackerIssuesModule.views', 'Assigned Users'),
             'visibility' => \Yii::t('TrackerIssuesModule.views', 'Visibility'),
+            'priority' => \Yii::t('TrackerIssuesModule.views', 'Priority'),
         ];
     }
 }

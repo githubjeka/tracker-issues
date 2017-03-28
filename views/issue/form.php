@@ -23,6 +23,9 @@ if (!isset($submitAjax)) {
 <?= $form->field($issueForm, 'visibility')
     ->dropDownList(\tracker\enum\IssueVisibilityEnum::getList()); ?>
 
+<?= $form->field($issueForm, 'priority')
+    ->dropDownList(\tracker\enum\IssuePriorityEnum::getList()); ?>
+
 <?= $form->field($issueForm, 'title')
     ->textInput([
         'id' => 'itemTask',

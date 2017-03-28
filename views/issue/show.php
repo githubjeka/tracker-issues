@@ -61,6 +61,13 @@ use yii\helpers\Html;
                     },
                 ],
                 [
+                    'attribute' => 'priority',
+                    'format' => 'html',
+                    'value' => function (Issue $issue) {
+                        return \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority]);
+                    },
+                ],
+                [
                     'attribute' => 'deadline',
                     'format' => 'html',
                     'value' => function (Issue $issue) {

@@ -36,6 +36,7 @@ return [
     'New issue' => '',
     'No open issues...' => '',
     'Performed' => '',
+    'Priority' => '',
     'Save' => '',
     'Status' => '',
     'Title' => '',

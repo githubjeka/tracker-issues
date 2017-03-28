@@ -17,10 +17,15 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Critical' => '',
     'Draft' => '',
     'Finished' => '',
     'In work' => '',
+    'Minor' => '',
+    'Normal' => '',
     'Private' => '',
     'Protected' => '',
     'Public' => '',
+    'Serious' => '',
+    'Urgent' => '',
 ];

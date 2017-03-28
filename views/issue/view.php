@@ -20,6 +20,7 @@ $assigners = $issue->getAssignees()->all();
 <p>
     <span class="label label-info"><?= $issue->getContentName(); ?></span>
     <?= StatusIssueWidget::widget(['status' => $issue->status]) ?>
+    <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority]) ?>
     <?= DeadlineIssueWidget::widget(['deadline' => $issue->deadline]) ?>
     <?= \tracker\widgets\VisibilityIssueWidget::widget(['visibilityContent' => $issue->content->visibility]); ?>
 </p>

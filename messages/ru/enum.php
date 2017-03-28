@@ -17,6 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Critical' => 'Критично',
+    'Minor' => 'Незначительно',
+    'Normal' => 'Обычно',
+    'Serious' => 'Серьёзно',
+    'Urgent' => 'Неотложно',
     'Draft' => 'Черновик',
     'Finished' => 'Завершено',
     'In work' => 'В работе',

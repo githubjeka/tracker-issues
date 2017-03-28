@@ -21,6 +21,7 @@ class IssueEditor extends IssueService
             'description' => $issue->description,
             'status' => $issue->status,
             'visibility' => $issue->content->visibility,
+            'priority' => $issue->priority,
         ]);
 
         $assignedUsers = [];
@@ -47,6 +48,7 @@ class IssueEditor extends IssueService
         $this->issueModel->title = $this->requestForm->title;
         $this->issueModel->description = $this->requestForm->description;
         $this->issueModel->status = $this->requestForm->status;
+        $this->issueModel->priority = $this->requestForm->priority;
         $this->issueModel->deadline = ($this->requestForm->deadlineDate && $this->requestForm->deadlineTime)
             ? \Yii::$app->formatter->asDate($this->requestForm->deadlineDate, 'php:Y-m-d') . ' ' .
               $this->requestForm->deadlineTime
