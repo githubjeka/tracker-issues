@@ -45,4 +45,17 @@ class Module extends ContentContainerModule
     {
         return 'tracker-issues';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function disable()
+    {
+        foreach (\tracker\models\Issue::find()->each() as $issue) {
+            /** @var $issue \tracker\models\Issue */
+            $issue->delete();
+        }
+
+        parent::disable();
+    }
 }
