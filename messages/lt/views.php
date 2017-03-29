@@ -35,6 +35,7 @@ return [
     'Must be completed by' => '',
     'New issue' => '',
     'No open issues...' => '',
+    'Notify assignors' => '',
     'Performed' => '',
     'Priority' => '',
     'Save' => '',
@@ -42,4 +43,6 @@ return [
     'Title' => '',
     'Visibility' => '',
     'What is to do?' => '',
+    '{userName} assigned you to the issue {issue}.' => '',
+    '{userName} changed the issue {issue} wherever you are assigned.' => '',
 ];

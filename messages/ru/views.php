@@ -17,7 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Priority' => 'Приоритет',
+    'Notify assignors' => 'Оповестить ответственных',
+    '{userName} assigned you to the issue {issue}.' => '{userName} назначил вас ответственным по задаче {issue}.',
+    '{userName} changed the issue {issue} wherever you are assigned.' => '{userName} изменил задачу {issue}, по которой вы ответственны.',
     '<strong>Describe</strong> new issue' => '<strong>Опишите</strong> новую задачу',
     '<strong>Edit</strong> issue' => '<strong>Изменить</strong> задачу',
     'Adopted' => 'Принято',
@@ -37,6 +39,7 @@ return [
     'New issue' => 'Новая задача',
     'No open issues...' => 'Нет открытых задач...',
     'Performed' => 'Завершены',
+    'Priority' => 'Приоритет',
     'Save' => 'Сохранить',
     'Status' => 'Статус',
     'Title' => 'Наименование',

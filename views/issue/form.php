@@ -16,7 +16,7 @@ if (!isset($submitAjax)) {
 }
 ?>
 
-<?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
+<?php $form = ActiveForm::begin(['enableClientValidation' => false, 'options' => ['class' => 'issue-form']]); ?>
 
 <?= Html::hiddenInput(Html::getInputName($issueForm, 'id'), $issueForm->id) ?>
 
@@ -39,7 +39,7 @@ if (!isset($submitAjax)) {
     'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
     'model' => $issueForm,
     'attribute' => 'description',
-    'label' => true ,
+    'label' => true,
     'options' => [
         'class' => 'atwho-input form-control humhub-ui-richtext issue-description-textarea',
     ],
@@ -107,6 +107,8 @@ if (!isset($submitAjax)) {
             'max' => Yii::$app->getModule('content')->maxAttachedFiles,
         ])
         ?>
+
+        <?= $form->field($issueForm, 'notifyAssignors')->checkbox() ?>
 
         <button type="submit" class="btn btn-block btn-primary btn-sm"
             <?php if ($submitAjax) : ?>

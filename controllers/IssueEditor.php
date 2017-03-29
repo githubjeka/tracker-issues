@@ -3,8 +3,11 @@
 namespace tracker\controllers;
 
 use humhub\modules\user\models\User;
+use tracker\enum\IssueStatusEnum;
 use tracker\models\Assignee;
 use tracker\models\Issue;
+use tracker\notifications\Assigned;
+use tracker\notifications\IssueEdited;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -71,15 +74,29 @@ class IssueEditor extends IssueService
                 $assigneeModel->issue_id = $this->issueModel->id;
                 $assigneeModel->user_id = $user->id;
                 $assigneeModel->save(false);
+                if ($this->issueModel->status != IssueStatusEnum::TYPE_DRAFT && $this->requestForm->notifyAssignors) {
+                    $notification = new Assigned;
+                    $notification->source = $this->issueModel;
+                    $notification->originator = \Yii::$app->user->getIdentity();
+                    $notification->send($user);
+                }
             } else {
                 $oldAssignees[$key] = null;
             }
         }
 
         foreach ($oldAssignees as $userId => $usrGuid) {
+
             if ($usrGuid !== null) {
                 $assigneeModel = Assignee::findOne(['user_id' => $userId]);
                 $assigneeModel->delete();
+            }
+
+            if ($this->issueModel->status != IssueStatusEnum::TYPE_DRAFT && $this->requestForm->notifyAssignors) {
+                $notification = new IssueEdited();
+                $notification->source = $this->issueModel;
+                $notification->originator = \Yii::$app->user->getIdentity();
+                $notification->send(User::findOne($userId));
             }
         }
 

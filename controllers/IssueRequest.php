@@ -20,14 +20,17 @@ class IssueRequest extends \yii\base\Model
     public $status = IssueStatusEnum::TYPE_DRAFT;
     public $visibility = IssueVisibilityEnum::TYPE_PROTECTED;
     public $priority = IssuePriorityEnum::TYPE_NORMAL;
+    public $notifyAssignors = true;
 
     public function rules()
     {
         return [
             ['assignedUsers', 'default', 'value' => []],
+            ['notifyAssignors', 'default', 'value' => true],
             ['status', 'default', 'value' => IssueStatusEnum::TYPE_DRAFT],
             ['visibility', 'default', 'value' => IssueVisibilityEnum::TYPE_PROTECTED],
             ['priority', 'default', 'value' => IssuePriorityEnum::TYPE_NORMAL],
+
             [['id', 'title'], 'required'],
             ['description', 'safe'],
             ['title', 'string', 'max' => 255],
@@ -37,6 +40,7 @@ class IssueRequest extends \yii\base\Model
             ['visibility', 'in', 'range' => array_keys(IssueVisibilityEnum::getList())],
             ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
             ['assignedUsers', 'safe'],
+            ['notifyAssignors', 'boolean'],
         ];
     }
 
@@ -52,6 +56,7 @@ class IssueRequest extends \yii\base\Model
             'assignedUsers' => \Yii::t('TrackerIssuesModule.views', 'Assigned Users'),
             'visibility' => \Yii::t('TrackerIssuesModule.views', 'Visibility'),
             'priority' => \Yii::t('TrackerIssuesModule.views', 'Priority'),
+            'notifyAssignors' => \Yii::t('TrackerIssuesModule.views', 'Notify assignors'),
         ];
     }
 }

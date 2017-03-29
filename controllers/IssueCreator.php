@@ -4,8 +4,10 @@ namespace tracker\controllers;
 
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\user\models\User;
+use tracker\enum\IssueStatusEnum;
 use tracker\models\Assignee;
 use tracker\models\Issue;
+use tracker\notifications\Assigned;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -57,12 +59,22 @@ class IssueCreator extends IssueService
         $this->issueModel->fileManager->attach(\Yii::$app->request->post('fileList'));
 
         if (is_array($this->requestForm->assignedUsers)) {
+
+            if ($this->issueModel->status != IssueStatusEnum::TYPE_DRAFT && $this->requestForm->notifyAssignors) {
+                $notification = new Assigned;
+                $notification->source = $this->issueModel;
+                $notification->originator = \Yii::$app->user->getIdentity();
+            }
+
             foreach ($this->requestForm->assignedUsers as $userGuid) {
                 $user = User::findOne(['guid' => $userGuid]);
                 $assigneeModel = new Assignee();
                 $assigneeModel->issue_id = $this->issueModel->id;
                 $assigneeModel->user_id = $user->id;
                 $assigneeModel->save(false);
+                if (isset($notification)) {
+                    $notification->send($user);
+                }
             }
         }
 

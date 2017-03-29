@@ -6,10 +6,13 @@ use humhub\modules\notification\components\BaseNotification;
 use tracker\Module;
 use yii\helpers\Html;
 
-class Assigned extends BaseNotification
+/**
+ * Class IssueEdited
+ *
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
+class IssueEdited extends BaseNotification
 {
-    public $viewName = "assigned";
-
     public function init()
     {
         $this->moduleId = Module::getIdentifier();
@@ -21,11 +24,13 @@ class Assigned extends BaseNotification
      */
     public function html()
     {
+        /** @var \tracker\models\Issue $issue */
+        $issue = $this->source;
         return \Yii::t(
-            'TrackerIssuesModule.views', '{userName} assigned you to the issue {issue}.',
+            'TrackerIssuesModule.views', '{userName} changed the issue {issue} wherever you are assigned.',
             [
                 '{userName}' => '<strong>' . Html::encode($this->originator->getDisplayName()) . '</strong>',
-                '{issue}' => '"' . Html::encode($this->source->getContentDescription()) . '"',
+                '{issue}' => '"' . Html::encode($issue->getContentDescription()) . '"',
             ]
         );
     }
