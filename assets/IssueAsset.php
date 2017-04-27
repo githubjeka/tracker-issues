@@ -9,18 +9,19 @@ use yii\web\AssetBundle;
  */
 class IssueAsset extends AssetBundle
 {
-    public $sourcePath = __DIR__;
+    public $sourcePath = __DIR__ . '/../resources/';
 
     public $css = [
-        'main.css',
+        'css/main.css',
     ];
 
     public $js = [
-        'humhub.issue.js',
+        'js/humhub.tracker.js',
     ];
 
     public $depends = [
-        'humhub\assets\CoreApiAsset',
+        '\humhub\modules\stream\assets\StreamAsset',
+        '\humhub\assets\CoreApiAsset',
     ];
 
 }

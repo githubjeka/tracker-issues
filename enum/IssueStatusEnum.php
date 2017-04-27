@@ -4,6 +4,8 @@ namespace tracker\enum;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ * NOTE: Constants must be integer
+ * @see m131023_165214_initial::up() migration status
  */
 class IssueStatusEnum extends BaseEnum
 {

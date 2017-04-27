@@ -18,7 +18,11 @@ use Yii;
  * @property string $deadline
  * @property integer $status
  * @property integer $priority
+ * @property string $started_at
+ * @property string $finished_at
  * @property Assignee[] $assignees
+ * @property Tag[] $tags
+ * @property Tag[] $personalTags
  * @property IssueContent $content
  */
 class Issue extends ContentActiveRecord
@@ -80,6 +84,23 @@ class Issue extends ContentActiveRecord
     }
 
     /**
+     * @return TagQuery|\yii\db\ActiveQuery
+     */
+    public function getTags()
+    {
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])
+            ->viaTable(TagsIssues::tableName(), ['issue_id' => 'id']);
+    }
+
+    /**
+     * @return TagQuery|\yii\db\ActiveQuery
+     */
+    public function getPersonalTags()
+    {
+        return $this->getTags()->byUser(\Yii::$app->user->id);
+    }
+
+    /**
      * @inheritdoc
      */
     public function getContent()
@@ -88,7 +109,6 @@ class Issue extends ContentActiveRecord
         return $this->hasOne(IssueContent::className(), ['object_id' => 'id'])
             ->andWhere(["$tableName.object_model" => self::className()]);
     }
-
 
     /**
      * @inheritdoc
@@ -102,6 +122,8 @@ class Issue extends ContentActiveRecord
             'status' => \Yii::t('TrackerIssuesModule.views', 'Status'),
             'visibility' => \Yii::t('TrackerIssuesModule.views', 'Visibility'),
             'priority' => \Yii::t('TrackerIssuesModule.views', 'Priority'),
+            'finished_at' => \Yii::t('TrackerIssuesModule.views', 'Finished at'),
+            'started_at' => \Yii::t('TrackerIssuesModule.views', 'Started at'),
         ];
     }
 }

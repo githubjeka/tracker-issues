@@ -5,6 +5,7 @@ namespace tracker\controllers;
 use humhub\modules\content\components\ContentContainerController;
 use tracker\models\Assignee;
 use tracker\models\Issue;
+use tracker\models\IssueSearch;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -28,18 +29,15 @@ class IssueController extends ContentContainerController
         ];
     }
 
-    public $hideSidebar = false;
+    public $hideSidebar = true;
 
     public function actionShow()
     {
-        $dataProviders = new \yii\data\ActiveDataProvider([
-            'query' => Issue::find()
-                ->contentContainer($this->contentContainer)
-                ->readable(),
-        ]);
+        $searchModel = new IssueSearch();
 
         return $this->render('show', [
-            'dataProviders' => $dataProviders,
+            'dataProvider' => $searchModel->search(\Yii::$app->request->get(), $this->contentContainer),
+            'searchModel' => $searchModel,
             'contentContainer' => $this->contentContainer,
             'canCreateNewIssue' => $this->canUserDo(new \tracker\permissions\CreateIssue()),
         ]);
@@ -52,14 +50,21 @@ class IssueController extends ContentContainerController
         }
 
         $issueCreator = new IssueCreator();
+        $request = \Yii::$app->request;
 
-        if ($issueCreator->load(\Yii::$app->request->post()) && $model = $issueCreator->create()) {
-            return $this->redirect($model->content->getUrl());
+        if ($issueCreator->load($request->post()) && $issue = $issueCreator->create()) {
+            return $this->redirect($issue->content->getUrl());
         }
 
         $issueCreator->createDraft($this->contentContainer);
 
-        return $this->renderAjax('create', ['issueForm' => $issueCreator->getIssueForm()]);
+        $form = $issueCreator->getIssueForm();
+        $form->status = \tracker\enum\IssueStatusEnum::TYPE_WORK;
+        if ($this->contentContainer instanceof \humhub\modules\user\models\User) {
+            $form->visibility = \tracker\enum\IssueVisibilityEnum::TYPE_PRIVATE;
+        }
+
+        return $this->renderAjax('create', ['issueForm' => $form]);
     }
 
     public function actionEdit($id)
@@ -83,7 +88,7 @@ class IssueController extends ContentContainerController
 
         if ($issueEditor->load(\Yii::$app->request->post())) {
             if ($issue = $issueEditor->save()) {
-                return $this->renderAjaxContent($issue->getWallOut());
+                return $this->redirect($issue->content->getUrl());
             }
         }
 
@@ -94,6 +99,7 @@ class IssueController extends ContentContainerController
     {
         $assignee = $this->findAssignee($id);
         $assignee->view_mark = 1;
+        $assignee->viewed_at = date('Y-m-d H:i');
         $assignee->save();
 
         return $this->renderAjaxContent($assignee->issue->getWallOut());
@@ -103,6 +109,7 @@ class IssueController extends ContentContainerController
     {
         $assignee = $this->findAssignee($id);
         $assignee->finish_mark = 1;
+        $assignee->finished_at = date('Y-m-d H:i');
         $assignee->save();
 
         return $this->renderAjaxContent($assignee->issue->getWallOut());

@@ -17,15 +17,17 @@ class IssueRequest extends \yii\base\Model
     public $deadlineDate;
     public $deadlineTime;
     public $assignedUsers = [];
+    public $tags = [];
     public $status = IssueStatusEnum::TYPE_DRAFT;
     public $visibility = IssueVisibilityEnum::TYPE_PROTECTED;
     public $priority = IssuePriorityEnum::TYPE_NORMAL;
     public $notifyAssignors = true;
+    public $container;
 
     public function rules()
     {
         return [
-            ['assignedUsers', 'default', 'value' => []],
+            [['assignedUsers', 'tags'], 'default', 'value' => []],
             ['notifyAssignors', 'default', 'value' => true],
             ['status', 'default', 'value' => IssueStatusEnum::TYPE_DRAFT],
             ['visibility', 'default', 'value' => IssueVisibilityEnum::TYPE_PROTECTED],
@@ -34,8 +36,8 @@ class IssueRequest extends \yii\base\Model
             [['id', 'title'], 'required'],
             ['description', 'safe'],
             ['title', 'string', 'max' => 255],
-            ['deadlineDate', 'date', 'format' => \Yii::$app->formatter->dateInputFormat],
-            ['deadlineTime', 'time', 'format' => 'php:H:m'],
+            ['deadlineDate', 'date', 'format' => 'php:Y-m-d'],
+            ['deadlineTime', 'time', 'format' => 'php:H:i'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList())],
             ['visibility', 'in', 'range' => array_keys(IssueVisibilityEnum::getList())],
             ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
@@ -57,6 +59,7 @@ class IssueRequest extends \yii\base\Model
             'visibility' => \Yii::t('TrackerIssuesModule.views', 'Visibility'),
             'priority' => \Yii::t('TrackerIssuesModule.views', 'Priority'),
             'notifyAssignors' => \Yii::t('TrackerIssuesModule.views', 'Notify assignors'),
+            'tags' => \Yii::t('TrackerIssuesModule.views', 'Tags'),
         ];
     }
 }

@@ -9,20 +9,27 @@ use tracker\enum\IssueVisibilityEnum;
  */
 class VisibilityIssueWidget extends \yii\bootstrap\Widget
 {
-    public $isAllowedGuest;
-    public $visibilitySpace;
     public $visibilityContent;
 
     public function run()
     {
-        if ($this->visibilityContent == IssueVisibilityEnum::TYPE_PRIVATE) {
-            return '<span class="label label-danger">' . \Yii::t('TrackerIssuesModule.enum', 'Private') . '</span>';
+        $text = IssueVisibilityEnum::getLabel($this->visibilityContent);
+        $class = $this->getCssClass();
+
+        return "<span class=\"label $class\">$text</span>";
+    }
+
+    private function getCssClass()
+    {
+        switch ($this->visibilityContent) {
+            case IssueVisibilityEnum::TYPE_PRIVATE :
+                return 'label-danger';
+            case IssueVisibilityEnum::TYPE_PROTECTED :
+                return 'label-primary';
+            case IssueVisibilityEnum::TYPE_PUBLIC :
+                return 'label-success';
         }
-        if ($this->visibilityContent == IssueVisibilityEnum::TYPE_PROTECTED) {
-            return '<span class="label label-primary">' . \Yii::t('TrackerIssuesModule.enum', 'Protected') . '</span>';
-        }
-        if ($this->visibilityContent == IssueVisibilityEnum::TYPE_PUBLIC) {
-            return '<span class="label label-success">' . \Yii::t('TrackerIssuesModule.enum', 'Public') . '</span>';
-        }
+
+        return 'label-default';
     }
 }

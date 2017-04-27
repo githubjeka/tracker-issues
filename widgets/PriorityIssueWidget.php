@@ -16,7 +16,7 @@ class PriorityIssueWidget extends \yii\bootstrap\Widget
         $text = IssuePriorityEnum::getLabel($this->priority);
         $class = $this->getCssClass();
 
-        return "<span class=\"label label-default $class\">$text</span>";
+        return "<span class=\"issue-label $class\">$text</span>";
     }
 
     private function getCssClass()
@@ -34,6 +34,6 @@ class PriorityIssueWidget extends \yii\bootstrap\Widget
                 return 'issue-priority-minor';
         }
 
-        return '';
+        return 'label-default';
     }
 }

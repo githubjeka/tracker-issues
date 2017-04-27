@@ -14,6 +14,8 @@ use yii\helpers\Html;
 if (!isset($submitAjax)) {
     $submitAjax = false;
 }
+
+$isSpace = $this->context->contentContainer instanceof \humhub\modules\space\models\Space;
 ?>
 
 <?php $form = ActiveForm::begin(['enableClientValidation' => false, 'options' => ['class' => 'issue-form']]); ?>
@@ -49,13 +51,24 @@ if (!isset($submitAjax)) {
 
     <div class="col-md-8">
 
-        <?= $form->field($issueForm, 'assignedUsers')
-            ->widget(\humhub\modules\user\widgets\UserPickerField::class,
-                ['url' => $this->context->contentContainer->createUrl('/space/membership/search')]
-            ); ?>
+        <?php if ($isSpace) : ?>
+            <?= $form->field($issueForm, 'assignedUsers')
+                ->widget(\humhub\modules\user\widgets\UserPickerField::class,
+                    [
+                        'url' => $this->context->contentContainer->createUrl('/space/membership/search'),
+                        'placeholder' =>Yii::t('TrackerIssuesModule.views', 'Select assignees'),]
+                ); ?>
+        <?php endif; ?>
 
         <?= $form->field($issueForm, 'status')
             ->dropDownList(\tracker\enum\IssueStatusEnum::getList()); ?>
+
+        <?= $form->field($issueForm, 'tags')
+            ->dropDownList(\yii\helpers\ArrayHelper::map(\tracker\models\Tag::find()->byUser(Yii::$app->user->id)
+                ->all(),
+                'id', 'name'),
+                ['text' => 'Please select', 'multiple' => true]
+            ); ?>
 
     </div>
 
@@ -66,7 +79,7 @@ if (!isset($submitAjax)) {
             <div class="form-group">
                 <?= $form->field($issueForm, 'deadlineDate')
                     ->widget(yii\jui\DatePicker::className(), [
-                        'dateFormat' => Yii::$app->formatter->dateInputFormat,
+                        'dateFormat' => 'php:Y-m-d',
                         'clientOptions' => [],
                         'options' => [
                             'class' => 'form-control',
@@ -108,7 +121,9 @@ if (!isset($submitAjax)) {
         ])
         ?>
 
-        <?= $form->field($issueForm, 'notifyAssignors')->checkbox() ?>
+        <?php if ($isSpace) : ?>
+            <?= $form->field($issueForm, 'notifyAssignors')->checkbox() ?>
+        <?php endif; ?>
 
         <button type="submit" class="btn btn-block btn-primary btn-sm"
             <?php if ($submitAjax) : ?>

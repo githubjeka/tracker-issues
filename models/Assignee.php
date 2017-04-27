@@ -16,6 +16,9 @@ use humhub\modules\user\models\User;
  * @property integer $issue_id
  * @property integer $view_mark
  * @property integer $finish_mark
+ * @property string $created_at
+ * @property string $viewed_at
+ * @property string $finished_at
  * @property User $user
  * @property Issue $issue
  */

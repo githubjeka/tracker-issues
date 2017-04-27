@@ -7,26 +7,31 @@ namespace tracker\widgets;
  */
 class DeadlineIssueWidget extends \yii\bootstrap\Widget
 {
+    /**
+     * @var int|string|\DateTime
+     * @see \yii\i18n\Formatter::asDatetime()
+     */
     public $deadline;
+    /**
+     * @var int|string|\DateTime
+     * @see \yii\i18n\Formatter::asDatetime()
+     */
+    public $startTime;
+    /**
+     * The indicator for adding "Must be completed by" message
+     *
+     * @var bool
+     */
     public $short = false;
 
     public function run()
     {
-        if ($this->deadline) {
-            if ($this->short) {
-                echo '<span class="label label-danger">' .
-                     \Yii::$app->formatter->asDatetime($this->deadline, 'short') .
-                     '</span>';
-            } else {
-                echo '<span class="label label-danger">' .
-                     \Yii::t('TrackerIssuesModule.views', 'Must be completed by') .
-                     '&nbsp;' . \Yii::$app->formatter->asDatetime($this->deadline, 'short') .
-                     '</span>';
-            }
-        } else {
-            echo '<span class="label label-default">'
-                 . \Yii::t('TrackerIssuesModule.views', 'Has not deadline') .
-                 '</span>';
-        }
+        return $this->render('deadlineIssue',
+            [
+                'startTime' => $this->startTime,
+                'short' => $this->short,
+                'deadline' => $this->deadline,
+            ]
+        );
     }
 }

@@ -1,0 +1,50 @@
+.issue-form .checkbox label {
+    padding-left: 0;
+}
+
+.issue-description-textarea {
+    min-height: 200px !important;
+}
+
+.issue-label {
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 3px 5px 4px;
+    font-weight: 600;
+    font-size: 10px !important;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-shadow: none;
+    border-radius: .25em;
+    line-height: 1;
+    text-align: center;
+}
+
+.issue-priority-urgent {
+    background-color: #e30000 !important;
+    color: white !important;
+}
+
+.issue-priority-critical {
+    background-color: #ffc8ea !important;
+    color: #7a7a7a !important;
+}
+
+.issue-priority-serious {
+    background-color: #ffee9c !important;
+    color: #7a7a7a !important;
+}
+
+.issue-priority-normal {
+    background-color: #e6f6cf !important;
+    color: #7a7a7a !important;
+}
+
+.issue-priority-minor {
+    background: #ededed;
+    color: #7a7a7a !important;
+}
+
+.issue-labels {
+    margin-right: 35px;
+}

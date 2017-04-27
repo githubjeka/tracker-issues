@@ -17,6 +17,16 @@ class StreamAction extends ContentContainerStream
     public function setupCriteria()
     {
         if (empty($this->streamQuery->contentId)) {
+            $this->streamQuery
+                ->query()
+                ->andWhere(
+                    'content.object_model <> :className',
+                    [':className' => Issue::class]
+                );
+        } else {
+            /**
+             * This code need to fix access by permanent link.
+             */
             $tableIssue = Issue::tableName();
             $tableAssignee = Assignee::tableName();
             $tableContent = Content::tableName();

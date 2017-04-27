@@ -6,6 +6,8 @@ use humhub\modules\user\models\User;
 use tracker\enum\IssueStatusEnum;
 use tracker\models\Assignee;
 use tracker\models\Issue;
+use tracker\models\Tag;
+use tracker\models\TagsIssues;
 use tracker\notifications\Assigned;
 use tracker\notifications\IssueEdited;
 use yii\helpers\ArrayHelper;
@@ -33,10 +35,16 @@ class IssueEditor extends IssueService
         }
         $this->requestForm->assignedUsers = $assignedUsers;
 
+        $tags = [];
+        foreach ($this->issueModel->personalTags as $tag) {
+            $tags[] = $tag->id;
+        }
+        $this->requestForm->tags = $tags;
+
         if ($issue->deadline) {
             $formatter = \Yii::$app->formatter;
             $this->requestForm->deadlineTime = $formatter->asTime($issue->deadline, 'php:H:m');
-            $this->requestForm->deadlineDate = $formatter->asDate($issue->deadline, $formatter->dateInputFormat);
+            $this->requestForm->deadlineDate = $formatter->asDate($issue->deadline, 'php:Y-m-d');
         }
 
         parent::__construct($config);
@@ -48,18 +56,26 @@ class IssueEditor extends IssueService
             return false;
         }
 
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        $currentUser = \Yii::$app->user->getIdentity();
+
         $this->issueModel->title = $this->requestForm->title;
         $this->issueModel->description = $this->requestForm->description;
         $this->issueModel->status = $this->requestForm->status;
         $this->issueModel->priority = $this->requestForm->priority;
         $this->issueModel->deadline = ($this->requestForm->deadlineDate && $this->requestForm->deadlineTime)
-            ? \Yii::$app->formatter->asDate($this->requestForm->deadlineDate, 'php:Y-m-d') . ' ' .
-              $this->requestForm->deadlineTime
+            ? $this->requestForm->deadlineDate . ' ' . $this->requestForm->deadlineTime . ':00'
             : null;
 
         $this->issueModel->content->visibility = $this->requestForm->visibility;
-
-        $this->issueModel->save(false);
+        if ($this->issueModel->status == IssueStatusEnum::TYPE_FINISHED) {
+            $this->issueModel->finished_at = date('Y-m-d H:i');
+        }
+        if (!$this->issueModel->save(false)) {
+            $transaction->rollBack();
+            throw new \LogicException(json_encode($this->issueModel->getErrors()));
+        };
 
         $oldAssignees = ArrayHelper::map($this->issueModel->getAssignees()->joinWith('user')
             ->all(), 'user_id', 'user.guid');
@@ -73,7 +89,11 @@ class IssueEditor extends IssueService
                 $assigneeModel = new Assignee();
                 $assigneeModel->issue_id = $this->issueModel->id;
                 $assigneeModel->user_id = $user->id;
-                $assigneeModel->save(false);
+                $assigneeModel->created_at = date('Y-m-d H:i');
+                if (!$assigneeModel->save(false)) {
+                    $transaction->rollBack();
+                    throw new \LogicException(json_encode($assigneeModel->getErrors()));
+                };
                 if ($this->issueModel->status != IssueStatusEnum::TYPE_DRAFT && $this->requestForm->notifyAssignors) {
                     $notification = new Assigned;
                     $notification->source = $this->issueModel;
@@ -89,19 +109,56 @@ class IssueEditor extends IssueService
 
             if ($usrGuid !== null) {
                 $assigneeModel = Assignee::findOne(['user_id' => $userId]);
-                $assigneeModel->delete();
+                if (!$assigneeModel->delete()) {
+                    $transaction->rollBack();
+                    throw new \LogicException('Assignee model can not be deleted');
+                };
             }
 
             if ($this->issueModel->status != IssueStatusEnum::TYPE_DRAFT && $this->requestForm->notifyAssignors) {
                 $notification = new IssueEdited();
                 $notification->source = $this->issueModel;
-                $notification->originator = \Yii::$app->user->getIdentity();
+                $notification->originator = $currentUser;
                 $notification->send(User::findOne($userId));
+            }
+        }
+
+        $oldTags = $this->issueModel->personalTags;
+
+        foreach ($this->requestForm->tags as $tagId) {
+
+            $key = array_search($tagId, $oldTags, true);
+
+            if ($key === false) {
+                $tagModel = Tag::find()->byUser($currentUser->getId())->andWhere(['id' => $tagId])->one();
+                $relationModel = new TagsIssues();
+                $relationModel->issue_id = $this->issueModel->id;
+                $relationModel->tag_id = $tagModel->id;
+                if (!$relationModel->save(false)) {
+                    $transaction->rollBack();
+                    throw new \LogicException(json_encode($relationModel->getErrors()));
+                };
+            } else {
+                $oldTags[$key] = null;
+            }
+        }
+
+        foreach ($oldTags as $tagModel) {
+            if ($tagModel !== null) {
+                $relationModel = TagsIssues::find()->where([
+                    'issue_id' => $this->issueModel->id,
+                    'tag_id' => $tagModel->id,
+                ])->one();
+                if (!$relationModel->delete()) {
+                    $transaction->rollBack();
+                    throw new \LogicException('TagsIssues model can not be deleted');
+                };
             }
         }
 
         $this->issueModel->fileManager->attach(\Yii::$app->request->post('fileList'));
 
+        $transaction->commit();
         return $this->issueModel;
     }
 }

@@ -18,7 +18,7 @@ class EditIssue extends \humhub\libs\BasePermission
         Space::USERGROUP_OWNER,
         Space::USERGROUP_MEMBER,
         Space::USERGROUP_ADMIN,
-        Space::USERGROUP_MODERATOR,
+        User::USERGROUP_SELF,
     ];
 
     /**
@@ -26,6 +26,10 @@ class EditIssue extends \humhub\libs\BasePermission
      */
     protected $fixedGroups = [
         Space::USERGROUP_USER,
+        User::USERGROUP_FRIEND,
+        User::USERGROUP_GUEST,
+        User::USERGROUP_USER,
+        User::USERGROUP_FRIEND,
     ];
 
     /**

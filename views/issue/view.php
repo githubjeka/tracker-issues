@@ -14,82 +14,84 @@ use tracker\widgets\StatusIssueWidget;
 use yii\helpers\Html;
 
 tracker\assets\IssueAsset::register($this);
-$assigners = $issue->getAssignees()->all();
+$formatter = Yii::$app->formatter;
 ?>
-
-<p>
-    <span class="label label-info"><?= $issue->getContentName(); ?></span>
-    <?= StatusIssueWidget::widget(['status' => $issue->status]) ?>
-    <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority]) ?>
-    <?= DeadlineIssueWidget::widget(['deadline' => $issue->deadline]) ?>
-    <?= \tracker\widgets\VisibilityIssueWidget::widget(['visibilityContent' => $issue->content->visibility]); ?>
-</p>
 
 <h4><?= Html::encode($issue->title) ?></h4>
 
 <div class="issue" id="issue_<?php echo $issue->id; ?>">
 
-    <p data-ui-markdown data-ui-show-more style="overflow: hidden;">
+    <p data-ui-markdown data-ui-show-more>
         <?= humhub\widgets\RichText::widget(['text' => $issue->description, 'record' => $issue]) ?>
     </p>
 
-    <?php if (count($assigners) > 0) : ?>
-        <hr>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row-fluid bg-info">
 
+                <div class="col-xs-4">
+                    <?= Yii::t('TrackerIssuesModule.views', 'Started at') ?><br>
+                    <?= $formatter->asDatetime($issue->started_at, 'HH:mm, eee d MMMM y ') ?>
+                </div>
+
+                <div class="col-xs-4">
+                    <?= DeadlineIssueWidget::widget(['deadline' => $issue->deadline]) ?><br>
+                    <?= StatusIssueWidget::widget(['status' => $issue->status]) ?>
+                </div>
+
+                <div class="col-xs-4">
+                    <?php if ($issue->finished_at) : ?>
+                        <?= Yii::t('TrackerIssuesModule.views', 'Finished at') ?><br>
+                        <?= $formatter->asDatetime($issue->finished_at, 'HH:mm, eee d MMMM y ') ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if (count($issue->assignees) > 0) : ?>
         <div class="table-responsive">
             <table class="table table-condensed">
                 <thead>
                 <tr>
                     <th><?= Yii::t('TrackerIssuesModule.views', 'Assignee') ?></th>
-                    <th><?= Yii::t('TrackerIssuesModule.views', 'Adopted in work') ?></th>
-                    <th><?= Yii::t('TrackerIssuesModule.views', 'Performed') ?></th>
+                    <th><?= Yii::t('TrackerIssuesModule.views', 'Assigned at') ?></th>
+                    <th><?= Yii::t('TrackerIssuesModule.views', 'Adopted at') ?></th>
+                    <th><?= Yii::t('TrackerIssuesModule.views', 'Finished at') ?></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <?php foreach (
-                            $issue->getAssignees()->andWhere('view_mark = 0 AND finish_mark = 0')->all() as $assigner
-                        ) : ?>
-                            <a href="<?php echo $assigner->user->getUrl(); ?>">
-                                <img src="<?php echo $assigner->user->getProfileImage()->getUrl(); ?>"
+                <?php foreach ($issue->assignees as $assigner) : ?>
+                    <tr>
+                        <td>
+                            <a href="<?= $assigner->user->getUrl(); ?>">
+                                <img src="<?= $assigner->user->getProfileImage()->getUrl(); ?>"
                                      class="img-rounded tt img_margin"
                                      height="24" width="24" alt="24x24" data-src="holder.js/24x24"
-                                     style="width: 24px; height: 24px;" data-toggle="tooltip" data-placement="top"
-                                     title=""
-                                     data-original-title="<?php echo Html::encode($assigner->user->displayName); ?>">
+                                     style="width: 24px; height: 24px;">
+                                <br>
+                                <small><?= Html::encode($assigner->user->displayName); ?></small>
                             </a>
-                        <?php endforeach; ?>
-                    </td>
-                    <td>
-                        <?php foreach (
-                            $issue->getAssignees()->andWhere('view_mark = 1 AND finish_mark = 0')->all() as $assigner
-                        ) : ?>
-                            <a href="<?php echo $assigner->user->getUrl(); ?>">
-                                <img src="<?php echo $assigner->user->getProfileImage()->getUrl(); ?>"
-                                     class="img-rounded tt img_margin"
-                                     height="24" width="24" alt="24x24" data-src="holder.js/24x24"
-                                     style="width: 24px; height: 24px;" data-toggle="tooltip" data-placement="top"
-                                     title=""
-                                     data-original-title="<?php echo Html::encode($assigner->user->displayName); ?>">
-                            </a>
-                        <?php endforeach; ?>
-                    </td>
-                    <td>
-                        <?php foreach (
-                            $issue->getAssignees()->andWhere('finish_mark = 1')->all() as $assigner
-                        ) : ?>
-                            <a href="<?php echo $assigner->user->getUrl(); ?>">
-                                <img src="<?php echo $assigner->user->getProfileImage()->getUrl(); ?>"
-                                     class="img-rounded tt img_margin"
-                                     height="24" width="24" alt="24x24" data-src="holder.js/24x24"
-                                     style="width: 24px; height: 24px;" data-toggle="tooltip" data-placement="top"
-                                     title=""
-                                     data-original-title="<?php echo Html::encode($assigner->user->displayName); ?>">
-                            </a>
-                        <?php endforeach; ?>
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            <?= $formatter->asDatetime($assigner->created_at, 'HH:mm, eee. d MMM yyyy') ?>
+                        </td>
+                        <td>
+                            <?php if ($assigner->view_mark) : ?>
+                                <?= $formatter->asDatetime($assigner->viewed_at, 'HH:mm, eee. d MMM yyyy') ?>
+                            <?php else: ?>
+                                <strong>-</strong>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($assigner->finish_mark) : ?>
+                                <?= $formatter->asDatetime($assigner->finished_at, 'HH:mm, eee. d MMM yyyy') ?>
+                            <?php else: ?>
+                                <strong>-</strong>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -133,8 +135,13 @@ $assigners = $issue->getAssignees()->all();
                     ]);
                     ?>
                 <?php endif; ?>
+                <?php break; ?>
             <?php endif; ?>
         <?php endforeach; ?>
-
+        <br>
     <?php endif; ?>
+
+    <strong><?= Yii::t('TrackerIssuesModule.views', 'Tags') ?>:</strong>
+    <?= \tracker\widgets\TagsWidget::widget(['tagsModels' => $issue->personalTags, 'asLink' => true]) ?>
+
 </div>

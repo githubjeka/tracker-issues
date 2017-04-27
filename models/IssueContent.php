@@ -29,10 +29,12 @@ class IssueContent extends \humhub\modules\content\models\Content
             $user = \Yii::$app->user->getIdentity();
         }
 
+        $visibility = (int)$this->visibility;
+
         // Check Guest Visibility
         if ($user === null) {
             if (\Yii::$app->getModule('user')->settings->get('auth.allowGuestAccess') &&
-                $this->visibility === self::VISIBILITY_PUBLIC
+                $visibility === self::VISIBILITY_PUBLIC
             ) {
                 // Check container visibility for guests
                 if (($this->container instanceof Space && $this->container->visibility == Space::VISIBILITY_ALL) ||
@@ -44,7 +46,7 @@ class IssueContent extends \humhub\modules\content\models\Content
             return false;
         }
 
-        if ((int)$this->visibility === (int)IssueVisibilityEnum::TYPE_PUBLIC) {
+        if ($visibility === (int)IssueVisibilityEnum::TYPE_PUBLIC) {
             return true;
         }
 
@@ -53,20 +55,19 @@ class IssueContent extends \humhub\modules\content\models\Content
             return true;
         }
 
-        if ((int)$this->visibility === (int)IssueVisibilityEnum::TYPE_PROTECTED &&
+        if ($visibility === (int)IssueVisibilityEnum::TYPE_PROTECTED &&
             $this->getContainer()->canAccessPrivateContent($user)
         ) {
             return true;
         }
 
-        if ((int)$this->visibility === (int)IssueVisibilityEnum::TYPE_PRIVATE) {
+        if ($visibility === (int)IssueVisibilityEnum::TYPE_PRIVATE) {
             if ($this->created_by === $user->id) {
                 return true;
             }
 
             return $this->getPolymorphicRelation()->getAssignees()->andWhere(['user_id' => $user->id])->exists();
         }
-
 
         return false;
     }

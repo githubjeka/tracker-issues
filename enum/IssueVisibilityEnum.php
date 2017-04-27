@@ -16,8 +16,8 @@ class IssueVisibilityEnum extends BaseEnum
     public static function getList()
     {
         return [
-            self::TYPE_PUBLIC => \Yii::t('TrackerIssuesModule.enum', 'Public'),
-            self::TYPE_PROTECTED => \Yii::t('TrackerIssuesModule.enum', 'Protected'),
+            self::TYPE_PUBLIC => \Yii::t('TrackerIssuesModule.enum', 'For all'),
+            self::TYPE_PROTECTED => \Yii::t('TrackerIssuesModule.enum', 'For space'),
             self::TYPE_PRIVATE => \Yii::t('TrackerIssuesModule.enum', 'Private'),
         ];
     }

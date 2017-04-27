@@ -16,7 +16,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
       <h4 class="modal-title" id="myModalLabel">
-          <?= Yii::t('TrackerIssuesModule.views', '<strong>Describe</strong> new issue'); ?>
+          <?= Yii::t('TrackerIssuesModule.views', 'New issue'); ?>
       </h4>
 
     </div>
