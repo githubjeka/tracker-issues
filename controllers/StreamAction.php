@@ -43,9 +43,10 @@ class StreamAction extends ContentContainerStream
                     [':user' => \Yii::$app->user->id]
                 )
                 ->andWhere(
-                    "$tableIssue.id IS NULL OR ($tableIssue.status != " . IssueStatusEnum::TYPE_DRAFT .
+                    "$tableIssue.id IS NULL OR ($tableContent.created_by = :user)" .
+                    " OR ($tableIssue.status != " . IssueStatusEnum::TYPE_DRAFT .
                     " AND ($tableContent.visibility != " . IssueVisibilityEnum::TYPE_PRIVATE .
-                    " OR $tableAssignee.id IS NOT NULL OR $tableContent.created_by = :user))",
+                    " OR $tableAssignee.id IS NOT NULL)) ",
                     [':user' => \Yii::$app->user->id]
                 );
         }
