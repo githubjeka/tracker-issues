@@ -21,7 +21,8 @@ $config = yii\helpers\ArrayHelper::merge(
     (is_readable(YII_APP_BASE_PATH . '/config/dynamic.php')) ? require(YII_APP_BASE_PATH . '/config/dynamic.php') : [],
     require(YII_APP_BASE_PATH . '/config/common.php'),
     require(YII_APP_BASE_PATH . '/config/console.php'),
-    require(__DIR__ . '/tests/config.php')
+    require(__DIR__ . '/tests/config.php'),
+    (is_readable(__DIR__ . '/tests/config-local.php')) ? require(__DIR__ . '/tests/config-local.php') : []
 );
 $application = new \humhub\components\console\Application($config);
 var_dump(Yii::getAlias('@app'));
