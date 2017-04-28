@@ -31,7 +31,10 @@ class IssueCreator extends IssueService
             throw new \LogicException(json_encode($issueModel->errors));
         };
 
+        $issueModel->refresh();
         $this->requestForm->id = $issueModel->id;
+
+        return $issueModel;
     }
 
     public function create()
