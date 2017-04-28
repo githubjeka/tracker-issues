@@ -3,4 +3,4 @@ bootstrap: false
 modules:
     enabled:
         - Yii2:
-            part: fixtures
+            part: [fixtures, orm]
