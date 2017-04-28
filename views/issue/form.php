@@ -22,11 +22,16 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
 
 <?= Html::hiddenInput(Html::getInputName($issueForm, 'id'), $issueForm->id) ?>
 
-<?= $form->field($issueForm, 'visibility')
-    ->dropDownList(\tracker\enum\IssueVisibilityEnum::getList()); ?>
-
-<?= $form->field($issueForm, 'priority')
-    ->dropDownList(\tracker\enum\IssuePriorityEnum::getList()); ?>
+<div class="row">
+    <div class="col-md-6">
+        <?= $form->field($issueForm, 'visibility')
+            ->dropDownList(\tracker\enum\IssueVisibilityEnum::getList()); ?>
+    </div>
+    <div class="col-md-6">
+        <?= $form->field($issueForm, 'priority')
+            ->dropDownList(\tracker\enum\IssuePriorityEnum::getList()); ?>
+    </div>
+</div>
 
 <?= $form->field($issueForm, 'title')
     ->textInput([
@@ -56,12 +61,10 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                 ->widget(\humhub\modules\user\widgets\UserPickerField::class,
                     [
                         'url' => $this->context->contentContainer->createUrl('/space/membership/search'),
-                        'placeholder' =>Yii::t('TrackerIssuesModule.views', 'Select assignees'),]
+                        'placeholder' => Yii::t('TrackerIssuesModule.views', 'Select assignees'),
+                    ]
                 ); ?>
         <?php endif; ?>
-
-        <?= $form->field($issueForm, 'status')
-            ->dropDownList(\tracker\enum\IssueStatusEnum::getList()); ?>
 
         <?= $form->field($issueForm, 'tags')
             ->dropDownList(\yii\helpers\ArrayHelper::map(\tracker\models\Tag::find()->byUser(Yii::$app->user->id)
