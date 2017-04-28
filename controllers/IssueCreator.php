@@ -50,7 +50,7 @@ class IssueCreator extends IssueService
 
         $this->issueModel->title = $this->requestForm->title;
         $this->issueModel->description = $this->requestForm->description;
-        $this->issueModel->status = $this->requestForm->status;
+        $this->issueModel->status = IssueStatusEnum::TYPE_WORK;
         $this->issueModel->priority = $this->requestForm->priority;
         $this->issueModel->deadline = ($this->requestForm->deadlineDate && $this->requestForm->deadlineTime)
             ? $this->requestForm->deadlineDate . ' ' . $this->requestForm->deadlineTime . ':00'
