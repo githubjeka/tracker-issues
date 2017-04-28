@@ -69,9 +69,13 @@ class IssueEditor extends IssueService
             : null;
 
         $this->issueModel->content->visibility = $this->requestForm->visibility;
+
         if ($this->issueModel->status == IssueStatusEnum::TYPE_FINISHED) {
             $this->issueModel->finished_at = date('Y-m-d H:i');
+        } else {
+            $this->issueModel->status = IssueStatusEnum::TYPE_WORK;
         }
+
         if (!$this->issueModel->save(false)) {
             $transaction->rollBack();
             throw new \LogicException(json_encode($this->issueModel->getErrors()));
