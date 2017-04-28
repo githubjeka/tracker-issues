@@ -7,7 +7,7 @@ class m131023_165214_initial extends \yii\db\Migration
 {
     public function up()
     {
-        $this->createTable('tracker_issue', [
+        $this->createTable('{{%tracker_issue}}', [
             'id' => $this->primaryKey(),
             'title' => $this->string(255),
             'description' => $this->text(),
@@ -18,7 +18,7 @@ class m131023_165214_initial extends \yii\db\Migration
             'finished_at' => $this->dateTime(),
         ], '');
 
-        $this->createTable('tracker_tag', [
+        $this->createTable('{{%tracker_tag}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(25)->notNull(),
             'description' => $this->text(),
@@ -27,13 +27,13 @@ class m131023_165214_initial extends \yii\db\Migration
             'owner_id' => $this->integer()->notNull(),
         ], '');
 
-        $this->createTable('tracker_issues_tags', [
+        $this->createTable('{{%tracker_issues_tags}}', [
             'id' => $this->primaryKey(),
             'issue_id' => $this->integer()->notNull(),
             'tag_id' => $this->integer()->notNull(),
         ], '');
 
-        $this->createTable('tracker_assignee', [
+        $this->createTable('{{%tracker_assignee}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'issue_id' => $this->integer()->notNull(),
@@ -46,9 +46,9 @@ class m131023_165214_initial extends \yii\db\Migration
 
         $this->addForeignKey(
             'fa_tracker_assignees',
-            'tracker_assignee',
+            '{{%tracker_assignee}}',
             'issue_id',
-            'tracker_issue',
+            '{{%tracker_issue}}',
             'id',
             'CASCADE',
             'CASCADE'
@@ -56,9 +56,9 @@ class m131023_165214_initial extends \yii\db\Migration
 
         $this->addForeignKey(
             'fa_tracker_tag_issues',
-            'tracker_issues_tags',
+            '{{%tracker_issues_tags}}',
             'issue_id',
-            'tracker_issue',
+            '{{%tracker_issue}}',
             'id',
             'CASCADE',
             'CASCADE'
@@ -66,9 +66,9 @@ class m131023_165214_initial extends \yii\db\Migration
 
         $this->addForeignKey(
             'fa_tracker_issue_tags',
-            'tracker_issues_tags',
+            '{{%tracker_issues_tags}}',
             'tag_id',
-            'tracker_tag',
+            '{{%tracker_tag}}',
             'id',
             'CASCADE',
             'CASCADE'
@@ -77,12 +77,12 @@ class m131023_165214_initial extends \yii\db\Migration
 
     public function down()
     {
-        $this->dropForeignKey('fa_tracker_assignees', 'tracker_assignee');
-        $this->dropForeignKey('fa_tracker_tag_issues', 'tracker_issues_tags');
-        $this->dropForeignKey('fa_tracker_issue_tags', 'tracker_issues_tags');
-        $this->dropTable('tracker_issue');
-        $this->dropTable('tracker_assignee');
-        $this->dropTable('tracker_issues_tags');
-        $this->dropTable('tracker_tag');
+        $this->dropForeignKey('fa_tracker_assignees', '{{%tracker_assignee}}');
+        $this->dropForeignKey('fa_tracker_tag_issues', '{{%tracker_issues_tags}}');
+        $this->dropForeignKey('fa_tracker_issue_tags', '{{%tracker_issues_tags}}');
+        $this->dropTable('{{%tracker_issue}}');
+        $this->dropTable('{{%tracker_assignee}}');
+        $this->dropTable('{{%tracker_issues_tags}}');
+        $this->dropTable('{{%tracker_tag}}');
     }
 }

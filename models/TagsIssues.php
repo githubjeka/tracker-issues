@@ -20,7 +20,7 @@ class TagsIssues extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tracker_issues_tags';
+        return '{{%tracker_issues_tags}}';
     }
 
     /**

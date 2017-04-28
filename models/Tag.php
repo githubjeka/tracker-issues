@@ -26,7 +26,7 @@ class Tag extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tracker_tag';
+        return '{{%tracker_tag}}';
     }
 
     /**
