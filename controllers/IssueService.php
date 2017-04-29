@@ -13,6 +13,12 @@ class IssueService extends Object
     /** @var IssueRequest */
     protected $requestForm;
 
+    public function __construct($config = [])
+    {
+        $this->requestForm = new IssueRequest();
+        parent::__construct($config);
+    }
+
     /** @var Issue */
     protected $issueModel;
 
@@ -21,8 +27,14 @@ class IssueService extends Object
         return $this->requestForm;
     }
 
-    public function load($datum)
+    /**
+     * @param $datum
+     * @param null $formName
+     * @see Model::load()
+     * @return bool
+     */
+    public function load($datum, $formName = null)
     {
-        return $this->requestForm->load($datum);
+        return $this->requestForm->load($datum, $formName);
     }
 }

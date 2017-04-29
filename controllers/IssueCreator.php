@@ -16,11 +16,6 @@ use tracker\notifications\Assigned;
  */
 class IssueCreator extends IssueService
 {
-    public function init()
-    {
-        $this->requestForm = new IssueRequest();
-    }
-
     public function createDraft(ContentContainerActiveRecord $content)
     {
         $issueModel = new Issue();
@@ -37,6 +32,9 @@ class IssueCreator extends IssueService
         return $issueModel;
     }
 
+    /**
+     * @return false|Issue
+     */
     public function create()
     {
         if (!$this->requestForm->validate()) {
