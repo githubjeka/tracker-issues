@@ -19,15 +19,16 @@ class IssueEditor extends IssueService
 {
     public function __construct(Issue $issue, array $config = [])
     {
+        parent::__construct($config);
+
         $this->issueModel = $issue;
-        $this->requestForm = new IssueRequest([
-            'id' => $issue->id,
-            'title' => $issue->title,
-            'description' => $issue->description,
-            'status' => $issue->status,
-            'visibility' => $issue->content->visibility,
-            'priority' => $issue->priority,
-        ]);
+
+        $this->requestForm->id = $issue->id;
+        $this->requestForm->title = $issue->title;
+        $this->requestForm->description = $issue->description;
+        $this->requestForm->status = $issue->status;
+        $this->requestForm->visibility = $issue->content->visibility;
+        $this->requestForm->priority = $issue->priority;
 
         $assignedUsers = [];
         foreach ($this->issueModel->assignees as $assignee) {
@@ -47,9 +48,14 @@ class IssueEditor extends IssueService
             $this->requestForm->deadlineDate = $formatter->asDate($issue->deadline, 'php:Y-m-d');
         }
 
-        parent::__construct($config);
+        if (!$this->requestForm->validate()) {
+            throw new \LogicException();
+        }
     }
 
+    /**
+     * @return Issue|false
+     */
     public function save()
     {
         if (!$this->requestForm->validate()) {

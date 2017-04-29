@@ -4,3 +4,4 @@ modules:
     enabled:
         - Yii2:
             part: [fixtures, orm]
+            cleanup: false
