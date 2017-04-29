@@ -35,10 +35,10 @@ humhub.module('tracker', function (module, require, $) {
     var getCreateForm = function (event) {
         var value = $('[name="space[]"]').val();
         if (value && value[0]) {
-            event.url += '&sguid=' + value[0];
+            event.url += (event.url.split('?')[1] ? '&' : '?') + 'sguid=' + value[0];
         } else {
             value = $('[name="u"]').val();
-            event.url += '&uguid=' + value;
+            event.url += (event.url.split('?')[1] ? '&' : '?') + 'uguid=' + value;
         }
         return modal.submit(event);
     };
