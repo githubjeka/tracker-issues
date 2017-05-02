@@ -13,19 +13,16 @@ class TagDesignator extends IssueService
 {
     public function __construct(Issue $issue, array $config = [])
     {
-        $this->issueModel = $issue;
+        parent::__construct($config);
 
-        $this->requestForm = new IssueRequest([
-            'id' => $issue->id,
-        ]);
+        $this->issueModel = $issue;
+        $this->requestForm->id = $issue->id;
 
         $tags = [];
         foreach ($this->issueModel->personalTags as $tag) {
             $tags[] = $tag->id;
         }
         $this->requestForm->tags = $tags;
-
-        parent::__construct($config);
     }
 
     public function save()
