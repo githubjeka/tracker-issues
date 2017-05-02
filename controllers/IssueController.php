@@ -6,6 +6,7 @@ use humhub\modules\content\components\ContentContainerController;
 use tracker\models\Assignee;
 use tracker\models\Issue;
 use tracker\models\IssueSearch;
+use tracker\Module;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -65,6 +66,39 @@ class IssueController extends ContentContainerController
         }
 
         return $this->renderAjax('create', ['issueForm' => $form]);
+    }
+
+    public function actionCreateSubtask($id)
+    {
+        $request = \Yii::$app->request;
+
+        if ($request->isPost) {
+            /** @var Issue|null $issue */
+            $issue = Issue::find()
+                ->readable()
+                ->where([Issue::tableName() . '.id' => $id,])
+                ->one();
+
+            if ($issue === null) {
+                throw new NotFoundHttpException('Issue not founded.');
+            }
+
+            if (!$this->canUserDo(new \tracker\permissions\EditIssue())) {
+                $this->forbidden();
+            }
+
+            $issueCreator = new IssueCreator();
+            $subtaskModel = $issueCreator->createSubtask($issue, $this->contentContainer);
+
+            return $this->redirect($subtaskModel->content->getUrl());
+        }
+
+        return $this->renderAjax('/dashboard/to_create_issue', [
+            'actionUrl' => \yii\helpers\Url::to([
+                '/' . Module::getIdentifier() . '/issue/create-subtask',
+                'id' => $id,
+            ]),
+        ]);
     }
 
     public function actionEdit($id)

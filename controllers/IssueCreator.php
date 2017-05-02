@@ -5,8 +5,10 @@ namespace tracker\controllers;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\user\models\User;
 use tracker\enum\IssueStatusEnum;
+use tracker\enum\LinkEnum;
 use tracker\models\Assignee;
 use tracker\models\Issue;
+use tracker\models\Link;
 use tracker\models\Tag;
 use tracker\models\TagsIssues;
 use tracker\notifications\Assigned;
@@ -30,6 +32,32 @@ class IssueCreator extends IssueService
         $this->requestForm->id = $issueModel->id;
 
         return $issueModel;
+    }
+
+    /**
+     * Create new draft as subtask of a issue.
+     *
+     * @param Issue $issue
+     * @param ContentContainerActiveRecord $content
+     *
+     * @return Issue
+     */
+    public function createSubtask(Issue $issue, ContentContainerActiveRecord $content)
+    {
+        $subtaskModel = $this->createDraft($content);
+        $subtaskModel->updateAttributes([
+            'title' => \Yii::t('TrackerIssuesModule.enum', 'Subtask') . ': ' . $issue->title,
+        ]);
+
+        $link = new Link();
+        $link->type = LinkEnum::TYPE_SUBTASK;
+        $link->parent_id = $issue->id;
+        $link->child_id = $subtaskModel->id;
+        if (!$link->save()) {
+            throw new \LogicException(json_encode($link->errors));
+        };
+
+        return $subtaskModel;
     }
 
     /**

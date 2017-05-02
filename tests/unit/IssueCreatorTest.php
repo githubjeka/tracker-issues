@@ -7,6 +7,8 @@ use humhub\modules\user\models\User;
 use tracker\controllers\IssueCreator;
 use tracker\enum\IssueStatusEnum;
 use tracker\models\Issue;
+use tracker\models\Link;
+use tracker\tests\fixtures\LinkFixture;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -36,7 +38,6 @@ class IssueCreatorTest extends ServiceTest
         $this->tester->dontSeeRecord(Issue::class, ['id' => 1]);
 
         $draftIssueModel = $this->createDraft();
-
         $this->assertEquals(1, $this->service->getIssueForm()->id);
         $this->assertEquals(1, $draftIssueModel->id);
         $this->assertEquals(IssueStatusEnum::TYPE_DRAFT, $draftIssueModel->status);
@@ -59,6 +60,22 @@ class IssueCreatorTest extends ServiceTest
         $this->tester->dontSeeRecord(Issue::class, $requiredAttributesIssue);
         $this->assertInstanceOf(Issue::class, $this->service->create());
         $this->tester->seeRecord(Issue::class, $requiredAttributesIssue);
+    }
+
+    public function testSubtaskIssue()
+    {
+        $this->tester->haveFixtures(['link' => LinkFixture::class]);
+
+        $this->createDraft();
+        $this->service->load(['title' => 'My test issue'], '');
+        $issue = $this->service->create();
+        $requiredAttributesIssue = ['id' => 1, 'parent_id' => 1, 'child_id' => 2,];
+
+        $this->tester->dontSeeRecord(Link::class, $requiredAttributesIssue);
+        $subtaskModel = $this->service->createSubtask($issue, Space::findOne(['id' => 2]));
+        $this->assertEquals(2, $subtaskModel->id);
+        $this->assertEquals(IssueStatusEnum::TYPE_DRAFT, $subtaskModel->status);
+        $this->tester->seeRecord(Link::class, $requiredAttributesIssue);
     }
 
     private function createDraft()
