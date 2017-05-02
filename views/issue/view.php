@@ -144,4 +144,41 @@ $formatter = Yii::$app->formatter;
     <strong><?= Yii::t('TrackerIssuesModule.views', 'Tags') ?>:</strong>
     <?= \tracker\widgets\TagsWidget::widget(['tagsModels' => $issue->personalTags, 'asLink' => true]) ?>
 
+    <hr>
+
+    <?php if ($issue->parent)  : ?>
+        <div class="panel">
+            <div class="panel-body">
+                <?= Yii::t('TrackerIssuesModule.views', 'This issue is subtask for the issue') ?>
+
+                <h5>
+                    <?= Html::a(Html::encode($issue->parent->title), $issue->parent->content->getUrl()) ?>
+                </h5>
+
+                <p data-ui-markdown data-ui-show-more>
+                    <?= humhub\widgets\RichText::widget([
+                        'text' => $issue->parent->description,
+                        'record' => $issue->parent,
+                    ]) ?>
+                </p>
+
+            </div>
+        </div>
+    <?php endif ?>
+
+    <?php if (!empty($issue->subtasks)) : ?>
+        <div class="panel">
+            <div class="panel-body">
+                <?= Yii::t('TrackerIssuesModule.views', 'This issue has subtasks') ?>
+
+                <?= $this->render('__gridView', [
+                    'contentContainer' => $issue->content->getContainer(),
+                    'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $issue->getSubtasks()->readable()]),
+                    'searchModel' => null,
+                ]) ?>
+
+            </div>
+        </div>
+    <?php endif ?>
+
 </div>
