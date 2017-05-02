@@ -19,6 +19,7 @@
 return [
     '<strong>Designate</strong> tag to issue' => '',
     'Add' => '',
+    'Add Subtask' => '',
     'Adopted' => '',
     'Adopted at' => '',
     'Are you sure you want to delete this item?' => '',
@@ -52,6 +53,8 @@ return [
     'Status' => '',
     'Tags' => '',
     'Text Color' => '',
+    'This issue has subtasks' => '',
+    'This issue is subtask for the issue' => '',
     'This list of personal tags. It is can be a tag, a milestone, label or other that you can mark a issue. This tags visible only for you.' => '',
     'Title' => '',
     'Visibility' => '',

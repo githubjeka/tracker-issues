@@ -26,6 +26,8 @@ return [
     'Minor' => '',
     'Normal' => '',
     'Private' => '',
+    'Refer' => '',
     'Serious' => '',
+    'Subtask' => '',
     'Urgent' => '',
 ];

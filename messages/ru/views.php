@@ -18,9 +18,10 @@
  */
 return [
     'Are you sure you want to delete this item?' => '',
-    'This list of personal tags. It is can be a tag, a milestone, label or other that you can mark a issue. This tags visible only for you.' => 'Это список персональных ярлыков. Это может быть номенклатурой, этапом, закладкой или всем, чем вы можете отметить задачу. Эти отметки видны только вам.',
+    'This issue has subtasks' => 'Имеет подзадачи',
     '<strong>Designate</strong> tag to issue' => '<strong>Назначить</strong> номенклатуру к задаче',
     'Add' => 'Добавить',
+    'Add Subtask' => 'Добавить подзадачу',
     'Adopted' => 'Принято',
     'Adopted at' => 'Принято в',
     'Assigned Users' => 'Ответственные',
@@ -53,6 +54,8 @@ return [
     'Status' => 'Статус',
     'Tags' => 'Номенклатура',
     'Text Color' => 'Цвет текста',
+    'This issue is subtask for the issue' => 'Является подзадачей к этой задаче',
+    'This list of personal tags. It is can be a tag, a milestone, label or other that you can mark a issue. This tags visible only for you.' => 'Это список персональных ярлыков. Это может быть номенклатурой, этапом, закладкой или всем, чем вы можете отметить задачу. Эти отметки видны только вам.',
     'Title' => 'Наименование',
     'Visibility' => 'Отображение',
     'What is to do?' => 'Что сделать?',
