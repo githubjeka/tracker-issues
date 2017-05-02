@@ -166,14 +166,16 @@ $formatter = Yii::$app->formatter;
         </div>
     <?php endif ?>
 
-    <?php if (!empty($issue->subtasks)) : ?>
+    <?php
+    $dataProvider = new \yii\data\ActiveDataProvider(['query' => $issue->getSubtasks()->readable()]);
+    if ($dataProvider->getTotalCount() > 0) : ?>
         <div class="panel">
             <div class="panel-body">
                 <?= Yii::t('TrackerIssuesModule.views', 'This issue has subtasks') ?>
 
                 <?= $this->render('__gridView', [
                     'contentContainer' => $issue->content->getContainer(),
-                    'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $issue->getSubtasks()->readable()]),
+                    'dataProvider' => $dataProvider,
                     'searchModel' => null,
                 ]) ?>
 
