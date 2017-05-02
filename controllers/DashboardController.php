@@ -42,15 +42,10 @@ class DashboardController extends Controller
 
     public function actionToCreateIssue()
     {
-        $request = \Yii::$app->request;
-
-        if ($request->isPost) {
-            $space = $request->post('space');
-            if ($space !== null && isset($space[0])) {
-                return $this->redirect(['/' . Module::getIdentifier() . '/issue/create', 'sguid' => $space[0]]);
-            }
-        }
-
-        return $this->renderAjax('to_create_issue');
+        return $this->renderAjax('to_create_issue', [
+            'actionUrl' => \yii\helpers\Url::to([
+                '/' . Module::getIdentifier() . '/issue/create',
+            ]),
+        ]);
     }
 }

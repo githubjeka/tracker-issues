@@ -1,8 +1,11 @@
 <?php
 use humhub\widgets\ActiveForm;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
+/**
+ * @var $this \humhub\components\View
+ * @var $actionUrl string
+ */
 \tracker\assets\IssueAsset::register($this);
 ?>
 <div class="modal-dialog modal-dialog-normal animated fadeIn">
@@ -42,9 +45,7 @@ use yii\helpers\Url;
                 <button type="submit" class="btn btn-block btn-primary btn-sm"
                         data-ui-loader
                         data-action-click="tracker.getCreateForm"
-                        data-action-url="<?= Url::to([
-                            '/' . tracker\Module::getIdentifier() . '/issue/create',
-                        ]); ?>"
+                        data-action-url="<?= $actionUrl ?>"
                 >
                     <?= Yii::t('TrackerIssuesModule.views', 'Add') ?>
                 </button>
