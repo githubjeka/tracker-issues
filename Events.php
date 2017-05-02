@@ -93,17 +93,24 @@ class Events extends \yii\base\Object
     public static function onWallEntryAddonInit(Event $event)
     {
         if ($event->sender->object instanceof Issue) {
+            $issue = $event->sender->object;
             $event->sender
                 ->addWidget(
                     widgets\DesignateTagWidget::className(),
-                    ['object' => $event->sender->object],
+                    ['object' => $issue],
                     ['sortOrder' => 30]
                 );
-            if ($event->sender->object->status != \tracker\enum\IssueStatusEnum::TYPE_FINISHED) {
+            $event->sender
+                ->addWidget(
+                    widgets\SubtaskWidget::className(),
+                    ['object' => $issue],
+                    ['sortOrder' => 30]
+                );
+            if ($issue->status != \tracker\enum\IssueStatusEnum::TYPE_FINISHED) {
                 $event->sender
                     ->addWidget(
                         widgets\FinishIssueWidget::className(),
-                        ['object' => $event->sender->object],
+                        ['object' => $issue],
                         ['sortOrder' => 30]
                     );
             }
