@@ -24,6 +24,8 @@ use Yii;
  * @property Tag[] $tags
  * @property Tag[] $personalTags
  * @property IssueContent $content
+ * @property Issue $parent
+ * @property Issue[] $subtasks
  */
 class Issue extends ContentActiveRecord
 {
@@ -108,6 +110,21 @@ class Issue extends ContentActiveRecord
         $tableName = IssueContent::tableName();
         return $this->hasOne(IssueContent::className(), ['object_id' => 'id'])
             ->andWhere(["$tableName.object_model" => self::className()]);
+    }
+
+    public function getParent()
+    {
+        return $this->hasOne(Issue::class, ['id' => 'parent_id'])
+            ->viaTable(Link::tableName(), ['child_id' => 'id']);
+    }
+
+    /**
+     * @return IssueQuery|\yii\db\ActiveQuery
+     */
+    public function getSubtasks()
+    {
+        return $this->hasMany(Issue::class, ['id' => 'child_id'])
+            ->viaTable(Link::tableName(), ['parent_id' => 'id']);
     }
 
     /**
