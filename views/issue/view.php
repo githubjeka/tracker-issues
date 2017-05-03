@@ -141,24 +141,25 @@ $formatter = Yii::$app->formatter;
         <br>
     <?php endif; ?>
 
-    <strong><?= Yii::t('TrackerIssuesModule.views', 'Tags') ?>:</strong>
-    <?= \tracker\widgets\TagsWidget::widget(['tagsModels' => $issue->personalTags, 'asLink' => true]) ?>
-
-    <hr>
+    <?php if (count($issue->personalTags) > 0) : ?>
+        <strong><?= Yii::t('TrackerIssuesModule.views', 'Tags') ?>:</strong>
+        <?= \tracker\widgets\TagsWidget::widget(['tagsModels' => $issue->personalTags, 'asLink' => true]) ?>
+        <hr>
+    <?php endif; ?>
 
     <?php
     /** @var Issue $parent */
     $parent = $issue->getParent()->readable()->one();
     ?>
     <?php if ($parent !== null)  : ?>
-        <div class="panel">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <strong><?= Yii::t('TrackerIssuesModule.views', 'This issue is subtask for the issue') ?></strong>
+                <h1 class="panel-title">
+                    <?= Html::a(Html::encode($parent->title), $parent->content->getUrl()) ?>
+                </h1>
+            </div>
             <div class="panel-body">
-                <?= Yii::t('TrackerIssuesModule.views', 'This issue is subtask for the issue') ?>
-
-                <h5>
-                    <?= Html::a(Html::encode($parent->title), $issue->content->getUrl()) ?>
-                </h5>
-
                 <p data-ui-markdown data-ui-show-more>
                     <?= humhub\widgets\RichText::widget([
                         'text' => $issue->description,
@@ -173,9 +174,13 @@ $formatter = Yii::$app->formatter;
     <?php
     $dataProvider = new \yii\data\ActiveDataProvider(['query' => $issue->getSubtasks()->readable()]);
     if ($dataProvider->getTotalCount() > 0) : ?>
-        <div class="panel">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    <?= Yii::t('TrackerIssuesModule.views', 'This issue has subtasks') ?>:
+                </h1>
+            </div>
             <div class="panel-body">
-                <?= Yii::t('TrackerIssuesModule.views', 'This issue has subtasks') ?>
 
                 <?= $this->render('__gridView', [
                     'contentContainer' => $issue->content->getContainer(),
