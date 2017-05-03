@@ -162,8 +162,8 @@ $formatter = Yii::$app->formatter;
             <div class="panel-body">
                 <p data-ui-markdown data-ui-show-more>
                     <?= humhub\widgets\RichText::widget([
-                        'text' => $issue->description,
-                        'record' => $issue,
+                        'text' => $parent->description,
+                        'record' => $parent,
                     ]) ?>
                 </p>
 
