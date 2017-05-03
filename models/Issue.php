@@ -112,6 +112,9 @@ class Issue extends ContentActiveRecord
             ->andWhere(["$tableName.object_model" => self::className()]);
     }
 
+    /**
+     * @return IssueQuery|\yii\db\ActiveQuery
+     */
     public function getParent()
     {
         return $this->hasOne(Issue::class, ['id' => 'parent_id'])

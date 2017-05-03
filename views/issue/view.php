@@ -146,19 +146,23 @@ $formatter = Yii::$app->formatter;
 
     <hr>
 
-    <?php if ($issue->parent)  : ?>
+    <?php
+    /** @var Issue $parent */
+    $parent = $issue->getParent()->readable()->one();
+    ?>
+    <?php if ($parent !== null)  : ?>
         <div class="panel">
             <div class="panel-body">
                 <?= Yii::t('TrackerIssuesModule.views', 'This issue is subtask for the issue') ?>
 
                 <h5>
-                    <?= Html::a(Html::encode($issue->parent->title), $issue->parent->content->getUrl()) ?>
+                    <?= Html::a(Html::encode($parent->title), $issue->content->getUrl()) ?>
                 </h5>
 
                 <p data-ui-markdown data-ui-show-more>
                     <?= humhub\widgets\RichText::widget([
-                        'text' => $issue->parent->description,
-                        'record' => $issue->parent,
+                        'text' => $issue->description,
+                        'record' => $issue,
                     ]) ?>
                 </p>
 
