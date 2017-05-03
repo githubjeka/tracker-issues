@@ -1,5 +1,8 @@
 #### Issue Tracker integrated to [Humhub](https://github.com/humhub/humhub)
 
+The tracker focused on Enterprise and Private Social Networks.
+![screenshot of one issue](https://cloud.githubusercontent.com/assets/874234/25657653/907516a0-3007-11e7-9430-0956bc2febf2.jpg)
+
 ## Features
 - You can create tasks, issue, schedule meetings and other for your spaces.
 - You can create private, personal tasks. Manage all available for you tasks using the dashboard.
