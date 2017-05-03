@@ -75,6 +75,7 @@ class IssueCreatorTest extends ServiceTest
         $subtaskModel = $this->service->createSubtask($issue, Space::findOne(['id' => 2]));
         $this->assertEquals(2, $subtaskModel->id);
         $this->assertEquals(IssueStatusEnum::TYPE_DRAFT, $subtaskModel->status);
+        $this->assertNotEmpty($subtaskModel->started_at);
         $this->tester->seeRecord(Link::class, $requiredAttributesIssue);
     }
 

@@ -47,6 +47,7 @@ class IssueCreator extends IssueService
         $subtaskModel = $this->createDraft($content);
         $subtaskModel->updateAttributes([
             'title' => \Yii::t('TrackerIssuesModule.enum', 'Subtask') . ': ' . $issue->title,
+            'started_at' => date('Y-m-d H:i'),
         ]);
 
         $link = new Link();
