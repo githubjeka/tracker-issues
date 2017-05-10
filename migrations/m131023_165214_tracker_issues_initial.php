@@ -3,7 +3,7 @@
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class m131023_165214_initial extends \yii\db\Migration
+class m131023_165214_tracker_issues_initial extends \yii\db\Migration
 {
     public function up()
     {
