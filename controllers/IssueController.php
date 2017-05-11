@@ -7,6 +7,7 @@ use tracker\models\Assignee;
 use tracker\models\Issue;
 use tracker\models\IssueSearch;
 use tracker\Module;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -90,7 +91,7 @@ class IssueController extends ContentContainerController
             $issueCreator = new IssueCreator();
             $subtaskModel = $issueCreator->createSubtask($issue, $this->contentContainer);
 
-            return $this->redirect($subtaskModel->content->getUrl());
+            return $this->htmlRedirect($subtaskModel->content->getUrl());
         }
 
         return $this->renderAjax('/dashboard/to_create_issue', [
@@ -127,6 +128,34 @@ class IssueController extends ContentContainerController
         }
 
         return $this->renderAjax('edit', ['issueForm' => $issueEditor->getIssueForm()]);
+    }
+
+    public function actionFinishIssue($id)
+    {
+        /** @var Issue|null $issue */
+        $issue = Issue::find()
+            ->contentContainer($this->contentContainer)
+            ->readable()
+            ->where([Issue::tableName() . '.id' => $id,])
+            ->one();
+
+        if ($issue === null) {
+            throw new NotFoundHttpException('Issue not founded.');
+        }
+
+        if (!$this->canUserDo(new \tracker\permissions\EditIssue())) {
+            $this->forbidden();
+        }
+
+        $issueEditor = new IssueEditor($issue);
+
+        if ($issueEditor->load(\Yii::$app->request->post())) {
+            if ($issueEditor->save()) {
+                return '{}';
+            }
+        }
+
+        throw new BadRequestHttpException();
     }
 
     public function actionMarkAdopted($id)

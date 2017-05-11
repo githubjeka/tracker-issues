@@ -4,7 +4,7 @@
         [
             'data-action-click' => 'tracker.finishIssue',
             'data-action-url' => $object->content->container->createUrl(
-                '/' . \tracker\Module::getIdentifier() . '/issue/edit',
+                '/' . \tracker\Module::getIdentifier() . '/issue/finish-issue',
                 ['id' => $object->id]
             ),
         ]

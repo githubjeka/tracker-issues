@@ -99,7 +99,7 @@ class TagController extends Controller
         $tagDesignator = new TagDesignator($issueModel);
 
         if ($tagDesignator->load(\Yii::$app->request->post()) && $tagDesignator->save()) {
-            return $this->redirect($issueModel->content->getUrl());
+            return '{}';
         }
 
         return $this->renderAjax('designate', ['formModel' => $tagDesignator->getIssueForm()]);

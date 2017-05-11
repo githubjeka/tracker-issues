@@ -1,3 +1,4 @@
+"use strict";
 humhub.module('tracker', function (module, require, $) {
 
     var client = require('client');
@@ -5,8 +6,12 @@ humhub.module('tracker', function (module, require, $) {
     var designateTag = function (evt) {
         client.submit(evt).then(
             function (resp) {
-                "use strict";
-                console.log(resp);
+                if (resp.status === 200) {
+                    client.reload();
+                    humhub.modules.ui.modal.global.close();
+                } else {
+                    console.log(resp);
+                }
             }
         ).catch(function (e) {
             module.log.error(e, true);
