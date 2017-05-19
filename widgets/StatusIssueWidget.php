@@ -10,6 +10,7 @@ use tracker\enum\IssueStatusEnum;
 class StatusIssueWidget extends \yii\bootstrap\Widget
 {
     public $status;
+    public $asCheckboxIcon = false;
 
     public function run()
     {
@@ -21,6 +22,16 @@ class StatusIssueWidget extends \yii\bootstrap\Widget
             $style = 'default';
         }
 
-        return '<span class="label label-' . $style . '">' . IssueStatusEnum::getLabel($this->status) . '</span>';
+        if ($this->asCheckboxIcon) {
+            if ($this->status === IssueStatusEnum::TYPE_FINISHED) {
+                $text = '<span class="fa fa-check" aria-hidden="true"></span>';
+            } else {
+                $text = '<span class="fa fa-square-o" aria-hidden="true"></span>';
+            }
+        } else {
+            $text = IssueStatusEnum::getLabel($this->status);
+        }
+
+        return '<span class="label label-' . $style . '">' . $text . '</span>';
     }
 }
