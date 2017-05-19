@@ -19,7 +19,6 @@ class TagController extends Controller
 
     public function behaviors()
     {
-        //TODO guest have access :(
         return [
             'acl' => [
                 'class' => \humhub\components\behaviors\AccessControl::class,
