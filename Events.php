@@ -72,7 +72,6 @@ class Events extends \yii\base\Object
             'icon' => '<i class="fa fa-tasks"></i>',
             'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'dashboard'),
             'sortOrder' => 300,
-            'htmlOptions' => ['data-pjax' => 0,],
         ]);
 
         $event->sender->addItem([
@@ -81,7 +80,6 @@ class Events extends \yii\base\Object
             'icon' => '<i class="fa fa-tags"></i>',
             'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'tag'),
             'sortOrder' => 300,
-            'htmlOptions' => ['data-pjax' => 0,],
         ]);
     }
 

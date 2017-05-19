@@ -12,6 +12,8 @@ use tracker\Module;
  */
 class DashboardController extends Controller
 {
+    public $subLayout = '@tracker/views/layouts/sub_layout_issues';
+
     public function actions()
     {
         return [
@@ -29,7 +31,6 @@ class DashboardController extends Controller
             $this->forbidden();
         }
 
-        $this->layout = 'main';
         $searchModel = new IssueSearch(['status' => IssueStatusEnum::TYPE_WORK]);
 
         return $this->render('/issue/show', [

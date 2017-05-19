@@ -15,7 +15,7 @@ use yii\web\NotFoundHttpException;
  */
 class TagController extends Controller
 {
-    public $layout = '@tracker/views/layouts/main';
+    public $subLayout = '@tracker/views/layouts/sub_layout_tag';
 
     public function behaviors()
     {

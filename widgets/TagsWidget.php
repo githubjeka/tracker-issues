@@ -23,7 +23,7 @@ class TagsWidget extends Widget
                 $html .= Html::a(
                     '<span class="label label-default" style="' . $style . '">' . Html::encode($tagModel->name),
                     ['/' . Module::getIdentifier() . '/tag/view', 'id' => $tagModel->id],
-                    ['style' => $style, 'data-pjax' => 0]
+                    ['style' => $style]
                 );
             } else {
 

@@ -15,6 +15,8 @@ use yii\web\NotFoundHttpException;
  */
 class IssueController extends ContentContainerController
 {
+    public $subLayout = '@tracker/views/layouts/sub_layout_issues';
+
     /**
      * @inheritdoc
      */
