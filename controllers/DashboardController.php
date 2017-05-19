@@ -41,6 +41,29 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function actionTimeline()
+    {
+        $userComponent = \Yii::$app->user;
+
+        if ($userComponent->isGuest) {
+            $this->forbidden();
+        }
+
+        $searchModel = new IssueSearch([
+            'status' => [
+                \tracker\enum\IssueStatusEnum::TYPE_WORK,
+                \tracker\enum\IssueStatusEnum::TYPE_FINISHED,
+            ],
+        ]);
+
+        return $this->render('/issue/timeline', [
+            'dataProvider' => $searchModel->search(\Yii::$app->request->get()),
+            'searchModel' => $searchModel,
+            'contentContainer' => $userComponent->getIdentity(),
+            'canCreateNewIssue' => true,
+        ]);
+    }
+
     public function actionToCreateIssue()
     {
         return $this->renderAjax('to_create_issue', [

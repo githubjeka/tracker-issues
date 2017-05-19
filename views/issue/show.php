@@ -20,6 +20,16 @@ use yii\widgets\Pjax;
 <div class="panel panel-default">
     <div class="panel-body">
 
+        <?php if (!($contentContainer instanceof \humhub\modules\space\models\Space)) : ?>
+            <div class="pull-right">
+                <?= \yii\helpers\Html::a(
+                    Yii::t('TrackerIssuesModule.views', 'Timeline'),
+                    ['/' . tracker\Module::getIdentifier() . '/dashboard/timeline'],
+                    ['class' => 'btn btn-link']
+                ); ?>
+            </div>
+        <?php endif; ?>
+
         <?php if ($canCreateNewIssue): ?>
             <?php if ($contentContainer instanceof \humhub\modules\space\models\Space) {
                 $url = $contentContainer->createUrl('issue/create');
