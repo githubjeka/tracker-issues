@@ -9,7 +9,7 @@ use yii\web\AssetBundle;
  */
 class IssueAsset extends AssetBundle
 {
-    public $sourcePath = __DIR__ . '/../resources/';
+    public $sourcePath = __DIR__ . '/../resources/common/';
 
     public $css = [
         'css/main.css',
