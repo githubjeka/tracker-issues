@@ -1,0 +1,17 @@
+.tl-timemarker .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-text h2.tl-headline, .tl-timemarker .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-text h2.tl-headline p {
+    color: #666;
+}
+
+.tl-menubar-button {
+    background-color: #708fa0;
+    color: #ffffff;
+}
+
+.tl-timegroup .tl-timegroup-message {
+    z-index: 10;
+}
+
+.tl-timegroup {
+    background-color: #fafafa;
+    outline: 1px dotted #e8e6e6;
+}

@@ -13,6 +13,7 @@ class TimelineAsset extends AssetBundle
 
     public $css = [
         'timeline.css',
+        'themes/timeline.humhub.css',
     ];
 
     public $js = [
