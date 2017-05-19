@@ -24,7 +24,7 @@ class IssueSearch extends Model
     public function rules()
     {
         return [
-            ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList())],
+            ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList()), 'allowArray' => true],
         ];
     }
 
@@ -61,7 +61,7 @@ class IssueSearch extends Model
             return $dataProvider;
         }
 
-        $query->andFilterWhere([Issue::tableName() . '.status' => $this->status]);
+        $query->andFilterWhere(['IN', Issue::tableName() . '.status', $this->status]);
         return $dataProvider;
     }
 }
