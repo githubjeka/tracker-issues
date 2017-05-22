@@ -24,7 +24,7 @@ class IssueCreatorTest extends ServiceTest
     protected function _before()
     {
         $this->tester->haveFixtures([
-            'node' => \tracker\tests\fixtures\IssueFixture::class,
+            'issues' => \tracker\tests\fixtures\IssueFixture::class,
             'space' => \humhub\modules\space\tests\codeception\fixtures\SpaceFixture::class,
         ]);
 
