@@ -26,3 +26,16 @@ The tracker focused on Enterprise and Private Social Networks.
 - run `php ../../yii migrate -p="migrations"`
 - clear assets from `assets/` and cache from `protected/runtime/cache/`
 
+### Improvements for translation.
+
+If you want enhancement translation for your language just update files in [messages/your-languages](messages/)
+follow this example code:
+
+```php
+return [
+    'Issue' => 'Your translation for `Issue` message',
+    'Tracker issues' => 'Your translation for `Tracker issues` message',
+];
+```
+
+After send Pull Request to [Tracker module repository](https://github.com/githubjeka/tracker-issues)
