@@ -86,10 +86,10 @@ class IssueSearch extends Model
                 'BETWEEN',
                 Issue::tableName() . '.started_at',
                 new Expression('cast(:start as date)', [':start' => $this->startStartedDate]),
-                new Expression('cast(:start as date)', [':start' => $this->endStartedDate]),
+                new Expression('cast(:end as date)', [':end' => $this->endStartedDate]),
             ]);
         } elseif ($this->endStartedDate) {
-            $query->andWhere(['<=', Issue::tableName() . '.started_at', $this->endStartedDate]);
+            $query->andWhere(['<', Issue::tableName() . '.started_at', $this->endStartedDate]);
         } elseif ($this->startStartedDate) {
             $query->andWhere(['>=', Issue::tableName() . '.started_at', $this->startStartedDate]);
         }
