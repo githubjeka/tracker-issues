@@ -30,7 +30,7 @@ $formatter = Yii::$app->formatter;
             <div class="row-fluid bg-info">
 
                 <div class="col-xs-4">
-                    <?= Yii::t('TrackerIssuesModule.views', 'Started at') ?><br>
+                    <?= Yii::t('TrackerIssuesModule.views', 'From this time recommended begin to start work') ?><br>
                     <?= $formatter->asDatetime($issue->started_at, 'HH:mm, eee d MMMM y ') ?>
                 </div>
 
