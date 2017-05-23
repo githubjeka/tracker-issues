@@ -78,6 +78,8 @@ class IssueQuery extends ActiveQueryContent
                     [':user' => $user->id]
                 );
         } else {
+            $this->leftJoin('space', 'contentcontainer.pk=space.id AND contentcontainer.class=:spaceClass',
+                [':spaceClass' => Space::className()]);
             $this->andWhere('space.id IS NOT NULL and space.visibility=' . Space::VISIBILITY_ALL .
                             ' AND content.visibility=1');
         }
