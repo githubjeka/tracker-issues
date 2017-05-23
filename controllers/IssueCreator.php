@@ -23,6 +23,7 @@ class IssueCreator extends IssueService
         $issueModel = new Issue();
         $issueModel->content->notifyUsersOfNewContent = false;
         $issueModel->content->setContainer($content);
+        $issueModel->started_at = date('Y-m-d H:i');
 
         if (!$issueModel->save()) {
             throw new \LogicException(json_encode($issueModel->errors));
@@ -30,6 +31,10 @@ class IssueCreator extends IssueService
 
         $issueModel->refresh();
         $this->requestForm->id = $issueModel->id;
+
+        $formatter = \Yii::$app->formatter;
+        $this->requestForm->startedTime = $formatter->asTime($issueModel->started_at, 'php:H:m');
+        $this->requestForm->startedDate = $formatter->asDate($issueModel->started_at, 'php:Y-m-d');
 
         return $issueModel;
     }
@@ -87,7 +92,11 @@ class IssueCreator extends IssueService
             : null;
 
         $this->issueModel->content->visibility = $this->requestForm->visibility;
-        $this->issueModel->started_at = date('Y-m-d H:i');
+
+        if ($this->requestForm->startedDate && $this->requestForm->startedTime) {
+            $this->issueModel->started_at = $this->requestForm->startedDate . ' ' . $this->requestForm->startedTime;
+        }
+
         if ($this->issueModel->status == IssueStatusEnum::TYPE_FINISHED) {
             $this->issueModel->finished_at = date('Y-m-d H:i');
         }

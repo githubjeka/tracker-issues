@@ -42,8 +42,11 @@ class IssueEditor extends IssueService
         }
         $this->requestForm->tags = $tags;
 
+        $formatter = \Yii::$app->formatter;
+        $this->requestForm->startedTime = $formatter->asTime($issue->started_at, 'php:H:m');
+        $this->requestForm->startedDate = $formatter->asDate($issue->started_at, 'php:Y-m-d');
+
         if ($issue->deadline) {
-            $formatter = \Yii::$app->formatter;
             $this->requestForm->deadlineTime = $formatter->asTime($issue->deadline, 'php:H:m');
             $this->requestForm->deadlineDate = $formatter->asDate($issue->deadline, 'php:Y-m-d');
         }
@@ -70,6 +73,11 @@ class IssueEditor extends IssueService
         $this->issueModel->description = $this->requestForm->description;
         $this->issueModel->status = $this->requestForm->status;
         $this->issueModel->priority = $this->requestForm->priority;
+
+        if ($this->requestForm->startedDate && $this->requestForm->startedTime) {
+            $this->issueModel->started_at = $this->requestForm->startedDate . ' ' . $this->requestForm->startedTime;
+        }
+
         $this->issueModel->deadline = ($this->requestForm->deadlineDate && $this->requestForm->deadlineTime)
             ? $this->requestForm->deadlineDate . ' ' . $this->requestForm->deadlineTime . ':00'
             : null;

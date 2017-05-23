@@ -61,6 +61,20 @@ class IssueEditorTest extends ServiceTest
         $this->changeAttribute($attr, ArrayHelper::merge($this->getOldIssueAttributes(), $attr));
     }
 
+    public function testEditStartedAtIssue()
+    {
+        $this->changeAttribute(
+            ['startedDate' => '2017-01-20', 'startedTime' => '14:50'],
+            ArrayHelper::merge($this->getOldIssueAttributes(), ['started_at' => '2017-01-20 14:50'])
+        );
+
+        $this->changeAttribute(
+            ['startedDate' => null, 'startedTime' => '23:50'],
+            ArrayHelper::merge($this->getOldIssueAttributes(), ['started_at' => '2017-01-20 14:50']),
+            false
+        );
+    }
+
     public function testEditDeadlineIssue()
     {
         $this->changeAttribute(
@@ -79,7 +93,7 @@ class IssueEditorTest extends ServiceTest
 
     public function testEditStatusToDraftIssue()
     {
-        $this->changeAttribute(['status' => IssueStatusEnum::TYPE_DRAFT], $this->getOldIssueAttributes());
+        $this->changeAttribute(['status' => IssueStatusEnum::TYPE_DRAFT], $this->getOldIssueAttributes(), false);
     }
 
     public function testEditStatusToFinishIssue()
@@ -91,8 +105,11 @@ class IssueEditorTest extends ServiceTest
         $this->assertNotEmpty($issue->finished_at);
     }
 
-    private function changeAttribute(array $attrToSave, array $expectedNewAttribute)
+    private function changeAttribute(array $attrToSave, array $expectedNewAttribute, $checkDontSeeRecord = true)
     {
+        if ($checkDontSeeRecord) {
+            $this->tester->dontSeeRecord(Issue::class, $expectedNewAttribute);
+        }
         $this->service->load($attrToSave, '');
         $this->assertNotFalse($this->service->save(), $this->getRequestFormErrors());
         $this->tester->seeRecord(Issue::class, $expectedNewAttribute);

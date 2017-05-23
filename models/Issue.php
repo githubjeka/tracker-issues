@@ -46,7 +46,7 @@ class Issue extends ContentActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['deadline',], 'safe'],
+            [['deadline', 'started_at'], 'date' , 'format'=> 'php:Y-m-d H:i'],
             [['status', 'priority',], 'integer'],
             [['title'], 'string', 'max' => 255],
         ];

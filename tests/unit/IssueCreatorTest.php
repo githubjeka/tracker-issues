@@ -62,6 +62,25 @@ class IssueCreatorTest extends ServiceTest
         $this->tester->seeRecord(Issue::class, $requiredAttributesIssue);
     }
 
+    public function testStartedTimeForNewIssue()
+    {
+        $this->createDraft();
+        $this->assertFalse($this->service->create());
+
+        $this->service->load(['title' => 'My test issue', 'startedTime' => '10:00', 'startedDate' => '2017-01-31'], '');
+
+        $requiredAttributesIssue = [
+            'id' => 1,
+            'title' => 'My test issue',
+            'status' => IssueStatusEnum::TYPE_WORK,
+            'started_at' => '2017-01-31 10:00',
+        ];
+
+        $this->tester->dontSeeRecord(Issue::class, $requiredAttributesIssue);
+        $this->assertInstanceOf(Issue::class, $this->service->create());
+        $this->tester->seeRecord(Issue::class, $requiredAttributesIssue);
+    }
+
     public function testSubtaskIssue()
     {
         $this->tester->haveFixtures(['link' => LinkFixture::class]);

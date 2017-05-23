@@ -75,9 +75,42 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
 
     </div>
 
-    <div class="col-md-4">
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <div>
+            <strong><?= Yii::t('TrackerIssuesModule.views', 'Started Date') ?></strong>
+            <small class="help-block">
+                <?= Yii::t('TrackerIssuesModule.views', 'From this time recommended begin to start work'); ?>
+            </small>
+            <hr>
+
+            <div class="form-group">
+                <?= $form->field($issueForm, 'startedDate')
+                    ->widget(yii\jui\DatePicker::className(), [
+                        'dateFormat' => 'php:Y-m-d',
+                        'clientOptions' => [],
+                        'options' => [
+                            'class' => 'form-control',
+                            'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
+                        ],
+                    ])->label(false); ?>
+            </div>
+
+            <div class="form-group">
+                <?= $form->field($issueForm, 'startedTime')->input('time')->label(false); ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
         <div>
             <strong><?= Yii::t('TrackerIssuesModule.views', 'Deadline') ?></strong>
+            <small class="help-block">
+                <?= Yii::t('TrackerIssuesModule.views', 'The planned time by which you should end work.'); ?>
+            </small>
             <hr>
             <div class="form-group">
                 <?= $form->field($issueForm, 'deadlineDate')

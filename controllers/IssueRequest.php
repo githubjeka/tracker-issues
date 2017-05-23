@@ -14,6 +14,8 @@ class IssueRequest extends \yii\base\Model
     public $id;
     public $title;
     public $description;
+    public $startedDate;
+    public $startedTime;
     public $deadlineDate;
     public $deadlineTime;
     public $assignedUsers = [];
@@ -36,8 +38,8 @@ class IssueRequest extends \yii\base\Model
             [['id', 'title'], 'required'],
             ['description', 'safe'],
             ['title', 'string', 'max' => 255],
-            ['deadlineDate', 'date', 'format' => 'php:Y-m-d'],
-            ['deadlineTime', 'time', 'format' => 'php:H:i'],
+            [['deadlineDate', 'startedDate',], 'date', 'format' => 'php:Y-m-d'],
+            [['deadlineTime', 'startedTime',], 'time', 'format' => 'php:H:i'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList())],
             ['visibility', 'in', 'range' => array_keys(IssueVisibilityEnum::getList())],
             ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
@@ -54,6 +56,8 @@ class IssueRequest extends \yii\base\Model
             'deadline' => \Yii::t('TrackerIssuesModule.views', 'Deadline'),
             'deadlineDate' => \Yii::t('TrackerIssuesModule.views', 'Deadline Date'),
             'deadlineTime' => \Yii::t('TrackerIssuesModule.views', 'Deadline Time'),
+            'startedDate' => \Yii::t('TrackerIssuesModule.views', 'Started Date'),
+            'startedTime' => \Yii::t('TrackerIssuesModule.views', 'Started Time'),
             'status' => \Yii::t('TrackerIssuesModule.views', 'Status'),
             'assignedUsers' => \Yii::t('TrackerIssuesModule.views', 'Assigned Users'),
             'visibility' => \Yii::t('TrackerIssuesModule.views', 'Visibility'),
