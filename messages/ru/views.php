@@ -18,7 +18,12 @@
  */
 return [
     'Are you sure you want to delete this item?' => '',
-    'This issue has subtasks' => 'Имеет подзадачи',
+    'Calendar' => 'Календарь',
+    'From this time recommended begin to start work' => 'Рекомендуемое время начала работ.',
+    'Started Date' => 'Дата начала',
+    'Started Time' => 'Время начала',
+    'The planned time by which you should end work.' => 'Планируемое время окончания работ.',
+    'Timeline' => 'Временная шкала',
     '<strong>Designate</strong> tag to issue' => '<strong>Назначить</strong> номенклатуру к задаче',
     'Add' => 'Добавить',
     'Add Subtask' => 'Добавить подзадачу',
@@ -54,6 +59,7 @@ return [
     'Status' => 'Статус',
     'Tags' => 'Номенклатура',
     'Text Color' => 'Цвет текста',
+    'This issue has subtasks' => 'Имеет подзадачи',
     'This issue is subtask for the issue' => 'Является подзадачей к этой задаче',
     'This list of personal tags. It is can be a tag, a milestone, label or other that you can mark a issue. This tags visible only for you.' => 'Это список персональных ярлыков. Это может быть номенклатурой, этапом, закладкой или всем, чем вы можете отметить задачу. Эти отметки видны только вам.',
     'Title' => 'Наименование',
