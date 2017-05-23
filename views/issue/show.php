@@ -27,6 +27,11 @@ use yii\widgets\Pjax;
                     ['/' . tracker\Module::getIdentifier() . '/dashboard/timeline'],
                     ['class' => 'btn btn-link']
                 ); ?>
+                <?= \yii\helpers\Html::a(
+                    Yii::t('TrackerIssuesModule.views', 'Calendar'),
+                    ['/' . tracker\Module::getIdentifier() . '/calendar/index'],
+                    ['class' => 'btn btn-link']
+                ); ?>
             </div>
         <?php endif; ?>
 
