@@ -21,6 +21,7 @@ class CalendarContainer extends Object
 
         $this->searchModel = new IssueSearch([
             'nullIfError' => true,
+            'isConstantly' => false,
             'status' => [
                 \tracker\enum\IssueStatusEnum::TYPE_WORK,
             ],
@@ -62,18 +63,12 @@ class CalendarContainer extends Object
                 'color' => isset($model->content->getContainer()->color) ? $model->content->getContainer()->color : '#337ab7',
             ];
 
-            $nowTime = new \DateTimeImmutable();
             $startTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $model->started_at);
             $deadlineTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $model->deadline);
 
-            if ($deadlineTime) {
-                $array['start'] = $startTime->format('c');
-                $array['end'] = $deadlineTime->format('c');
-                $array['allDay'] = $endDateObject < $deadlineTime;
-            } else {
-                $array['start'] = $nowTime->format('c');
-                $array['allDay'] = true;
-            }
+            $array['start'] = $startTime->format('c');
+            $array['end'] = $deadlineTime->format('c');
+            $array['allDay'] = $endDateObject < $deadlineTime;
 
             $events[] = $array;
         }
