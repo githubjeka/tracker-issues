@@ -19,7 +19,7 @@ class IssueQuery extends ActiveQueryContent
      *
      * @param \humhub\modules\user\models\User $user
      *
-     * @return \humhub\modules\content\components\ActiveQueryContent
+     * @return $this
      */
     public function readable($user = null)
     {
@@ -84,6 +84,24 @@ class IssueQuery extends ActiveQueryContent
                             ' AND content.visibility=1');
         }
 
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withoutDeadline()
+    {
+        $this->andWhere('deadline IS NULL');
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withDeadline()
+    {
+        $this->andWhere('deadline IS NOT NULL');
         return $this;
     }
 
