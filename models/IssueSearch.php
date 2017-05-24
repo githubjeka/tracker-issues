@@ -23,6 +23,16 @@ class IssueSearch extends Model
     public $tag;
 
     /**
+     * The filter to return issues by which permanent work is being conducted.
+     * If true will be returned issues without deadline. $endStartedDate will be set to NULL
+     * If false will be returned issues with deadline.
+     * If null then filter by deadline is not applied.
+     *
+     * @var null|boolean
+     */
+    public $isConstantly;
+
+    /**
      * Returns dataProvider when model is valid only.
      *
      * @var bool
@@ -35,6 +45,26 @@ class IssueSearch extends Model
     public function rules()
     {
         return [
+            [
+                'isConstantly',
+                'filter',
+                'filter' => function ($value) {
+                    return $value == true ? true : false;
+                },
+                'skipOnEmpty' => true,
+                'skipOnArray' => true,
+            ],
+            [
+                ['endStartedDate',],
+                'filter',
+                'filter' => function () {
+                    return null;
+                },
+                'when' => function (IssueSearch $model) {
+                    return $model->isConstantly === true;
+                },
+            ],
+            ['isConstantly', 'boolean'],
             ['startStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['endStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList()), 'allowArray' => true],
@@ -77,6 +107,12 @@ class IssueSearch extends Model
             } else {
                 return $dataProvider;
             }
+        }
+
+        if ($this->isConstantly === true) {
+            $query->withoutDeadline();
+        } elseif ($this->isConstantly === false) {
+            $query->withDeadline();
         }
 
         $query->andFilterWhere(['IN', Issue::tableName() . '.status', $this->status]);

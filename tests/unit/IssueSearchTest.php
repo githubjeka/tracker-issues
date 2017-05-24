@@ -34,13 +34,23 @@ class IssueSearchTest extends \Codeception\Test\Unit
         $spaceContent = Space::findOne(['id' => 3]);
         $issueCreator = new IssueCreator();
         $issueCreator->createDraft($spaceContent);
-        $issueCreator->load(['title' => 'My test issue1', 'visibility' => 1], '');
+        $issueCreator->load([
+            'title' => 'My test issue1',
+            'visibility' => 1,
+            'deadlineDate' => '2017-01-06',
+            'deadlineTime' => '00:00',
+        ], '');
         $issue = $issueCreator->create();
         $issue->updateAttributes(['started_at' => '2017-01-05 00:00']);
 
         $issueCreator = new IssueCreator();
         $issueCreator->createDraft($spaceContent);
-        $issueCreator->load(['title' => 'My test issue2', 'visibility' => 1], '');
+        $issueCreator->load([
+            'title' => 'My test issue2',
+            'visibility' => 1,
+            'deadlineDate' => '2017-01-15',
+            'deadlineTime' => '22:00',
+        ], '');
         $issue = $issueCreator->create();
         $issue->updateAttributes(['started_at' => '2017-01-10 10:00']);
 
@@ -49,7 +59,11 @@ class IssueSearchTest extends \Codeception\Test\Unit
         $issueCreator->load(['title' => 'My test issue3', 'visibility' => 1], '');
         $issue = $issueCreator->create();
         $issueEditor = new IssueEditor($issue);
-        $issueEditor->load(['status' => IssueStatusEnum::TYPE_FINISHED], '');
+        $issueEditor->load([
+            'status' => IssueStatusEnum::TYPE_FINISHED,
+            'deadlineDate' => '2017-01-15',
+            'deadlineTime' => '22:00',
+        ], '');
         $issue = $issueEditor->save();
         $issue->updateAttributes(['started_at' => '2017-01-31 23:59']);
 
@@ -140,12 +154,27 @@ class IssueSearchTest extends \Codeception\Test\Unit
         $this->searchModel->startStartedDate = '2016-12-31';
         $this->searchModel->endStartedDate = '2017-01-11';
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(3, $dataProvider->getTotalCount(),$dataProvider->query->createCommand()->rawSql);
+        $this->assertEquals(3, $dataProvider->getTotalCount(), $dataProvider->query->createCommand()->rawSql);
 
         $this->searchModel->startStartedDate = '2017-01-31';
         $this->searchModel->endStartedDate = '2017-02-28';
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(1, $dataProvider->getTotalCount(),$dataProvider->query->createCommand()->rawSql);
+        $this->assertEquals(1, $dataProvider->getTotalCount(), $dataProvider->query->createCommand()->rawSql);
+    }
+
+    public function testSearchByDeadline()
+    {
+        $this->searchModel->isConstantly = null;
+        $dataProvider = $this->searchModel->search([]);
+        $this->assertEquals(4, $dataProvider->getTotalCount());
+
+        $this->searchModel->isConstantly = false;
+        $dataProvider = $this->searchModel->search([]);
+        $this->assertEquals(3, $dataProvider->getTotalCount());
+
+        $this->searchModel->isConstantly = true;
+        $dataProvider = $this->searchModel->search([]);
+        $this->assertEquals(1, $dataProvider->getTotalCount());
     }
 }
 
