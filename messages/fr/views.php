@@ -63,8 +63,12 @@ return [
     'This list of personal tags. It is can be a tag, a milestone, label or other that you can mark a issue. This tags visible only for you.' => '',
     'Timeline' => '',
     'Title' => '',
+    'Validity period' => '',
     'Visibility' => '',
     'What is to do?' => '',
+    'constantly' => '',
+    'from' => '',
+    'to' => '',
     '{userName} assigned you to the issue {issue}.' => '',
     '{userName} changed the issue {issue} wherever you are assigned.' => '',
 ];
