@@ -5,15 +5,20 @@
  * @var boolean $short
  * @var string $startedTime
  */
+$formatter = \Yii::$app->formatter;
 ?>
 
 <?php if (empty($deadline))  : ?>
+    <?php if (isset($startTime))  : ?>
+        <span class="label label-default">
+            <?= $formatter->asDatetime($startTime, 'd MMM y, HH:mm') ?>
+        </span>&nbsp;-&nbsp;
+    <?php endif; ?>
     <span class="label label-default">
          <?= \Yii::t('TrackerIssuesModule.views', 'Has not deadline') ?>
     </span>
 <?php else: ?>
     <?php
-    $formatter = \Yii::$app->formatter;
     $color = 'label-info';
     $dateDeadline = \DateTime::createFromFormat('Y-m-d', $formatter->asDatetime($deadline, 'php:Y-m-d'));
     $dateNow = (new \DateTime())->add(new DateInterval('P1D'));
