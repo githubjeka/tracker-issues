@@ -31,7 +31,11 @@ class DashboardController extends Controller
             $this->forbidden();
         }
 
-        $searchModel = new IssueSearch(['status' => IssueStatusEnum::TYPE_WORK]);
+        $searchModel = new IssueSearch([
+            'nullIfError' => true,
+            'status' => IssueStatusEnum::TYPE_WORK,
+            'isConstantly' => false,
+        ]);
 
         return $this->render('/issue/show', [
             'dataProvider' => $searchModel->search(\Yii::$app->request->get()),
@@ -50,6 +54,7 @@ class DashboardController extends Controller
         }
 
         $searchModel = new IssueSearch([
+            'isConstantly' => false,
             'status' => [
                 \tracker\enum\IssueStatusEnum::TYPE_WORK,
                 \tracker\enum\IssueStatusEnum::TYPE_FINISHED,
