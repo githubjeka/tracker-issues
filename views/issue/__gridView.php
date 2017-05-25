@@ -54,6 +54,7 @@ use yii\helpers\Html;
         ],
         [
             'attribute' => 'deadline',
+            'label' => Yii::t('TrackerIssuesModule.views', 'Validity period'),
             'format' => 'html',
             'value' => function (Issue $issue) {
                 return DeadlineIssueWidget::widget([
@@ -62,6 +63,7 @@ use yii\helpers\Html;
                     'short' => true,
                 ]);
             },
+            'filter' => \tracker\widgets\PeriodFilterWidget::widget(['searchModel' => $searchModel]),
         ],
         [
             'attribute' => 'priority',
