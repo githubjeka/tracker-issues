@@ -37,11 +37,14 @@ use yii\helpers\Html;
 
 <h3><?= Yii::t('TrackerIssuesModule.base', 'Tracker issues') ?></h3>
 
-<?= $this->render('list_issues',
-    [
-        'canCreateNewIssue' => false,
-        'contentContainer' => false,
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-    ]) ?>
-
+<div class="panel panel-default">
+    <div class="panel-body">
+        <?= $this->render('@tracker/views/issue/__gridView',
+            [
+                'hideTagsColumn' => true,
+                'contentContainer' => false,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]) ?>
+    </div>
+</div>

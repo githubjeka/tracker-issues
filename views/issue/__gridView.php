@@ -44,6 +44,7 @@ use yii\helpers\Html;
                     'asLink' => true,
                 ]);
             },
+            'visible' => isset($hideTagsColumn) ? !$hideTagsColumn : true,
         ],
         [
             'attribute' => 'title',
