@@ -53,9 +53,10 @@ class TagController extends Controller
     {
         $model = $this->findModel($id);
 
-        $searchModel = new IssueSearch(
-            ['tag' => [$model->id]]
-        );
+        $searchModel = new IssueSearch([
+            'tag' => [$model->id],
+            'isConstantly' => false,
+        ]);
 
         return $this->render('view', [
             'model' => $model,
