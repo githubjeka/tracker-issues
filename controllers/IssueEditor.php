@@ -126,7 +126,7 @@ class IssueEditor extends IssueService
         foreach ($oldAssignees as $userId => $usrGuid) {
 
             if ($usrGuid !== null) {
-                $assigneeModel = Assignee::findOne(['user_id' => $userId]);
+                $assigneeModel = Assignee::findOne(['user_id' => $userId, 'issue_id' => $this->issueModel->id]);
                 if (!$assigneeModel->delete()) {
                     $transaction->rollBack();
                     throw new \LogicException('Assignee model can not be deleted');
