@@ -50,7 +50,7 @@
 }
 
 .table-filter {
-    width: auto;
+    width: auto!important;
 }
 
 .select-form {
