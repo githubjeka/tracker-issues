@@ -49,6 +49,10 @@
     margin-right: 35px;
 }
 
+.table-filter {
+    width: auto;
+}
+
 .select-form {
     border: 2px solid #ededed;
     box-shadow: none;
