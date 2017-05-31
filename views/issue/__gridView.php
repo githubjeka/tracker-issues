@@ -80,6 +80,7 @@ use yii\helpers\Html;
                 return StatusIssueWidget::widget(['status' => $issue->status]);
             },
             'filter' => \tracker\enum\IssueStatusEnum::getList(),
+            'filterInputOptions'=>['class'=>'select-form', 'id' => null]
         ],
         [
             'label' => Yii::t('TrackerIssuesModule.views', 'Owner'),
