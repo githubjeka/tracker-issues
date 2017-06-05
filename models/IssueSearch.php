@@ -65,6 +65,7 @@ class IssueSearch extends Model
                 },
             ],
             ['isConstantly', 'boolean'],
+            ['tag', 'in', 'range' => $this->listTags(true), 'allowArray' => true],
             ['startStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['endStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList()), 'allowArray' => true],
@@ -87,10 +88,6 @@ class IssueSearch extends Model
             $query->contentContainer($contentContainer);
         }
 
-        if (!empty($this->tag)) {
-            $query->joinWith(['personalTags'])->andWhere([Tag::tableName() . '.id' => $this->tag]);
-        }
-
         $dataProvider = new \yii\data\ActiveDataProvider([
             'query' => $query,
             'sort' => [
@@ -107,6 +104,11 @@ class IssueSearch extends Model
             } else {
                 return $dataProvider;
             }
+        }
+
+        if (!empty($this->tag)) {
+            $query->joinWith(['personalTags']);
+            $query->andWhere(['IN', Tag::tableName() . '.id', $this->tag]);
         }
 
         if ($this->isConstantly === true) {
@@ -130,5 +132,24 @@ class IssueSearch extends Model
             $query->andWhere(['>=', Issue::tableName() . '.started_at', $this->startStartedDate]);
         }
         return $dataProvider;
+    }
+
+    public function listTags($onlyKey = false)
+    {
+        $list = \yii\helpers\ArrayHelper::map(
+            \tracker\models\Tag::find()->byUser(\Yii::$app->user->id)->all(),
+            'id',
+            'name'
+        );
+
+        if ($list === []) {
+            return [];
+        }
+
+        if ($onlyKey) {
+            return array_keys($list);
+        }
+
+        return $list;
     }
 }
