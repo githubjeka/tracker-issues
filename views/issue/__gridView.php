@@ -45,7 +45,7 @@ use yii\helpers\Html;
                 ]);
             },
             'visible' => isset($hideTagsColumn) ? !$hideTagsColumn : true,
-            'filter' => \yii\bootstrap\Html::activeCheckboxList($searchModel, 'tag', $searchModel->listTags()),
+            'filter' => $searchModel ? \yii\bootstrap\Html::activeCheckboxList($searchModel, 'tag', $searchModel->listTags()) : false,
         ],
         [
             'attribute' => 'title',
