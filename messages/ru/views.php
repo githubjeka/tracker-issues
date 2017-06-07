@@ -39,7 +39,7 @@ return [
     'Done' => 'Выполнено',
     'Finish issue' => 'Завершить задачу',
     'Finished at' => 'Закончено в',
-    'From this time recommended begin to start work' => 'Рекомендуемое время начала работ.',
+    'From this time recommended begin to start work' => 'Рекомендуемое время начала работ',
     'Has not deadline' => 'Без крайнего срока',
     'More details, please...' => 'Подробнее, пожалуйста...',
     'Must be completed by' => 'Срок до',
