@@ -25,7 +25,7 @@ use yii\helpers\Url;
             $form->field($formModel, 'tags')
                 ->dropDownList(\yii\helpers\ArrayHelper::map(\tracker\models\Tag::find()->byUser(Yii::$app->user->id)->all(),
                     'id', 'name'),
-                    ['text' => 'Please select', 'multiple' => true]
+                    ['text' => 'Please select', 'multiple' => true, 'class'=>'select-form']
                 );
             ?>
 
