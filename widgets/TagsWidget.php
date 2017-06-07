@@ -22,8 +22,7 @@ class TagsWidget extends Widget
             if ($this->asLink) {
                 $html .= Html::a(
                     '<span class="label label-default" style="' . $style . '">' . Html::encode($tagModel->name),
-                    ['/' . Module::getIdentifier() . '/tag/view', 'id' => $tagModel->id],
-                    ['style' => $style]
+                    ['/' . Module::getIdentifier() . '/tag/view', 'id' => $tagModel->id]
                 );
             } else {
 
