@@ -8,7 +8,7 @@
     "issue",
     "tracker"
   ],
-  "version": "0.0.9",
+  "version": "0.0.10dev",
   "humhub": {
     "minVersion": "1.2.1"
   },
