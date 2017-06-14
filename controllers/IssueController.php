@@ -167,7 +167,7 @@ class IssueController extends ContentContainerController
         $assignee->viewed_at = date('Y-m-d H:i');
         $assignee->save();
 
-        return $this->renderAjaxContent($assignee->issue->getWallOut());
+        \Yii::$app->response->setStatusCode(204, 'No Content');
     }
 
     public function actionMarkDone($id)
@@ -177,7 +177,7 @@ class IssueController extends ContentContainerController
         $assignee->finished_at = date('Y-m-d H:i');
         $assignee->save();
 
-        return $this->renderAjaxContent($assignee->issue->getWallOut());
+        \Yii::$app->response->setStatusCode(204, 'No Content');
     }
 
     protected function findAssignee($id)

@@ -74,14 +74,6 @@ $container = $object->content->container;
 
             <hr>
 
-            <p>
-                <span class="label label-info"><?= $object->getContentName(); ?></span>
-                <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $object->priority]) ?>
-                <?= \tracker\widgets\VisibilityIssueWidget::widget(['visibilityContent' => $object->content->visibility]); ?>
-            </p>
-
-            <hr/>
-
             <div class="content" id="wall_content_<?= $object->getUniqueId(); ?>">
                 <?= $content; ?>
             </div>
