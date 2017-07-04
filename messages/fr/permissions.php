@@ -17,10 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Allow others to create new issue on your profile page' => '',
-    'Allow others to edit issue on your profile page' => '',
-    'Allows the user to create issue' => '',
-    'Allows the user to edit issue' => '',
-    'Create issue' => '',
-    'Edit issue' => '',
+    'Allow others to create new issue on your profile page' => 'Autoriser les autres à créer une nouvelle tâche sur votre profil',
+    'Allow others to edit issue on your profile page' => 'Autorisier les autres à éditer la tâche sur votre profil',
+    'Allows the user to create issue' => 'Autoriser les utilisateurs à créer une nouvelle tâche',
+    'Allows the user to edit issue' => 'Autorisier les utilisateurs à éditer une tâche',
+    'Create issue' => 'Créer tâche',
+    'Edit issue' => 'Editer tâche',
 ];
