@@ -70,7 +70,17 @@ class Events extends \yii\base\Object
             'label' => \Yii::t('TrackerIssuesModule.base', 'Tracker issues'),
             'url' => ['/tracker-issues/dashboard/issues'],
             'icon' => '<i class="fa fa-tasks"></i>',
-            'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'dashboard'),
+            'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'dashboard' &&
+                           $controller->action->id === 'issues'),
+            'sortOrder' => 300,
+        ]);
+
+        $event->sender->addItem([
+            'label' => \Yii::t('TrackerIssuesModule.views', 'Documents'),
+            'url' => ['/tracker-issues/dashboard/documents'],
+            'icon' => '<i class="fa fa-files-o"></i>',
+            'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'dashboard' &&
+                           $controller->action->id === 'documents'),
             'sortOrder' => 300,
         ]);
 
