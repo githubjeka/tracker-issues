@@ -6,7 +6,9 @@
     "task",
     "todo",
     "issue",
-    "tracker"
+    "tracker",
+    "workflow",
+    "documents"
   ],
   "version": "0.0.10dev",
   "humhub": {
