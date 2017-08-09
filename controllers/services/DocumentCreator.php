@@ -202,7 +202,7 @@ class DocumentCreator extends \yii\base\Model
      * Old files by the document just storing in database to ability revert changes.
      *
      * @param Document $documentModel
-     *
+     * TODO: fix bug to save files by same naming
      * @return false|Document
      */
     public function addFileToDocument(Document $documentModel)
