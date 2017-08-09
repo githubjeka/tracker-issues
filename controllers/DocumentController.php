@@ -111,7 +111,38 @@ class DocumentController extends Controller
 
     public function actionChangeCategory($id)
     {
-        // TODO
+
+    }
+
+    public function actionAddFile($id)
+    {
+        $document = Document::find()->byId($id)->one();
+
+        if ($document === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if ((int)$document->created_by !== (int)Yii::$app->user->id) {
+            $this->forbidden();
+        }
+
+        $documentCreator = new DocumentCreator();
+
+        if (Yii::$app->request->isPost) {
+            if ($documentCreator->load(Yii::$app->request->post())) {
+                if ($_document = $documentCreator->addFileToDocument($document)) {
+                    return $this->redirect(['view', 'id' => $_document->id]);
+                }
+            }
+        }
+
+        return $this->renderAjax('form_add_file', [
+            'requestModel' => $documentCreator->getDocumentForm(),
+            'actionUrl' => \yii\helpers\Url::to([
+                '/' . Module::getIdentifier() . '/document/add-file',
+                'id' => $document->id,
+            ]),
+        ]);
     }
 
     public function actionToAddReceivers($id)

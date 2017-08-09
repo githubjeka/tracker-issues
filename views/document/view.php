@@ -27,6 +27,17 @@ $user = $userClass::findOne($model->created_by);
             <a href="<?= \yii\helpers\Url::to([
                 '/' . \tracker\Module::getIdentifier() . '/dashboard/documents',
             ]) ?>"><i class="fa fa-2x fa-arrow-left fa-pull-left"></i></a>
+            <?php if ((int)$model->created_by === (int)Yii::$app->user->id) : ?>
+                <div class="pull-right">
+                    <?php $url = Url::to([
+                        '/' . tracker\Module::getIdentifier() . '/document/add-file',
+                        'id' => $model->id,
+                    ]); ?>
+                    <a href="<?= $url; ?>" class="btn btn-primary btn-sm text-uppercase" data-target="#globalModal">
+                        <i class="fa fa-refresh"></i> <?= Yii::t('TrackerIssuesModule.views', 'Change file'); ?>
+                    </a>
+                </div>
+            <?php endif; ?>
             <h1 class="panel-title text-center">
                 <?= (isset(Document::categories()[$model->category])) ?
                     Html::encode(Document::categories()[$model->category]) : Html::encode($model->category) ?>

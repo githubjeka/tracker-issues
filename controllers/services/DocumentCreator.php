@@ -86,35 +86,28 @@ class DocumentCreator extends \yii\base\Model
             throw new \LogicException(json_encode($documentModel->errors));
         }
 
-        $fileModel = new DocumentFile();
-        $fileModel->document_id = $documentModel->id;
-        $fileModel->filename = $this->requestForm->file->name;
-        $fileModel->created_by = \Yii::$app->user->id;
-        $fileModel->created_at = time();
-
-        if (!$fileModel->save()) {
+        try {
+            $this->addFileToDocument($documentModel);
+        } catch (\LogicException $e) {
             $transaction->rollBack();
-            throw new \LogicException(json_encode($fileModel->errors));
+            throw $e;
+        } catch (\RuntimeException $e) {
+            $transaction->rollBack();
+            throw $e;
         }
 
-        /** @var Module $module */
-        $module = \Yii::$app->moduleManager->getModule(Module::getIdentifier());
-        $category = isset(Document::categories()[$documentModel->category]) ? $documentModel->category : 'no-category';
-        $path = $module->documentRootPath . $category . '/' . $documentModel->id . '/';
-
-        if (!file_exists($path) && !mkdir($path, 0774, true)) {
+        try {
+            $this->addReceiversTo($documentModel);
+        } catch (\LogicException $e) {
             $transaction->rollBack();
-            throw new \RuntimeException('Can not created ' . realpath($path));
-        };
-
-        if (!$this->requestForm->file->saveAs($path . $fileModel->filename)) {
+            throw $e;
+        } catch (\RuntimeException $e) {
             $transaction->rollBack();
-            throw new \RuntimeException('Can not saved the file ' . $fileModel->filename . ' in ' . $path);
+            throw $e;
         }
-
-        $this->addReceiversTo($documentModel);
 
         $transaction->commit();
+        $documentModel->refresh();
 
         return $documentModel;
     }
@@ -183,5 +176,54 @@ class DocumentCreator extends \yii\base\Model
         $transaction->commit();
 
         return $document;
+    }
+
+    public function addFileToDocument(Document $documentModel)
+    {
+        if (!$this->requestForm->validate(['file'])) {
+            return false;
+        }
+
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        $oldMainDocument = $documentModel->file;
+
+        $fileModel = new DocumentFile();
+        $fileModel->document_id = $documentModel->id;
+        $fileModel->filename = $this->requestForm->file->name;
+        $fileModel->created_by = \Yii::$app->user->id;
+        $fileModel->created_at = time();
+
+        if (!$fileModel->save()) {
+            $transaction->rollBack();
+            throw new \LogicException(json_encode($fileModel->errors));
+        }
+
+        /** @var Module $module */
+        $module = \Yii::$app->moduleManager->getModule(Module::getIdentifier());
+        $category = isset(Document::categories()[$documentModel->category]) ? $documentModel->category : 'no-category';
+        $path = $module->documentRootPath . $category . '/' . $documentModel->id . '/';
+
+        if (!file_exists($path) && !mkdir($path, 0774, true)) {
+            $transaction->rollBack();
+            throw new \RuntimeException('Can not created ' . realpath($path));
+        };
+
+        if (!$this->requestForm->file->saveAs($path . $fileModel->filename)) {
+            $transaction->rollBack();
+            throw new \RuntimeException('Can not saved the file ' . $fileModel->filename . ' in ' . $path);
+        }
+
+        if ($oldMainDocument) {
+            $oldMainDocument->is_show = false;
+            if (!$oldMainDocument->save()) {
+                $transaction->rollBack();
+                throw new \LogicException(json_encode($oldMainDocument->errors));
+            }
+        }
+
+        $transaction->commit();
+
+        return $documentModel;
     }
 }

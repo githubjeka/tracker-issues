@@ -33,7 +33,8 @@ class DocumentFile extends \yii\db\ActiveRecord
     {
         return [
             [['document_id', 'filename', 'created_at', 'created_by'], 'required'],
-            [['document_id', 'is_show', 'created_at', 'created_by'], 'integer'],
+            [['document_id', 'created_at', 'created_by'], 'integer'],
+            [['is_show'], 'boolean'],
             [['comments'], 'string'],
             [['filename'], 'string', 'max' => 255],
             [
