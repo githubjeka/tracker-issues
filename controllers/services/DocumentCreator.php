@@ -15,6 +15,8 @@ use tracker\notifications\DocumentShared;
 use yii\web\UploadedFile;
 
 /**
+ * Main service to provide public API for manipulation with Document model.
+ *
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 class DocumentCreator extends \yii\base\Model
@@ -22,26 +24,30 @@ class DocumentCreator extends \yii\base\Model
     /** @var DocumentRequest */
     private $requestForm;
 
-    public function __construct($config = [])
+    /**
+     * @inheritdoc
+     */
+    public function init()
     {
+        parent::init();
         $this->requestForm = new DocumentRequest();
-        parent::__construct($config);
     }
 
-    /** @var Document */
-    protected $documentModel;
-
+    /**
+     * @return DocumentRequest
+     */
     public function getDocumentForm()
     {
         return $this->requestForm;
     }
 
     /**
+     * Populates the document request model with input user data.
+     *
      * @param array $datum
      * @param null $formName
      *
      * @return bool
-     * @see Model::load()
      */
     public function load($datum, $formName = null)
     {
@@ -62,6 +68,11 @@ class DocumentCreator extends \yii\base\Model
         return true;
     }
 
+    /**
+     * Public API to create document
+     *
+     * @return false|Document
+     */
     public function create()
     {
         if (!$this->requestForm->validate()) {
@@ -112,6 +123,13 @@ class DocumentCreator extends \yii\base\Model
         return $documentModel;
     }
 
+    /**
+     * Public API to add new receivers to the document
+     *
+     * @param Document $document
+     *
+     * @return false|Document
+     */
     public function addReceiversTo(Document $document)
     {
         if (!$this->requestForm->validate(['receivers'])) {
@@ -178,6 +196,15 @@ class DocumentCreator extends \yii\base\Model
         return $document;
     }
 
+    /**
+     * Public API to add new file to the document.
+     * This file will be main by download in document model.
+     * Old files by the document just storing in database to ability revert changes.
+     *
+     * @param Document $documentModel
+     *
+     * @return false|Document
+     */
     public function addFileToDocument(Document $documentModel)
     {
         if (!$this->requestForm->validate(['file'])) {
