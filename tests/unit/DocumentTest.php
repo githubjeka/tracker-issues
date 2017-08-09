@@ -18,7 +18,6 @@ namespace tracker\controllers\services {
 
 namespace tracker\tests\unit {
 
-    use humhub\modules\space\models\Space;
     use humhub\modules\user\models\User;
     use humhub\modules\user\tests\codeception\fixtures\UserFixture;
     use tracker\controllers\services\DocumentCreator;
@@ -26,6 +25,7 @@ namespace tracker\tests\unit {
     use tracker\enum\IssuePriorityEnum;
     use tracker\enum\IssueStatusEnum;
     use tracker\models\Document;
+    use tracker\tests\fixtures\DocumentFileFixture;
 
     /**
      * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -39,7 +39,7 @@ namespace tracker\tests\unit {
         protected function _before()
         {
             $this->tester->haveFixtures([
-                'document' => \tracker\tests\fixtures\DocumentFixture::class,
+                'document' => DocumentFileFixture::class,
                 'space' => \humhub\modules\space\tests\codeception\fixtures\SpaceFixture::class,
             ]);
 
@@ -48,8 +48,7 @@ namespace tracker\tests\unit {
 
         public function testWorkWithCreator()
         {
-            $spaceContent = Space::findOne(['id' => 1]);
-            $documentCreator = new DocumentCreator($spaceContent);
+            $documentCreator = new DocumentCreator();
             $this->assertFalse($documentCreator->create());
             $this->assertTrue($documentCreator->getDocumentForm()->hasErrors());
 
@@ -69,18 +68,22 @@ namespace tracker\tests\unit {
             $document = $documentCreator->create();
             $this->assertInstanceOf(Document::class, $document);
             $this->assertEquals($requireAttributes['name'], $document->name);
-            $this->assertEquals($_FILES['file']['name'], $document->file);
+            $this->assertEquals($_FILES['file']['name'], $document->file->filename);
             $this->assertEmpty($document->category);
             $this->assertEmpty($document->type);
             $this->assertEmpty($document->from);
             $this->assertEmpty($document->to);
             $this->assertEmpty($document->number);
             $this->assertEmpty($document->description);
+            $this->assertEquals(1, $document->created_by);
+            $this->assertEquals(1, $document->file->created_by);
+            $this->assertNotEmpty($document->created_at);
+            $this->assertNotEmpty($document->file->created_at);
             $this->assertCount(0, $document->receivers);
             $this->assertCount(0, $document->issues);
 
 
-            $documentCreator = new DocumentCreator($spaceContent);
+            $documentCreator = new DocumentCreator();
             $document = $documentCreator->addReceiversTo($document);
             $document->refresh();
             $this->assertCount(0, $document->receivers);
