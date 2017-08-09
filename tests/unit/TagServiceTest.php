@@ -4,9 +4,9 @@ namespace tracker\tests\unit;
 
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
-use tracker\controllers\IssueCreator;
-use tracker\controllers\IssueRequest;
-use tracker\controllers\TagDesignator;
+use tracker\controllers\services\IssueCreator;
+use tracker\controllers\requests\IssueRequest;
+use tracker\controllers\services\TagDesignator;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>

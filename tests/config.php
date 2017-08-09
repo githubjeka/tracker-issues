@@ -7,6 +7,12 @@ return yii\helpers\ArrayHelper::merge(
         'controllerMap' => [
             'installer' => 'humhub\modules\installer\commands\InstallController',
         ],
+        'modules' => [
+            \tracker\Module::getIdentifier() => [
+                'class' => \tracker\Module::class,
+                'documentRootPath' => codecept_data_dir(),
+            ],
+        ],
         'components' => [
             'mailer' => [
                 'useFileTransport' => true,

@@ -2,8 +2,9 @@
 
 namespace tracker\tests\unit;
 
-use tracker\controllers\IssueRequest;
-use tracker\controllers\IssueService;
+use tracker\controllers\requests\IssueRequest;
+use tracker\controllers\services\IssueService;
+
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>

@@ -4,7 +4,7 @@ namespace tracker\tests\unit;
 
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
-use tracker\controllers\IssueCreator;
+use tracker\controllers\services\IssueCreator;
 use tracker\enum\IssueStatusEnum;
 use tracker\models\Issue;
 use tracker\models\Link;

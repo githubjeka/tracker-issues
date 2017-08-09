@@ -23,5 +23,5 @@ return [
 4. cd to `protected/modules/tracker/`
 5. run `php yii_test migrate/up --includeModuleMigrations=1 --interactive=0`
 6. run `php yii_test installer/auto`
-7. run `php yii_test migrate/up -p=migrations`
+7. run `php yii_test migrate/up -p=migrations --interactive=0`
 8. run `codecept run`
