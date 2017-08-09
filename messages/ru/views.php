@@ -18,6 +18,11 @@
  */
 return [
     'Are you sure you want to delete this item?' => '',
+    'Comments' => '',
+    'Document ID' => '',
+    'Filename' => '',
+    'ID' => '',
+    'Is Show' => '',
     '<strong>Designate</strong> tag to issue' => '<strong>Назначить</strong> номенклатуру к задаче',
     'Add' => 'Добавить',
     'Add Receivers' => 'Добавить получателей',
@@ -71,7 +76,6 @@ return [
     'No open issues...' => 'Нет открытых задач...',
     'Notify assignors' => 'Оповестить ответственных',
     'Number' => 'Номер',
-    'Only selected members from this space can get initial access to the viewing of the document in next step.' => 'Только выбранные участники из этого пространства смогут получить первоначальный доступ к просмотру документа на следующем шаге.',
     'Ordered Letter' => 'Заказное',
     'Ordered Letter with notification' => 'Заказное с уведомлением',
     'Ordered Letter with ordered notification' => 'Заказное с заказным уведомлением',
