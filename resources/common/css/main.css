@@ -1,78 +1,85 @@
 .issue-form .checkbox label {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 .issue-description-textarea {
-    min-height: 200px !important;
+  min-height: 200px !important;
 }
 
 .issue-label {
-    text-transform: uppercase;
-    display: inline-block;
-    padding: 3px 5px 4px;
-    font-weight: 600;
-    font-size: 10px !important;
-    vertical-align: baseline;
-    white-space: nowrap;
-    text-shadow: none;
-    border-radius: .25em;
-    line-height: 1;
-    text-align: center;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 3px 5px 4px;
+  font-weight: 600;
+  font-size: 10px !important;
+  vertical-align: baseline;
+  white-space: nowrap;
+  text-shadow: none;
+  border-radius: .25em;
+  line-height: 1;
+  text-align: center;
 }
 
 .issue-priority-urgent {
-    background-color: #e30000 !important;
-    color: white !important;
+  background-color: #e30000 !important;
+  color: white !important;
 }
 
 .issue-priority-critical {
-    background-color: #ffc8ea !important;
-    color: #7a7a7a !important;
+  background-color: #ffc8ea !important;
+  color: #7a7a7a !important;
 }
 
 .issue-priority-serious {
-    background-color: #ffee9c !important;
-    color: #7a7a7a !important;
+  background-color: #ffee9c !important;
+  color: #7a7a7a !important;
 }
 
 .issue-priority-normal {
-    background-color: #e6f6cf !important;
-    color: #7a7a7a !important;
+  background-color: #e6f6cf !important;
+  color: #7a7a7a !important;
 }
 
 .issue-priority-minor {
-    background: #ededed;
-    color: #7a7a7a !important;
+  background: #ededed;
+  color: #7a7a7a !important;
 }
 
 .issue-labels {
-    margin-right: 35px;
+  margin-right: 35px;
 }
 
 .table-filter {
-    width: auto!important;
+  width: auto !important;
 }
 
 .select-form {
-    border: 2px solid #ededed;
-    box-shadow: none;
-    min-height: 35px;
-    display: block;
-    width: 100%;
-    height: 34px;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border-radius: 4px;
-    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  border: 2px solid #ededed;
+  box-shadow: none;
+  min-height: 35px;
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 4px;
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
 .select-form:focus {
-    border-color: #6fdbe8;
-    outline: 0;
+  border-color: #6fdbe8;
+  outline: 0;
+}
+
+li.size {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  list-style-position: inside;
 }
