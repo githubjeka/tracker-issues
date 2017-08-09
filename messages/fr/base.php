@@ -17,6 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Issue' => 'Tâche',
-    'Tracker issues' => 'Tâches du Projet',
+    'Issue' => '',
+    'Tracker issues' => '',
 ];
