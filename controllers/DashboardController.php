@@ -92,9 +92,6 @@ class DashboardController extends Controller
 
     public function actionToCreateIssue()
     {
-        if (!\Yii::$app->user->can(new CreateIssue())) {
-            $this->forbidden();
-        }
         return $this->renderAjax('to_create_issue', [
             'actionUrl' => \yii\helpers\Url::to([
                 '/' . Module::getIdentifier() . '/issue/create',
