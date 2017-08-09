@@ -1,6 +1,6 @@
 <?php
 
-namespace tracker\controllers;
+namespace tracker\controllers\services;
 
 use humhub\modules\user\models\User;
 use tracker\enum\IssueStatusEnum;
@@ -43,11 +43,11 @@ class IssueEditor extends IssueService
         $this->requestForm->tags = $tags;
 
         $formatter = \Yii::$app->formatter;
-        $this->requestForm->startedTime = $formatter->asTime($issue->started_at, 'php:H:m');
+        $this->requestForm->startedTime = $formatter->asTime($issue->started_at, 'php:H:i');
         $this->requestForm->startedDate = $formatter->asDate($issue->started_at, 'php:Y-m-d');
 
         if ($issue->deadline) {
-            $this->requestForm->deadlineTime = $formatter->asTime($issue->deadline, 'php:H:m');
+            $this->requestForm->deadlineTime = $formatter->asTime($issue->deadline, 'php:H:i');
             $this->requestForm->deadlineDate = $formatter->asDate($issue->deadline, 'php:Y-m-d');
         }
 

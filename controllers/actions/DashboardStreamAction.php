@@ -1,7 +1,7 @@
 <?php
 
 
-namespace tracker\controllers;
+namespace tracker\controllers\actions;
 
 use humhub\modules\dashboard\components\actions\DashboardStream;
 use tracker\models\Issue;

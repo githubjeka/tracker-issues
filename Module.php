@@ -5,8 +5,11 @@ namespace tracker;
 use humhub\modules\content\components\ContentContainerModule;
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
+use tracker\permissions\AddDocument;
+use tracker\permissions\AddReceiversToDocument;
 use tracker\permissions\CreateIssue;
 use tracker\permissions\EditIssue;
+use tracker\permissions\ViewAllDocuments;
 
 /**
  * Main class of module tracker issue
@@ -17,9 +20,14 @@ class Module extends ContentContainerModule
 {
     public $id = 'tracker-issues';
 
+    public $documentRootPath;
+
     public function init()
     {
         \Yii::setAlias('tracker', __DIR__);
+        if (!is_dir($this->documentRootPath)) {
+            $this->documentRootPath = \Yii::getAlias('@webroot/uploads/documents/');
+        }
         parent::init();
     }
 
@@ -43,7 +51,11 @@ class Module extends ContentContainerModule
             ];
         }
 
-        return [];
+        return [
+            new AddDocument(),
+            new AddReceiversToDocument(),
+            new ViewAllDocuments(),
+        ];
     }
 
     public static function getIdentifier()

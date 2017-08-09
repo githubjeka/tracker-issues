@@ -1,7 +1,8 @@
 <?php
 
-namespace tracker\controllers;
+namespace tracker\controllers\services;
 
+use humhub\modules\space\models\Space;
 use tracker\models\IssueSearch;
 use tracker\widgets\TagsWidget;
 use yii\base\Object;
@@ -57,10 +58,12 @@ class CalendarContainer extends Object
             $title = '<span class="label label-default">' . $model->content->getContainer()->getDisplayName() .
                      '</span> | ' . $title;
 
+            /** @var Space $container */
+            $container = $model->content->getContainer();
             $array = [
                 'title' => $title,
                 'url' => $model->content->getUrl(),
-                'color' => isset($model->content->getContainer()->color) ? $model->content->getContainer()->color : '#337ab7',
+                'color' => isset($container->color) ? $container->color : '#337ab7',
             ];
 
             $startTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $model->started_at);

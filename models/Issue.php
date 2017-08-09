@@ -24,8 +24,9 @@ use Yii;
  * @property Tag[] $tags
  * @property Tag[] $personalTags
  * @property IssueContent $content
- * @property Issue $parent
+ * @property Issue|null $parent
  * @property Issue[] $subtasks
+ * @property Document[] $documents
  */
 class Issue extends ContentActiveRecord
 {
@@ -46,7 +47,7 @@ class Issue extends ContentActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['deadline', 'started_at'], 'date' , 'format'=> 'php:Y-m-d H:i'],
+            [['deadline', 'started_at'], 'date', 'format' => 'php:Y-m-d H:i'],
             [['status', 'priority',], 'integer'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -128,6 +129,12 @@ class Issue extends ContentActiveRecord
     {
         return $this->hasMany(Issue::class, ['id' => 'child_id'])
             ->viaTable(Link::tableName(), ['parent_id' => 'id']);
+    }
+
+    public function getDocuments()
+    {
+        return $this->hasMany(Document::class, ['id' => 'document_id'])
+            ->viaTable(DocumentIssue::tableName(), ['issue_id' => 'id']);
     }
 
     /**

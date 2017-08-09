@@ -3,6 +3,10 @@
 namespace tracker\controllers;
 
 use humhub\modules\content\components\ContentContainerController;
+use tracker\controllers\actions\DashboardStreamAction;
+use tracker\controllers\actions\StreamAction;
+use tracker\controllers\services\IssueCreator;
+use tracker\controllers\services\IssueEditor;
 use tracker\models\Assignee;
 use tracker\models\Issue;
 use tracker\models\IssueSearch;
@@ -65,7 +69,7 @@ class IssueController extends ContentContainerController
         $form = $issueCreator->getIssueForm();
         $form->status = \tracker\enum\IssueStatusEnum::TYPE_WORK;
         if ($this->contentContainer instanceof \humhub\modules\user\models\User) {
-            $form->visibility = \tracker\enum\IssueVisibilityEnum::TYPE_PRIVATE;
+            $form->visibility = \tracker\enum\ContentVisibilityEnum::TYPE_PRIVATE;
         }
 
         return $this->renderAjax('create', ['issueForm' => $form]);

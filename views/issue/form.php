@@ -5,7 +5,7 @@
 
 /**
  * @var $this \humhub\components\View
- * @var \tracker\controllers\IssueRequest $issueForm
+ * @var \tracker\controllers\requests\IssueRequest $issueForm
  * @var boolean $submitAjax
  */
 use yii\bootstrap\ActiveForm;
@@ -25,7 +25,7 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
 <div class="row">
     <div class="col-md-6">
         <?= $form->field($issueForm, 'visibility')
-            ->dropDownList(\tracker\enum\IssueVisibilityEnum::getList()); ?>
+            ->dropDownList(\tracker\enum\ContentVisibilityEnum::getList()); ?>
     </div>
     <div class="col-md-6">
         <?= $form->field($issueForm, 'priority')
@@ -72,7 +72,6 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                 'id', 'name'),
                 ['text' => 'Please select', 'multiple' => true]
             ); ?>
-
     </div>
 
 </div>

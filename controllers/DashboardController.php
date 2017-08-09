@@ -3,9 +3,14 @@
 namespace tracker\controllers;
 
 use humhub\components\Controller;
+use tracker\controllers\actions\DashboardStreamAction;
 use tracker\enum\IssueStatusEnum;
+use tracker\models\DocumentSearch;
 use tracker\models\IssueSearch;
 use tracker\Module;
+use tracker\permissions\AddDocument;
+use tracker\permissions\CreateIssue;
+use Yii;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -45,6 +50,22 @@ class DashboardController extends Controller
         ]);
     }
 
+    /**
+     * Lists all Document models.
+     *
+     * @return mixed
+     */
+    public function actionDocuments()
+    {
+        $searchModel = new DocumentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('/document/index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
     public function actionTimeline()
     {
         $userComponent = \Yii::$app->user;
@@ -71,10 +92,31 @@ class DashboardController extends Controller
 
     public function actionToCreateIssue()
     {
+        if (!\Yii::$app->user->can(new CreateIssue())) {
+            $this->forbidden();
+        }
         return $this->renderAjax('to_create_issue', [
             'actionUrl' => \yii\helpers\Url::to([
                 '/' . Module::getIdentifier() . '/issue/create',
             ]),
         ]);
+    }
+
+    public function actionToCreateDocument()
+    {
+        if (!\Yii::$app->user->can(new AddDocument())) {
+            $this->forbidden();
+        }
+
+        return $this->renderAjax('to_create_document', [
+            'actionUrl' => \yii\helpers\Url::to([
+                '/' . Module::getIdentifier() . '/document/create',
+            ]),
+        ]);
+    }
+
+    public function actionFiles()
+    {
+        return $this->render('elfinder');
     }
 }

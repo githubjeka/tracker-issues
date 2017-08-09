@@ -5,7 +5,7 @@
 
 /**
  * @var $this \humhub\components\View
- * @var \tracker\controllers\IssueRequest $issueForm
+ * @var \tracker\controllers\requests\IssueRequest $issueForm
  */
 ?>
 

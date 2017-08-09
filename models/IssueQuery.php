@@ -7,7 +7,7 @@ use humhub\modules\content\models\Content;
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
 use tracker\enum\IssueStatusEnum;
-use tracker\enum\IssueVisibilityEnum;
+use tracker\enum\ContentVisibilityEnum;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -73,7 +73,7 @@ class IssueQuery extends ActiveQueryContent
                     [':user' => $user->id]
                 )
                 ->andWhere(
-                    "$tableContent.visibility != " . IssueVisibilityEnum::TYPE_PRIVATE .
+                    "$tableContent.visibility != " . ContentVisibilityEnum::TYPE_PRIVATE .
                     " OR $tableContent.created_by = :user OR $tableAssignee.id IS NOT NULL",
                     [':user' => $user->id]
                 );

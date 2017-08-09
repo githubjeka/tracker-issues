@@ -2,6 +2,8 @@
 
 namespace tracker\controllers;
 
+use tracker\controllers\services\CalendarContainer;
+
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */

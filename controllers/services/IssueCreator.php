@@ -1,12 +1,13 @@
 <?php
 
-namespace tracker\controllers;
+namespace tracker\controllers\services;
 
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\user\models\User;
 use tracker\enum\IssueStatusEnum;
 use tracker\enum\LinkEnum;
 use tracker\models\Assignee;
+use tracker\models\DocumentIssue;
 use tracker\models\Issue;
 use tracker\models\Link;
 use tracker\models\Tag;
@@ -54,6 +55,17 @@ class IssueCreator extends IssueService
             'title' => \Yii::t('TrackerIssuesModule.enum', 'Subtask') . ': ' . $issue->title,
             'started_at' => date('Y-m-d H:i'),
         ]);
+
+        foreach ($issue->documents as $document) {
+            $link = new DocumentIssue([
+                'document_id' => $document->id,
+                'issue_id' => $subtaskModel->id,
+            ]);
+
+            if ($link->save() === false) {
+                throw new \LogicException(json_encode($link->errors));
+            }
+        }
 
         $link = new Link();
         $link->type = LinkEnum::TYPE_SUBTASK;

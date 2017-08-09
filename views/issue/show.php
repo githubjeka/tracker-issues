@@ -13,7 +13,6 @@
 
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-
 \tracker\assets\IssueAsset::register($this);
 ?>
 
@@ -59,6 +58,7 @@ use yii\widgets\Pjax;
 
     </div>
 </div>
+
 
 
 

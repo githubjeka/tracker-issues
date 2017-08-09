@@ -7,7 +7,7 @@ use humhub\modules\content\models\Content;
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class IssueVisibilityEnum extends BaseEnum
+class ContentVisibilityEnum extends BaseEnum
 {
     const TYPE_PUBLIC = Content::VISIBILITY_PUBLIC;
     const TYPE_PROTECTED = Content::VISIBILITY_PRIVATE;

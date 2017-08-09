@@ -3,6 +3,7 @@
 namespace tracker\controllers;
 
 use humhub\components\Controller;
+use tracker\controllers\services\TagDesignator;
 use tracker\models\Issue;
 use tracker\models\IssueSearch;
 use tracker\models\Tag;

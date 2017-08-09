@@ -1,6 +1,6 @@
 <?php
 
-namespace tracker\controllers;
+namespace tracker\controllers\services;
 
 use tracker\models\Issue;
 use tracker\models\Tag;

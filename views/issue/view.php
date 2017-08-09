@@ -8,10 +8,10 @@
  * @var Issue $issue
  */
 
+use humhub\libs\Html;
 use tracker\models\Issue;
 use tracker\widgets\DeadlineIssueWidget;
 use tracker\widgets\StatusIssueWidget;
-use yii\helpers\Html;
 
 tracker\assets\IssueAsset::register($this);
 $formatter = Yii::$app->formatter;
@@ -21,23 +21,29 @@ $formatter = Yii::$app->formatter;
 
     <div class="row">
         <div class="col-md-8">
-
-            <h4><?= Html::encode($issue->title) ?></h4>
-
             <p data-ui-markdown data-ui-show-more>
-                <?= humhub\widgets\RichText::widget(['text' => $issue->description, 'record' => $issue]) ?>
+                <?= humhub\widgets\RichText::widget([
+                    'text' => $issue->description,
+                    'record' => $issue,
+                ]) ?>
             </p>
-
         </div>
 
         <div class="col-md-4">
-            <div class="panel panel-info">
+            <div class="panel panel-info collapse in" id="issue-details-<?= $issue->getUniqueId(); ?>">
                 <div class="panel-body">
                     <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Visibility') ?>">
-                        <span class="label label-default"><i class="fa fa-dot-circle-o fa-fw"
-                                                             aria-hidden="true"></i></span>
+                        <span class="label label-default">
+                          <i class="fa fa-dot-circle-o fa-fw" aria-hidden="true"></i>
+                        </span>
                         <?= \tracker\widgets\VisibilityIssueWidget::widget(['visibilityContent' => $issue->content->visibility]); ?>
+                        <br>
+                        <p style="margin-left: 26px;display: block;">
+                            <small><?= Html::containerLink($issue->content->container); ?></small>
+                        </p>
                     </div>
+
+                    <hr>
 
                     <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Status') ?>">
                         <span class="label label-default"><i class="fa fa-flag fa-fw" aria-hidden="true"></i></span>
@@ -58,7 +64,7 @@ $formatter = Yii::$app->formatter;
                         <span class="label label-default"><i class="fa fa-calendar-o fa-fw"
                                                              aria-hidden="true"></i></span>
                         <span class="label label-default">
-                            <?= $formatter->asDatetime($issue->started_at, 'HH:mm, eee d MMMM y ') ?>
+                            <?= $formatter->asDatetime($issue->started_at, 'eee d MMMM y, HH:mm') ?>
                         </span>
                     </div>
 
@@ -74,7 +80,7 @@ $formatter = Yii::$app->formatter;
                             <span class="label label-default"><i class="fa fa-calendar-check-o fa-fw"
                                                                  aria-hidden="true"></i></span>
                             <span class="label label-default">
-                             <?= $formatter->asDatetime($issue->finished_at, 'HH:mm, eee d MMMM y ') ?>
+                             <?= $formatter->asDatetime($issue->finished_at, 'eee d MMMM y, HH:mm') ?>
                             </span>
                         </div>
                     <?php endif; ?>
@@ -95,47 +101,6 @@ $formatter = Yii::$app->formatter;
             </div>
         </div>
     </div>
-
-    <?php
-    /** @var Issue $parent */
-    $parent = $issue->getParent()->readable()->one();
-    $parentNotReadable = $issue->getParent()->one();
-    ?>
-    <?php if ($parent !== null)  : ?>
-        <div class="panel panel-warning">
-            <div class="panel-heading">
-                <strong><?= Yii::t('TrackerIssuesModule.views', 'This issue is subtask for the issue') ?></strong>
-                <h1 class="panel-title">
-                    <?= Html::a(Html::encode($parent->title), $parent->content->getUrl()) ?>
-                </h1>
-            </div>
-            <div class="panel-body">
-                <p data-ui-markdown data-ui-show-more>
-                    <?= humhub\widgets\RichText::widget([
-                        'text' => $parent->description,
-                        'record' => $parent,
-                    ]) ?>
-                </p>
-
-            </div>
-        </div>
-    <?php elseif($parentNotReadable !== null) : ?>
-        <div class="panel panel-warning">
-            <div class="panel-heading">
-                <strong><?= Yii::t('TrackerIssuesModule.views', 'This issue is subtask for the issue') ?></strong>
-                <h1 class="panel-title"><?= Html::encode($parentNotReadable->title) ?></h1>
-            </div>
-            <div class="panel-body">
-                <p data-ui-markdown data-ui-show-more>
-                    <?= humhub\widgets\RichText::widget([
-                        'text' => $parentNotReadable->description,
-                        'record' => $parentNotReadable,
-                    ]) ?>
-                </p>
-
-            </div>
-        </div>
-    <?php endif ?>
 
     <?php if (count($issue->assignees) > 0) : ?>
         <div class="table-responsive">
@@ -232,26 +197,5 @@ $formatter = Yii::$app->formatter;
             </table>
         </div>
     <?php endif; ?>
-
-    <?php
-    $dataProvider = new \yii\data\ActiveDataProvider(['query' => $issue->getSubtasks()->readable()]);
-    if ($dataProvider->getTotalCount() > 0) : ?>
-        <div class="panel panel-warning">
-            <div class="panel-heading">
-                <h1 class="panel-title">
-                    <?= Yii::t('TrackerIssuesModule.views', 'This issue has subtasks') ?>:
-                </h1>
-            </div>
-            <div class="panel-body">
-
-                <?= $this->render('__gridView', [
-                    'contentContainer' => $issue->content->getContainer(),
-                    'dataProvider' => $dataProvider,
-                    'searchModel' => null,
-                ]) ?>
-
-            </div>
-        </div>
-    <?php endif ?>
 
 </div>

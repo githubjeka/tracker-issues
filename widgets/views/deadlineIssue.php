@@ -11,7 +11,7 @@ $formatter = \Yii::$app->formatter;
 <?php if (empty($deadline))  : ?>
     <?php if (isset($startTime))  : ?>
         <span class="label label-default">
-            <?= $formatter->asDatetime($startTime, 'd MMM y, HH:mm') ?>
+            <?= $formatter->asDatetime($startTime, 'eee d MMMM y, HH:mm') ?>
         </span>&nbsp;-&nbsp;
     <?php endif; ?>
     <span class="label label-default">
@@ -29,7 +29,7 @@ $formatter = \Yii::$app->formatter;
 
     <?php if (isset($startTime))  : ?>
         <span class="label label-default">
-            <?= $formatter->asDatetime($startTime, 'd MMM y, HH:mm') ?>
+            <?= $formatter->asDatetime($startTime, 'eee d MMMM y, HH:mm') ?>
         </span>&nbsp;-&nbsp;
     <?php endif; ?>
 
@@ -38,6 +38,6 @@ $formatter = \Yii::$app->formatter;
             <?= \Yii::t('TrackerIssuesModule.views', 'Must be completed by') ?>&nbsp;
         <?php endif; ?>
 
-        <?= $formatter->asDatetime($deadline, 'd MMM y, HH:mm') ?>
+        <?= $formatter->asDatetime($deadline, 'eee d MMMM y, HH:mm') ?>
     </span>
 <?php endif; ?>

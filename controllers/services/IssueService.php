@@ -1,7 +1,8 @@
 <?php
 
-namespace tracker\controllers;
+namespace tracker\controllers\services;
 
+use tracker\controllers\requests\IssueRequest;
 use tracker\models\Issue;
 use yii\base\Object;
 

@@ -93,6 +93,9 @@ class IssueSearch extends Model
             'sort' => [
                 'defaultOrder' => ['deadline' => SORT_ASC],
             ],
+            'pagination'=>[
+                'defaultPageSize'=>50,
+            ]
         ]);
 
         $this->load($params);

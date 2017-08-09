@@ -1,10 +1,10 @@
 <?php
 
-namespace tracker\controllers;
+namespace tracker\controllers\requests;
 
+use tracker\enum\ContentVisibilityEnum;
 use tracker\enum\IssuePriorityEnum;
 use tracker\enum\IssueStatusEnum;
-use tracker\enum\IssueVisibilityEnum;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -21,7 +21,7 @@ class IssueRequest extends \yii\base\Model
     public $assignedUsers = [];
     public $tags = [];
     public $status = IssueStatusEnum::TYPE_DRAFT;
-    public $visibility = IssueVisibilityEnum::TYPE_PROTECTED;
+    public $visibility = ContentVisibilityEnum::TYPE_PROTECTED;
     public $priority = IssuePriorityEnum::TYPE_NORMAL;
     public $notifyAssignors = true;
     public $container;
@@ -32,7 +32,7 @@ class IssueRequest extends \yii\base\Model
             [['assignedUsers', 'tags'], 'default', 'value' => []],
             ['notifyAssignors', 'default', 'value' => true],
             ['status', 'default', 'value' => IssueStatusEnum::TYPE_DRAFT],
-            ['visibility', 'default', 'value' => IssueVisibilityEnum::TYPE_PROTECTED],
+            ['visibility', 'default', 'value' => ContentVisibilityEnum::TYPE_PROTECTED],
             ['priority', 'default', 'value' => IssuePriorityEnum::TYPE_NORMAL],
 
             [['id', 'title'], 'required'],
@@ -41,7 +41,7 @@ class IssueRequest extends \yii\base\Model
             [['deadlineDate', 'startedDate',], 'date', 'format' => 'php:Y-m-d'],
             [['deadlineTime', 'startedTime',], 'time', 'format' => 'php:H:i'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList())],
-            ['visibility', 'in', 'range' => array_keys(IssueVisibilityEnum::getList())],
+            ['visibility', 'in', 'range' => array_keys(ContentVisibilityEnum::getList())],
             ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
             ['assignedUsers', 'safe'],
             ['notifyAssignors', 'boolean'],

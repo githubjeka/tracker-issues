@@ -2,7 +2,7 @@
 
 namespace tracker\widgets;
 
-use tracker\enum\IssueVisibilityEnum;
+use tracker\enum\ContentVisibilityEnum;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -13,7 +13,7 @@ class VisibilityIssueWidget extends \yii\bootstrap\Widget
 
     public function run()
     {
-        $text = IssueVisibilityEnum::getLabel($this->visibilityContent);
+        $text = ContentVisibilityEnum::getLabel($this->visibilityContent);
         $class = $this->getCssClass();
 
         return "<span class=\"label $class\">$text</span>";
@@ -22,11 +22,11 @@ class VisibilityIssueWidget extends \yii\bootstrap\Widget
     private function getCssClass()
     {
         switch ($this->visibilityContent) {
-            case IssueVisibilityEnum::TYPE_PRIVATE :
+            case ContentVisibilityEnum::TYPE_PRIVATE :
                 return 'label-danger';
-            case IssueVisibilityEnum::TYPE_PROTECTED :
+            case ContentVisibilityEnum::TYPE_PROTECTED :
                 return 'label-primary';
-            case IssueVisibilityEnum::TYPE_PUBLIC :
+            case ContentVisibilityEnum::TYPE_PUBLIC :
                 return 'label-success';
         }
 

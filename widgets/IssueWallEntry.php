@@ -13,6 +13,11 @@ class IssueWallEntry extends \humhub\modules\content\widgets\WallEntry
 
     public function run()
     {
+        \Yii::$app->response->on(\yii\web\Response::EVENT_AFTER_SEND, function () {
+            \Yii::$app->session->remove('parents');
+            \Yii::$app->session->remove('childs');
+        });
+
         return $this->renderFile(__DIR__ . '/../views/issue/view.php', ['issue' => $this->contentObject,]);
     }
 
