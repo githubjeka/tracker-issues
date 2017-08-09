@@ -3,7 +3,6 @@
 namespace tracker\controllers;
 
 use humhub\components\Controller;
-use humhub\modules\space\models\Space;
 use tracker\controllers\services\DocumentCreator;
 use tracker\models\Document;
 use tracker\models\DocumentReceiver;
@@ -65,13 +64,7 @@ class DocumentController extends Controller
             $this->forbidden();
         }
 
-        $contentContainer = Space::findOne(['guid' => Yii::$app->request->get('sguid')]);
-
-        if ($contentContainer == null) {
-            throw new NotFoundHttpException(Yii::t('base', 'Space not found!'));
-        }
-
-        $documentCreator = new DocumentCreator($contentContainer);
+        $documentCreator = new DocumentCreator();
         $request = \Yii::$app->request;
 
         if ($documentCreator->load($request->post()) && $document = $documentCreator->create()) {
@@ -80,25 +73,19 @@ class DocumentController extends Controller
 
         return $this->renderAjax('create', [
             'documentRequest' => $documentCreator->getDocumentForm(),
-            'contentContainer' => $contentContainer,
         ]);
     }
 
     public function actionDownload($id)
     {
-        $contentContainer = Space::findOne(['guid' => Yii::$app->request->get('sguid')]);
-
-        if ($contentContainer == null) {
-            throw new NotFoundHttpException(Yii::t('base', 'Space not found!'));
-        }
-
         $document = Document::find()->readable()->byId($id)->one();
         if ($document === null) {
             throw new ForbiddenHttpException();
         }
         /** @var Module $module */
         $module = \Yii::$app->getModule(Module::getIdentifier());
-        $path = $module->documentRootPath . $document->category . '/' . $document->id . '/';
+        $category = isset(Document::categories()[$document->category]) ? $document->category : 'no-category';
+        $path = $module->documentRootPath . $category . '/' . $document->id . '/';
 
         $receiver = DocumentReceiver::findOne([
             'view_mark' => 0,
@@ -113,14 +100,18 @@ class DocumentController extends Controller
             }
         }
 
-        return Yii::$app->response->sendContentAsFile(file_get_contents($path . $document->file), $document->file, [
-            'inline' => true,
-        ]);
+        return Yii::$app
+            ->response
+            ->sendContentAsFile(
+                file_get_contents($path . $document->file->filename),
+                $document->file->filename,
+                ['inline' => true,]
+            );
     }
 
     public function actionChangeCategory($id)
     {
-
+        // TODO
     }
 
     public function actionToAddReceivers($id)
@@ -132,11 +123,11 @@ class DocumentController extends Controller
         }
 
         if (!\Yii::$app->user->can(new AddReceiversToDocument()) &&
-            $document->content->created_by !== Yii::$app->user->id) {
+            $document->created_by !== Yii::$app->user->id) {
             $this->forbidden();
         }
 
-        $documentCreator = new DocumentCreator($document->content->getContainer());
+        $documentCreator = new DocumentCreator();
 
         if (Yii::$app->request->isPost) {
             if ($documentCreator->load(Yii::$app->request->post())) {
@@ -147,7 +138,6 @@ class DocumentController extends Controller
 
         return $this->renderAjax('to_add_receivers_document', [
             'requestModel' => $documentCreator->getDocumentForm(),
-            'container' => $document->content->getContainer(),
             'actionUrl' => \yii\helpers\Url::to([
                 '/' . Module::getIdentifier() . '/document/to-add-receivers',
                 'id' => $document->id,

@@ -8,8 +8,6 @@ use tracker\enum\IssueStatusEnum;
 use tracker\models\DocumentSearch;
 use tracker\models\IssueSearch;
 use tracker\Module;
-use tracker\permissions\AddDocument;
-use tracker\permissions\CreateIssue;
 use Yii;
 
 /**
@@ -95,19 +93,6 @@ class DashboardController extends Controller
         return $this->renderAjax('to_create_issue', [
             'actionUrl' => \yii\helpers\Url::to([
                 '/' . Module::getIdentifier() . '/issue/create',
-            ]),
-        ]);
-    }
-
-    public function actionToCreateDocument()
-    {
-        if (!\Yii::$app->user->can(new AddDocument())) {
-            $this->forbidden();
-        }
-
-        return $this->renderAjax('to_create_document', [
-            'actionUrl' => \yii\helpers\Url::to([
-                '/' . Module::getIdentifier() . '/document/create',
             ]),
         ]);
     }

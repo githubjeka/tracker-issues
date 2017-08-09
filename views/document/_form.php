@@ -20,7 +20,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($documentRequest, 'receivers')
         ->widget(\humhub\modules\user\widgets\UserPickerField::class,
             [
-                'url' => $contentContainer->createUrl('/space/membership/search'),
                 'placeholder' => Yii::t('TrackerIssuesModule.views', 'Select receivers'),
                 'options' => ['autofocus' => true],
             ]
@@ -73,5 +72,4 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>

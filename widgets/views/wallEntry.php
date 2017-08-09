@@ -53,7 +53,7 @@ $parent = $object->getParent()->one();
 
                         <i title="<?= Yii::t('TrackerIssuesModule.views', 'Created At') ?>">
                             <small class="pull-right">
-                                <?= Yii::$app->formatter->asDate($document->content->created_at, 'long') ?>
+                                <?= Yii::$app->formatter->asDate($document->created_at, 'long') ?>
                             </small>
                         </i>
                         <?php if ($document->type) : ?>
@@ -92,8 +92,7 @@ $parent = $object->getParent()->one();
                                         Yii::t('TrackerIssuesModule.views', 'Download file'),
                                 [
                                     '/' . \tracker\Module::getIdentifier() . '/document/download',
-                                    'id' => $document->id,
-                                    'sguid' => $document->content->contentContainer->guid,
+                                    'id' => $document->id
                                 ],
                                 [
                                     'target' => '_blank',

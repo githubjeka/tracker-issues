@@ -2,7 +2,6 @@
 
 namespace tracker\models;
 
-use humhub\modules\content\components\ContentActiveRecord;
 use Yii;
 use yii\db\ActiveQuery;
 
@@ -11,17 +10,19 @@ use yii\db\ActiveQuery;
  *
  * @property integer $id
  * @property string $name
- * @property string $file
  * @property string $description
  * @property string $number
  * @property string $from
  * @property string $to
  * @property integer $type
  * @property integer $category
+ * @property integer $created_at
+ * @property integer $created_by
  * @property DocumentReceiver[] $receivers
  * @property Issue[] $issues
+ * @property DocumentFile $file
  */
-class Document extends ContentActiveRecord
+class Document extends yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -37,10 +38,10 @@ class Document extends ContentActiveRecord
     public function rules()
     {
         return [
-            [['name', 'file'], 'required'],
+            [['name'], 'required'],
             [['description'], 'string'],
             [['type', 'category'], 'string'],
-            [['name', 'file', 'number', 'from', 'to'], 'string', 'max' => 255],
+            [['name', 'number', 'from', 'to'], 'string', 'max' => 255],
         ];
     }
 
@@ -71,6 +72,7 @@ class Document extends ContentActiveRecord
 
     /**
      * TODO убрать это, сделать по аналогии с категориями
+     *
      * @return array
      */
     public static function types()
@@ -107,6 +109,10 @@ class Document extends ContentActiveRecord
             ->viaTable(DocumentIssue::tableName(), ['document_id' => 'id']);
     }
 
+    public function getFile()
+    {
+        return $this->hasOne(DocumentFile::class, ['document_id' => 'id'])->andWhere(['is_show' => true]);
+    }
 
     /**
      * @inheritdoc

@@ -20,7 +20,6 @@ use tracker\models\Document;
                     [
                         '/' . \tracker\Module::getIdentifier() . '/document/download',
                         'id' => $model->id,
-                        'sguid' => $model->content->contentContainer->guid,
                     ],
                     ['title' => Yii::t('TrackerIssuesModule.views', 'Download file'), 'target' => '_blank']
                 );
@@ -44,7 +43,7 @@ use tracker\models\Document;
                     <hr style="margin: 0">
                     <i title="<?= Yii::t('TrackerIssuesModule.views', 'Created At') ?>">
                         <small class="pull-right">
-                            <?= Yii::$app->formatter->asDate($model->content->created_at, 'long') ?>
+                            <?= Yii::$app->formatter->asDate($model->created_at, 'long') ?>
                         </small>
                     </i>
                     <?php if ($model->type) : ?>

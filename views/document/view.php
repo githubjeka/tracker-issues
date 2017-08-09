@@ -14,6 +14,10 @@ use yii\widgets\DetailView;
 $this->title = $model->name;
 $formatter = Yii::$app->formatter;
 $this->registerAssetBundle(\tracker\assets\IssueAsset::class);
+/** @var \humhub\modules\user\models\User $userClass */
+$userClass = Yii::$app->user->identityClass;
+/** @var \humhub\modules\user\models\User|null $user */
+$user = $userClass::findOne($model->created_by);
 ?>
 <div class="document-view">
 
@@ -59,7 +63,6 @@ $this->registerAssetBundle(\tracker\assets\IssueAsset::class);
                                     [
                                         '/' . \tracker\Module::getIdentifier() . '/document/download',
                                         'id' => $model->id,
-                                        'sguid' => $model->content->contentContainer->guid,
                                     ],
                                     [
                                         'title' => Yii::t('TrackerIssuesModule.views', 'Download file'),
@@ -82,12 +85,13 @@ $this->registerAssetBundle(\tracker\assets\IssueAsset::class);
                             [
                                 'label' => Yii::t('TrackerIssuesModule.views', 'Created By'),
                                 'format' => 'raw',
-                                'value' => '<img src="' . $model->content->createdBy->getProfileImage()->getUrl() . '"
+                                'value' => $user
+                                    ? '<img src="' . $user->getProfileImage()->getUrl() . '"
                                          class="img-rounded tt img_margin"
                                          height="24" width="24" alt="24x24" data-src="holder.js/24x24"
                                          style="width: 24px; height: 24px;"> ' .
-                                           Html::encode($model->content->createdBy->displayName) . ' / ' .
-                                           Yii::$app->formatter->asDatetime($model->content->created_at),
+                                      Html::encode($user->displayName) . ' / ' .
+                                      Yii::$app->formatter->asDatetime($model->created_at) : '',
                             ],
                         ],
                     ]) ?>
@@ -99,7 +103,8 @@ $this->registerAssetBundle(\tracker\assets\IssueAsset::class);
     <div class="panel">
         <div class="panel-body">
 
-            <?php if (\Yii::$app->user->can(new AddReceiversToDocument()) || $model->content->created_by === Yii::$app->user->id) : ?>
+            <?php if (\Yii::$app->user->can(new AddReceiversToDocument()) ||
+                      $model->created_by === Yii::$app->user->id) : ?>
                 <div class="text-right">
                     <?php $url = Url::to([
                         '/' . tracker\Module::getIdentifier() . '/document/to-add-receivers',

@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $documentRequest \tracker\controllers\DocumentRequest */
+/* @var $documentRequest \tracker\controllers\requests\DocumentRequest */
 
 $this->title = Yii::t('TrackerIssuesModule.views', 'Create Document');
 ?>
@@ -18,8 +18,7 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Create Document');
         </div>
 
         <div class="modal-body">
-            <?= $this->render('_form',
-                ['contentContainer' => $contentContainer, 'documentRequest' => $documentRequest]) ?>
+            <?= $this->render('_form', ['documentRequest' => $documentRequest]) ?>
         </div>
     </div>
 </div>

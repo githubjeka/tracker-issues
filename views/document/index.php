@@ -93,7 +93,7 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
 
         <?php if (\Yii::$app->user->can(new AddDocument())) : ?>
             <p class="pull-left">
-                <?php $url = Url::to(['/' . tracker\Module::getIdentifier() . '/dashboard/to-create-document']); ?>
+                <?php $url = Url::to(['/' . tracker\Module::getIdentifier() . '/document/create']); ?>
                 <a href="<?= $url; ?>" class="btn btn-primary btn-sm" data-target="#globalModal">
                     <i class="fa fa-plus"></i> <?= Yii::t('TrackerIssuesModule.views', 'New Document'); ?>
                 </a>

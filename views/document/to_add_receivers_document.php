@@ -6,7 +6,6 @@ use humhub\widgets\ActiveForm;
  * @var $this \humhub\components\View
  * @var $actionUrl string
  * @var $requestModel \tracker\controllers\requests\DocumentRequest
- * @var $container \humhub\modules\content\components\ContentContainerActiveRecord
  */
 \tracker\assets\IssueAsset::register($this);
 $this->registerJs(
@@ -44,7 +43,6 @@ $this->registerJs(
                 <?= \humhub\modules\user\widgets\UserPickerField::widget([
                     'model' => $requestModel,
                     'attribute' => 'receivers',
-                    'url' => $container->createUrl('/space/membership/search'),
                     'placeholder' => Yii::t('TrackerIssuesModule.views', 'Select receivers'),
                     'options' => ['autofocus' => true, 'id' => 'user-picker-select'],
                 ]); ?>

@@ -2,12 +2,12 @@
 
 namespace tracker\controllers\services;
 
-use humhub\modules\content\components\ContentContainerActiveRecord;
 use tracker\controllers\requests\DocumentRequest;
 use tracker\enum\ContentVisibilityEnum;
 use tracker\enum\IssuePriorityEnum;
 use tracker\enum\IssueStatusEnum;
 use tracker\models\Document;
+use tracker\models\DocumentFile;
 use tracker\models\DocumentIssue;
 use tracker\models\DocumentReceiver;
 use tracker\Module;
@@ -21,16 +21,10 @@ class DocumentCreator extends \yii\base\Model
 {
     /** @var DocumentRequest */
     private $requestForm;
-    private $container;
 
-    public function __construct(ContentContainerActiveRecord $container, $config = [])
+    public function __construct($config = [])
     {
-        if (!($container instanceof \humhub\modules\space\models\Space)) {
-            throw new \LogicException('Content container should be one of Space');
-        }
-
         $this->requestForm = new DocumentRequest();
-        $this->container = $container;
         parent::__construct($config);
     }
 
@@ -57,9 +51,14 @@ class DocumentCreator extends \yii\base\Model
             return false;
         }
 
+        if ($formName === null) {
+            $formName = $this->requestForm->formName();
+        }
+
         $this->requestForm->file = UploadedFile::getInstanceByName(
-            $formName === '' ? 'file' : $formName . '["file"]'
+            $formName === '' ? 'file' : $formName . '[file]'
         );
+
         return true;
     }
 
@@ -71,43 +70,53 @@ class DocumentCreator extends \yii\base\Model
 
         $transaction = \Yii::$app->db->beginTransaction();
 
-        $model = new Document();
-        $model->content->notifyUsersOfNewContent = false;
-        $model->content->setContainer($this->container);
-        $model->name = $this->requestForm->name;
-        $model->number = $this->requestForm->number;
-        $model->description = $this->requestForm->description;
-        $model->to = $this->requestForm->to;
-        $model->from = $this->requestForm->from;
-        $model->category = $this->requestForm->category;
-        $model->type = $this->requestForm->type;
-        $model->file = $this->requestForm->file->name;
+        $documentModel = new Document();
+        $documentModel->name = $this->requestForm->name;
+        $documentModel->number = $this->requestForm->number;
+        $documentModel->description = $this->requestForm->description;
+        $documentModel->to = $this->requestForm->to;
+        $documentModel->from = $this->requestForm->from;
+        $documentModel->category = $this->requestForm->category;
+        $documentModel->type = $this->requestForm->type;
+        $documentModel->created_by = \Yii::$app->user->id;
+        $documentModel->created_at = time();
 
-        if (!$model->save()) {
+        if (!$documentModel->save()) {
             $transaction->rollBack();
-            throw new \LogicException(json_encode($model->errors));
+            throw new \LogicException(json_encode($documentModel->errors));
+        }
+
+        $fileModel = new DocumentFile();
+        $fileModel->document_id = $documentModel->id;
+        $fileModel->filename = $this->requestForm->file->name;
+        $fileModel->created_by = \Yii::$app->user->id;
+        $fileModel->created_at = time();
+
+        if (!$fileModel->save()) {
+            $transaction->rollBack();
+            throw new \LogicException(json_encode($fileModel->errors));
         }
 
         /** @var Module $module */
         $module = \Yii::$app->moduleManager->getModule(Module::getIdentifier());
-        $category = isset(Document::categories()[$model->category]) ? $model->category : 'no-category';
-        $path = $module->documentRootPath . $category . '/' . $model->id . '/';
+        $category = isset(Document::categories()[$documentModel->category]) ? $documentModel->category : 'no-category';
+        $path = $module->documentRootPath . $category . '/' . $documentModel->id . '/';
 
         if (!file_exists($path) && !mkdir($path, 0774, true)) {
             $transaction->rollBack();
             throw new \RuntimeException('Can not created ' . realpath($path));
         };
 
-        if (!$this->requestForm->file->saveAs($path . $model->file)) {
+        if (!$this->requestForm->file->saveAs($path . $fileModel->filename)) {
             $transaction->rollBack();
-            throw new \RuntimeException('Can not saved the file ' . $model->file . ' in ' . $path);
+            throw new \RuntimeException('Can not saved the file ' . $fileModel->filename . ' in ' . $path);
         }
 
-        $this->addReceiversTo($model);
+        $this->addReceiversTo($documentModel);
 
         $transaction->commit();
 
-        return $model;
+        return $documentModel;
     }
 
     public function addReceiversTo(Document $document)
