@@ -27,7 +27,7 @@ $this->registerJs(
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             <h4 class="modal-title" id="myModalLabel">
-                <?= Yii::t('TrackerIssuesModule.views', 'Add Receivers'); ?>
+                <?= Yii::t('TrackerIssuesModule.views', 'Change file'); ?>
             </h4>
 
         </div>
