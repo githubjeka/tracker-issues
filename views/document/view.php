@@ -23,6 +23,7 @@ $user = $userClass::findOne($model->created_by);
 
     <div class="panel">
         <div class="panel-heading">
+            <!-- TODO: mb better use referrer-->
             <a href="<?= \yii\helpers\Url::to([
                 '/' . \tracker\Module::getIdentifier() . '/dashboard/documents',
             ]) ?>"><i class="fa fa-2x fa-arrow-left fa-pull-left"></i></a>
