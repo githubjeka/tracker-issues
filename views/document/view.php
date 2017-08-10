@@ -2,6 +2,7 @@
 
 use tracker\models\Document;
 use tracker\models\Link;
+use tracker\Module;
 use tracker\permissions\AddReceiversToDocument;
 use tracker\widgets\StatusIssueWidget;
 use yii\helpers\Html;
@@ -23,14 +24,11 @@ $user = $userClass::findOne($model->created_by);
 
     <div class="panel">
         <div class="panel-heading">
-            <!-- TODO: mb better use referrer-->
-            <a href="<?= \yii\helpers\Url::to([
-                '/' . \tracker\Module::getIdentifier() . '/document',
-            ]) ?>"><i class="fa fa-2x fa-arrow-left fa-pull-left"></i></a>
+            <?= \tracker\widgets\BackBtn::widget(['alternativeUrl' => ['index']]) ?>
             <?php if ((int)$model->created_by === (int)Yii::$app->user->id) : ?>
                 <div class="pull-right">
                     <?php $url = Url::to([
-                        '/' . tracker\Module::getIdentifier() . '/document/add-file',
+                        '/' . Module::getIdentifier() . '/document/add-file',
                         'id' => $model->id,
                     ]); ?>
                     <a href="<?= $url; ?>" class="btn btn-primary btn-sm text-uppercase" data-target="#globalModal">
