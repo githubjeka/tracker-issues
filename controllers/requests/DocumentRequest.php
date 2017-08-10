@@ -12,6 +12,7 @@ class DocumentRequest extends \yii\base\Model
     public $name;
     public $description;
     public $from;
+    public $registeredAt;
     public $to;
     /** @var  UploadedFile */
     public $file;
@@ -25,7 +26,8 @@ class DocumentRequest extends \yii\base\Model
     {
         return [
             [['receivers'], 'default', 'value' => []],
-            [['name'], 'required'],
+            [['name', 'registeredAt', 'number'], 'required'],
+            [['registeredAt',], 'date', 'format' => 'php:Y-m-d'],
             [['receivers', 'category', 'type'], 'safe'],
             [['name', 'from', 'to', 'number'], 'string', 'max' => 255],
             ['file', 'file', 'skipOnEmpty' => false,],
@@ -45,6 +47,7 @@ class DocumentRequest extends \yii\base\Model
             'type' => \Yii::t('TrackerIssuesModule.views', 'Type'),
             'category' => \Yii::t('TrackerIssuesModule.views', 'Category'),
             'receivers' => \Yii::t('TrackerIssuesModule.views', 'Receivers'),
+            'registeredAt' => \Yii::t('TrackerIssuesModule.views', 'Registered at'),
         ];
     }
 }

@@ -16,8 +16,9 @@ use yii\db\ActiveQuery;
  * @property string $to
  * @property integer $type
  * @property integer $category
+ * @property integer $registered_at
  * @property integer $created_at
- * @property integer $created_by
+ * @property string $created_by
  * @property DocumentReceiver[] $receivers
  * @property Issue[] $issues
  * @property DocumentFile $file
@@ -38,7 +39,8 @@ class Document extends yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'created_by', 'registered_at', 'created_at'], 'required'],
+            [['registered_at', 'created_at', 'created_by'], 'integer'],
             [['description'], 'string'],
             [['type', 'category'], 'string'],
             [['name', 'number', 'from', 'to'], 'string', 'max' => 255],
@@ -59,6 +61,7 @@ class Document extends yii\db\ActiveRecord
             'to' => Yii::t('TrackerIssuesModule.views', 'To'),
             'type' => Yii::t('TrackerIssuesModule.views', 'Type'),
             'category' => Yii::t('TrackerIssuesModule.views', 'Category'),
+            'registered_at' => Yii::t('TrackerIssuesModule.views', 'Registered at'),
         ];
     }
 

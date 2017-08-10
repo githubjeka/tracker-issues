@@ -35,10 +35,25 @@ use yii\widgets\ActiveForm;
         <div class="col-md-6">
             <?= $form->field($documentRequest, 'number')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
         </div>
+
         <div class="col-md-6">
-            <?= $form->field($documentRequest, 'type')->dropDownList(\tracker\models\Document::types(),
-                ['prompt' => '-']) ?>
+            <div class="form-group">
+                <?= $form->field($documentRequest, 'registeredAt')
+                    ->widget(yii\jui\DatePicker::className(), [
+                        'dateFormat' => 'php:Y-m-d',
+                        'clientOptions' => [],
+                        'options' => [
+                            'class' => 'form-control',
+                            'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
+                        ],
+                    ]) ?>
+            </div>
         </div>
+    </div>
+
+    <div>
+        <?= $form->field($documentRequest, 'type')->dropDownList(\tracker\models\Document::types(),
+            ['prompt' => '-']) ?>
     </div>
 
     <div class="row">

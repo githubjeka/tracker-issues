@@ -87,6 +87,7 @@ $user = $userClass::findOne($model->created_by);
                                 'format' => 'html',
                                 'value' => "<b>{$model->number}</b>",
                             ],
+                            'registered_at:date',
                             'from',
                             'to',
                             [

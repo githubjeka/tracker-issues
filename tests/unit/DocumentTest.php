@@ -54,6 +54,8 @@ namespace tracker\tests\unit {
 
             $requireAttributes = [
                 'name' => 'TEST DOCUMENT',
+                'registeredAt' => '2017-05-01',
+                'number' => '130/t-13-e',
             ];
 
             $_FILES['file'] = [
@@ -73,7 +75,13 @@ namespace tracker\tests\unit {
             $this->assertEmpty($document->type);
             $this->assertEmpty($document->from);
             $this->assertEmpty($document->to);
-            $this->assertEmpty($document->number);
+            $this->assertEquals($requireAttributes['number'], $document->number);
+            $this->assertEquals(
+                date_create_from_format('Y-m-d', $requireAttributes['registeredAt'])
+                    ->setTime(0, 0)
+                ->format('U'),
+                $document->registered_at
+            );
             $this->assertEmpty($document->description);
             $this->assertEquals(1, $document->created_by);
             $this->assertEquals(1, $document->file->created_by);

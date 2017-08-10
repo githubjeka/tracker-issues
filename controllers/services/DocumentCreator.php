@@ -91,6 +91,12 @@ class DocumentCreator extends \yii\base\Model
         $documentModel->type = $this->requestForm->type;
         $documentModel->created_by = \Yii::$app->user->id;
         $documentModel->created_at = time();
+        $registeredAtDateObj = \DateTime::createFromFormat('Y-m-d', $this->requestForm->registeredAt);
+        if ($registeredAtDateObj === false) {
+            $transaction->rollBack();
+            throw new \LogicException('registeredAt should Y-m-d');
+        }
+        $documentModel->registered_at = $registeredAtDateObj->setTime(0, 0)->format('U');
 
         if (!$documentModel->save()) {
             $transaction->rollBack();
@@ -203,6 +209,7 @@ class DocumentCreator extends \yii\base\Model
      *
      * @param Document $documentModel
      * TODO: fix bug to save files by same naming
+     *
      * @return false|Document
      */
     public function addFileToDocument(Document $documentModel)
