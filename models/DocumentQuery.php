@@ -2,24 +2,24 @@
 
 namespace tracker\models;
 
-use humhub\modules\content\components\ActiveQueryContent;
 use humhub\modules\content\models\Content;
 use tracker\permissions\ViewAllDocuments;
+use yii\db\ActiveQuery;
 use yii\web\IdentityInterface;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class DocumentQuery extends ActiveQueryContent
+class DocumentQuery extends ActiveQuery
 {
     /**
      * Only returns user readable records via issues readable
      *
      * @param IdentityInterface|null $user
      *
-     * @return $this|ActiveQueryContent
+     * @return static
      */
-    public function readable($user = null)
+    public function readable(IdentityInterface $user)
     {
         if ($user === null && !\Yii::$app->user->isGuest) {
             $user = \Yii::$app->user->getIdentity();

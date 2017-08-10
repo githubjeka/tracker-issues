@@ -33,24 +33,20 @@ class DocumentSearch extends Model
      * Creates data provider instance with search query applied
      *
      * @param array $params
+     * @param \yii\web\IdentityInterface $user
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, \yii\web\IdentityInterface $user)
     {
         /**
          * Search documents by issues and permissions
          */
         $queryMain = Document::find()
-            ->readable()
+            ->readable($user)
             ->orderBy([Document::tableName() . '.id' => SORT_DESC]);
 
-        /**
-         * Search documents by creator
-         */
-        if ($user = \Yii::$app->user->identity) {
-            $queryUnion = Document::find()->byCreator($user);
-        }
+        $queryUnion = Document::find()->byCreator($user);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $queryMain,
@@ -64,10 +60,8 @@ class DocumentSearch extends Model
 
         $this->applyFilters($queryMain);
 
-        if (isset($queryUnion)) {
-            $this->applyFilters($queryUnion);
-            $queryMain->union($queryUnion->createCommand()->rawSql);
-        }
+        $this->applyFilters($queryUnion);
+        $queryMain->union($queryUnion->createCommand()->rawSql);
 
         return $dataProvider;
     }

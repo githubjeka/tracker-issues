@@ -25,7 +25,7 @@ $user = $userClass::findOne($model->created_by);
         <div class="panel-heading">
             <!-- TODO: mb better use referrer-->
             <a href="<?= \yii\helpers\Url::to([
-                '/' . \tracker\Module::getIdentifier() . '/dashboard/documents',
+                '/' . \tracker\Module::getIdentifier() . '/document',
             ]) ?>"><i class="fa fa-2x fa-arrow-left fa-pull-left"></i></a>
             <?php if ((int)$model->created_by === (int)Yii::$app->user->id) : ?>
                 <div class="pull-right">

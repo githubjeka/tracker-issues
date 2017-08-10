@@ -2,10 +2,12 @@
 
 namespace tracker\controllers;
 
+use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use tracker\controllers\services\DocumentCreator;
 use tracker\models\Document;
 use tracker\models\DocumentReceiver;
+use tracker\models\DocumentSearch;
 use tracker\Module;
 use tracker\permissions\AddDocument;
 use tracker\permissions\AddReceiversToDocument;
@@ -15,10 +17,13 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
- * DocumentController implements the CRUD actions for Document model.
+ * DocumentController implements the actions for Document model.
  */
 class DocumentController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public $subLayout = '@tracker/views/layouts/sub_layout_issues';
 
     /**
@@ -33,9 +38,30 @@ class DocumentController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'acl' => [
+                'class' => \humhub\components\behaviors\AccessControl::className(),
+                'rules' => [
+                    [ControllerAccess::RULE_LOGGED_IN_ONLY],
+                ],
+            ],
         ];
     }
 
+    /**
+     * Lists all Document models.
+     *
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $searchModel = new DocumentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->user->identity);
+
+        return $this->render('/document/index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
 
     /**
      * Displays a single Document model.
@@ -47,7 +73,7 @@ class DocumentController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModelForUser($id, Yii::$app->user->identity),
         ]);
     }
 
@@ -78,7 +104,8 @@ class DocumentController extends Controller
 
     public function actionDownload($id)
     {
-        $document = Document::find()->readable()->byId($id)->one();
+        $userComponent = \Yii::$app->user;
+        $document = Document::find()->readable($userComponent->identity)->byId($id)->one();
         if ($document === null) {
             throw new ForbiddenHttpException();
         }
@@ -89,7 +116,7 @@ class DocumentController extends Controller
 
         $receiver = DocumentReceiver::findOne([
             'view_mark' => 0,
-            'user_id' => \Yii::$app->user->id,
+            'user_id' => $userComponent->id,
             'document_id' => $document->id,
         ]);
         if ($receiver !== null) {
@@ -181,19 +208,18 @@ class DocumentController extends Controller
      * If the model is not found, a 404 HTTP exception will be thrown.
      *
      * @param integer $id
+     * @param \yii\web\IdentityInterface $user
      *
      * @return Document the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModelForUser($id, \yii\web\IdentityInterface $user)
     {
-        $model = Document::find()->readable()->byId($id)->one();
+        $model = Document::find()->readable($user)->byId($id)->one();
 
         if ($model === null) {
 
-            if (!\Yii::$app->user->isGuest) {
-                $model = Document::find()->byCreator(Yii::$app->user->identity)->byId($id)->one();
-            }
+            $model = Document::find()->byCreator($user)->byId($id)->one();
 
             if ($model === null) {
                 throw new NotFoundHttpException('The requested page does not exist.');

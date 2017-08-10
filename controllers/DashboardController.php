@@ -5,10 +5,8 @@ namespace tracker\controllers;
 use humhub\components\Controller;
 use tracker\controllers\actions\DashboardStreamAction;
 use tracker\enum\IssueStatusEnum;
-use tracker\models\DocumentSearch;
 use tracker\models\IssueSearch;
 use tracker\Module;
-use Yii;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -45,22 +43,6 @@ class DashboardController extends Controller
             'searchModel' => $searchModel,
             'contentContainer' => $userComponent->getIdentity(),
             'canCreateNewIssue' => true,
-        ]);
-    }
-
-    /**
-     * Lists all Document models.
-     *
-     * @return mixed
-     */
-    public function actionDocuments()
-    {
-        $searchModel = new DocumentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('/document/index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
