@@ -87,19 +87,8 @@ $parent = $object->getParent()->one();
 
                         <hr>
 
-                        <mark>
-                            <?= Html::a('<i class="fa fa-file-o"></i> ' .
-                                        Yii::t('TrackerIssuesModule.views', 'Download file'),
-                                [
-                                    '/' . \tracker\Module::getIdentifier() . '/document/download',
-                                    'id' => $document->id
-                                ],
-                                [
-                                    'target' => '_blank',
-                                    'class' => 'text-uppercase',
-                                ]
-                            )
-                            ?>
+                        <mark class="text-uppercase">
+                            <?=  \tracker\widgets\LinkToDocFileWidget::widget(['document' => $document]) ?>
                         </mark>
                         <i>
                             <small class="text-lowercase">

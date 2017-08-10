@@ -69,18 +69,9 @@ $user = $userClass::findOne($model->created_by);
                                 'attribute' => 'file',
                                 'format' => 'raw',
                                 'contentOptions' => ['class' => 'text-uppercase'],
-                                'value' => Html::a(
-                                    '<i class="fa fa-download"></i> ' .
-                                    '<mark>' . Yii::t('TrackerIssuesModule.views', 'Download file') . '</mark>',
-                                    [
-                                        '/' . \tracker\Module::getIdentifier() . '/document/download',
-                                        'id' => $model->id,
-                                    ],
-                                    [
-                                        'title' => Yii::t('TrackerIssuesModule.views', 'Download file'),
-                                        'target' => '_blank',
-                                    ]
-                                ),
+                                'value' => '<mark>' .
+                                           \tracker\widgets\LinkToDocFileWidget::widget(['document' => $model]) .
+                                           '</mark>',
                             ],
                             [
                                 'attribute' => 'number',

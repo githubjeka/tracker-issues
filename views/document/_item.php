@@ -16,14 +16,11 @@ use tracker\models\Document;
     <div class="row">
         <div class="col-md-1">
             <div class="text-right">
-                <?= Html::a('<i class="fa fa-3x fa-download fa-border"></i>',
-                    [
-                        '/' . \tracker\Module::getIdentifier() . '/document/download',
-                        'id' => $model->id,
-                    ],
-                    ['title' => Yii::t('TrackerIssuesModule.views', 'Download file'), 'target' => '_blank']
-                );
-                ?>
+                <?= \tracker\widgets\LinkToDocFileWidget::widget([
+                    'onlyIcon' => true,
+                    'document' => $model,
+                    'icon' => '<i class="fa fa-3x fa-download fa-border"></i>',
+                ]) ?>
             </div>
         </div>
         <div class="col-md-11">
