@@ -17,8 +17,8 @@ class m170809_082019_add_update_document extends Migration
             'filename' => $this->string()->notNull(),
             'is_show' => $this->boolean()->notNull()->defaultValue(true),
             'comments' => $this->text(),
-            'created_at' => $this->integer(),
-            'created_by' => $this->integer(),
+            'created_at' => $this->integer()->notNull(),
+            'created_by' => $this->string()->notNull(),
         ]);
 
         $this->addForeignKey(
@@ -28,8 +28,9 @@ class m170809_082019_add_update_document extends Migration
             'CASCADE', 'CASCADE'
         );
 
-        $this->addColumn('{{%tracker_document}}', 'created_at', $this->string());
-        $this->addColumn('{{%tracker_document}}', 'created_by', $this->string());
+        $this->addColumn('{{%tracker_document}}', 'registered_at', $this->integer()->notNull());
+        $this->addColumn('{{%tracker_document}}', 'created_at', $this->integer()->notNull());
+        $this->addColumn('{{%tracker_document}}', 'created_by', $this->string()->notNull());
 
         $query = new \yii\db\Query();
         foreach ($query->from('{{%tracker_document}}')->each() as $rowDocument) {
