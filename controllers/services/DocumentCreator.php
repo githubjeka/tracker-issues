@@ -92,6 +92,12 @@ class DocumentCreator extends \yii\base\Model
         $documentModel->created_by = \Yii::$app->user->id;
         $documentModel->created_at = time();
 
+        $registeredAtDateObj = \DateTime::createFromFormat('Y-m-d', $this->requestForm->registeredAt);
+        if ($registeredAtDateObj === false) {
+            $transaction->rollBack();
+            throw new \LogicException('registeredAt should Y-m-d');
+        }
+        $documentModel->registered_at = $registeredAtDateObj->setTime(0, 0)->format('U');
 
         if (!$documentModel->save()) {
             $transaction->rollBack();
