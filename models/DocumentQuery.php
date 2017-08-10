@@ -2,7 +2,6 @@
 
 namespace tracker\models;
 
-use humhub\modules\content\models\Content;
 use tracker\permissions\ViewAllDocuments;
 use yii\db\ActiveQuery;
 use yii\web\IdentityInterface;
@@ -21,14 +20,6 @@ class DocumentQuery extends ActiveQuery
      */
     public function readable(IdentityInterface $user)
     {
-        if ($user === null && !\Yii::$app->user->isGuest) {
-            $user = \Yii::$app->user->getIdentity();
-        }
-
-        if ($user === null) { // Not available for guests.
-            return $this->andWhere('1=0');
-        }
-
         if (\Yii::$app->user->permissionmanager->can(new ViewAllDocuments())) {
             return $this;
         }
@@ -44,19 +35,14 @@ class DocumentQuery extends ActiveQuery
         return $this;
     }
 
+    /**
+     * @param IdentityInterface $user
+     *
+     * @return $this
+     */
     public function byCreator(IdentityInterface $user)
     {
-        $contentTable = Content::tableName();
-        $documentTable = Document::tableName();
-        $documentClass = Document::class;
-        $this
-            ->leftJoin(['cd' => $contentTable],
-                "cd.object_id = $documentTable.id")
-            ->orWhere("cd.object_model = :documentClass AND cd.created_by = :userId",
-                [':userId' => $user->getId(), ':documentClass' => $documentClass])
-            ->groupBy(Document::tableName() . '.id');
-
-        return $this;
+        return $this->andWhere([Document::tableName() . '.created_by' => $user->getId()]);
     }
 
     /**
