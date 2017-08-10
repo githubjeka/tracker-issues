@@ -13,7 +13,6 @@ use tracker\permissions\AddDocument;
 use tracker\permissions\AddReceiversToDocument;
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -105,10 +104,8 @@ class DocumentController extends Controller
     public function actionDownload($id)
     {
         $userComponent = \Yii::$app->user;
-        $document = Document::find()->readable($userComponent->identity)->byId($id)->one();
-        if ($document === null) {
-            throw new ForbiddenHttpException();
-        }
+        $document = $this->findModelForUser($id, $userComponent->identity);
+
         /** @var Module $module */
         $module = \Yii::$app->getModule(Module::getIdentifier());
         $category = isset(Document::categories()[$document->category]) ? $document->category : 'no-category';
