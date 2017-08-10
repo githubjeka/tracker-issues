@@ -18,13 +18,13 @@
  */
 return [
     'Are you sure you want to delete this item?' => '',
-    'Change file' => 'Изменить файл',
     'Comments' => '',
     'Document ID' => '',
     'Filename' => '',
     'ID' => '',
     'Is Show' => '',
     'Only selected members from this space can get initial access to the viewing of the document in next step.' => '',
+    'Registered at' => 'Зарегистрировано в',
     '<strong>Designate</strong> tag to issue' => '<strong>Назначить</strong> номенклатуру к задаче',
     'Add' => 'Добавить',
     'Add Receivers' => 'Добавить получателей',
@@ -37,6 +37,7 @@ return [
     'Background Color' => 'Цвет фона',
     'Calendar' => 'Календарь',
     'Category' => 'Категория',
+    'Change file' => 'Изменить файл',
     'Create Document' => 'Создать документ',
     'Create Tag' => 'Создать номенклатуру',
     'Created At' => 'Создано',

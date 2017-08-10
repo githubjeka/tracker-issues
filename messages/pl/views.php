@@ -85,6 +85,7 @@ return [
     'Priority' => '',
     'Receiver' => '',
     'Receivers' => '',
+    'Registered at' => '',
     'Resolution, description' => '',
     'Save' => '',
     'Search' => '',
