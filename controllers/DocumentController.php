@@ -6,6 +6,7 @@ use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use tracker\controllers\services\DocumentCreator;
 use tracker\models\Document;
+use tracker\models\DocumentFileEntity;
 use tracker\models\DocumentReceiver;
 use tracker\models\DocumentSearch;
 use tracker\Module;
@@ -106,11 +107,7 @@ class DocumentController extends Controller
         $userComponent = \Yii::$app->user;
         $document = $this->findModelForUser($id, $userComponent->identity);
 
-        /** @var Module $module */
-        $module = \Yii::$app->getModule(Module::getIdentifier());
-        $category = isset(Document::categories()[$document->category]) ? $document->category : 'no-category';
-        $path = $module->documentRootPath . $category . '/' . $document->id . '/';
-
+        // TODO move to afterRequest
         $receiver = DocumentReceiver::findOne([
             'view_mark' => 0,
             'user_id' => $userComponent->id,
@@ -124,12 +121,18 @@ class DocumentController extends Controller
             }
         }
 
+        $documentEntity = new DocumentFileEntity($document);
+        $attachmentName = $documentEntity->getDownloadName();
+
         return Yii::$app
             ->response
             ->sendContentAsFile(
-                file_get_contents($path . $document->file->filename),
-                $document->file->filename,
-                ['inline' => true,]
+                file_get_contents($documentEntity->getPath() . $document->file->filename),
+                $attachmentName,
+                [
+                    'inline' => true,
+                    'mimeType' => $documentEntity->getMimeType(),
+                ]
             );
     }
 
