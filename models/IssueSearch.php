@@ -2,6 +2,7 @@
 
 namespace tracker\models;
 
+use humhub\modules\content\models\Content;
 use tracker\enum\IssueStatusEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -40,6 +41,15 @@ class IssueSearch extends Model
     public $nullIfError = false;
 
     /**
+     * '1' => Filter by Assigner for current user and all issues without assigners
+     * '2' => Filter by Assigner for current user only
+     * '0' => no filter by it
+     *
+     * @var integer
+     */
+    public $onlyNotFulfilled;
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -64,7 +74,16 @@ class IssueSearch extends Model
                     return $model->isConstantly === true;
                 },
             ],
-            ['isConstantly', 'boolean'],
+            [
+                'onlyNotFulfilled',
+                'default',
+                'value' => 0,
+                'when' => function ($model) {
+                    return !$model->isConstantly;
+                },
+            ],
+            [['isConstantly',], 'boolean'],
+            [['onlyNotFulfilled',], 'in', 'range' => ['0', '1', '2']],
             ['tag', 'in', 'range' => $this->listTags(true), 'allowArray' => true],
             ['startStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['endStartedDate', 'date', 'format' => 'php:Y-m-d'],
@@ -82,7 +101,16 @@ class IssueSearch extends Model
      */
     public function search($params, $contentContainer = null)
     {
-        $query = Issue::find()->readable();
+        $tableIssue = Issue::tableName();
+        $tableLink = Link::tableName();
+        $tableContent = Content::tableName();
+
+        $query = Issue::find()->readable()
+            ->leftJoin(Link::tableName(), "$tableLink.child_id = $tableIssue.id")
+            ->andWhere(
+                "$tableLink.child_id IS NULL OR ($tableLink.child_id = $tableIssue.id AND $tableContent.created_by != :user)",
+                [':user' => \Yii::$app->user->id]
+            );
 
         if ($contentContainer !== null) {
             $query->contentContainer($contentContainer);
@@ -93,9 +121,9 @@ class IssueSearch extends Model
             'sort' => [
                 'defaultOrder' => ['deadline' => SORT_ASC],
             ],
-            'pagination'=>[
-                'defaultPageSize'=>50,
-            ]
+            'pagination' => [
+                'defaultPageSize' => 50,
+            ],
         ]);
 
         $this->load($params);
@@ -134,6 +162,19 @@ class IssueSearch extends Model
         } elseif ($this->startStartedDate) {
             $query->andWhere(['>=', Issue::tableName() . '.started_at', $this->startStartedDate]);
         }
+
+        if ($this->onlyNotFulfilled == 1) {
+            $query->andWhere([
+                'OR',
+                [Assignee::tableName() . '.finish_mark' => false,],
+                new Expression(Assignee::tableName() . '.finish_mark IS NULL'),
+            ]);
+        } elseif ($this->onlyNotFulfilled == 2) {
+            $query->andWhere([
+                Assignee::tableName() . '.finish_mark' => false,
+            ]);
+        }
+
         return $dataProvider;
     }
 
