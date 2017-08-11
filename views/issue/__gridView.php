@@ -45,7 +45,8 @@ use yii\helpers\Html;
                 ]);
             },
             'visible' => isset($hideTagsColumn) ? !$hideTagsColumn : true,
-            'filter' => $searchModel ? \yii\bootstrap\Html::activeCheckboxList($searchModel, 'tag', $searchModel->listTags()) : false,
+            'filter' => $searchModel ? \yii\bootstrap\Html::activeCheckboxList($searchModel, 'tag',
+                $searchModel->listTags()) : false,
         ],
         [
             'attribute' => 'title',
@@ -81,7 +82,7 @@ use yii\helpers\Html;
                 return StatusIssueWidget::widget(['status' => $issue->status]);
             },
             'filter' => \tracker\enum\IssueStatusEnum::getList(),
-            'filterInputOptions'=>['class'=>'select-form table-filter', 'id' => null]
+            'filterInputOptions' => ['class' => 'select-form table-filter', 'id' => null],
         ],
         [
             'label' => Yii::t('TrackerIssuesModule.views', 'Owner'),
@@ -127,13 +128,22 @@ use yii\helpers\Html;
             'value' => function (Issue $issue) {
                 $html = '';
                 foreach ($issue->assignees as $assigner) {
-                    $html .= '<a href="' . $assigner->user->getUrl() . '"><img src="' . $assigner->user->getProfileImage()->getUrl() . '" class="img-rounded tt img_margin"
+                    $html .= '<a href="' . $assigner->user->getUrl() . '"><img src="' .
+                             $assigner->user->getProfileImage()->getUrl() . '" class="img-rounded tt img_margin"
                                    height="24" width="24" alt="24x24" data-src="holder.js/24x24"
                                    style="width:24px;height:24px;" data-toggle="tooltip" data-placement="top" title=""
-                                   data-original-title="oo' . Html::encode($assigner->user->getDisplayName()) . '"></a>';
+                                   data-original-title="oo' . Html::encode($assigner->user->getDisplayName()) .
+                             '"></a>';
                 }
                 return $html;
             },
+            'filter' => $searchModel && !$searchModel->isConstantly ? \yii\bootstrap\Html::activeRadioList(
+                $searchModel, 'onlyNotFulfilled', [
+                '0' => Yii::t('TrackerIssuesModule.views', 'All'),
+                '1' => Yii::t('TrackerIssuesModule.views', 'Not fulfilled'),
+                '2' => Yii::t('TrackerIssuesModule.views', 'For you'),
+            ])
+                : false,
         ],
     ],
 ]) ?>
