@@ -181,7 +181,7 @@ class DocumentController extends Controller
         }
 
         if (!\Yii::$app->user->can(new AddReceiversToDocument()) &&
-            $document->created_by !== Yii::$app->user->id) {
+            (int)$document->created_by !== (int)Yii::$app->user->id) {
             $this->forbidden();
         }
 

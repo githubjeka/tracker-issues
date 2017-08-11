@@ -106,7 +106,7 @@ $user = $userClass::findOne($model->created_by);
         <div class="panel-body">
 
             <?php if (\Yii::$app->user->can(new AddReceiversToDocument()) ||
-                      $model->created_by === Yii::$app->user->id) : ?>
+                      (int)$model->created_by === (int)Yii::$app->user->id) : ?>
                 <div class="text-right">
                     <?php $url = Url::to([
                         '/' . tracker\Module::getIdentifier() . '/document/to-add-receivers',
