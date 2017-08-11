@@ -52,7 +52,7 @@ class IssueEditor extends IssueService
         }
 
         if (!$this->requestForm->validate()) {
-            throw new \LogicException();
+            throw new \LogicException(json_encode($this->requestForm->getErrors()));
         }
     }
 
