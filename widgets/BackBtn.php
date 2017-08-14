@@ -33,12 +33,19 @@ class BackBtn extends Widget
                 $current = $request->getUrl();
             }
 
-            // find GET params and remove it for compare
-            $endReferrer = !($endReferrer = stripos($referrer, '?')) ? null : $endReferrer;
-            $endCurrent = !($endCurrent = stripos($current, '?')) ? null : $endCurrent;
+            // find GET params and remove it for compare , hell of PHP  :/
+            if (\Yii::$app->urlManager->enablePrettyUrl) {
+                $endReferrer = !($endReferrer = stripos($referrer, '?')) ? null : $endReferrer;
+                $endCurrent = !($endCurrent = stripos($current, '?')) ? null : $endCurrent;
+            } else {
+                $endReferrer = !($endReferrer = stripos($referrer, '&')) ? null : $endReferrer;
+                $endCurrent = !($endCurrent = stripos($current, '&')) ? null : $endCurrent;
+            }
+            $substrRef = $endReferrer !== null ? substr($referrer, 0, $endReferrer) : substr($referrer, 0);
+            $substrCur = $endCurrent !== null ? substr($current, 0, $endCurrent) : substr($current, 0);
 
             // compare, if diff then URL is referrer
-            if (substr($referrer, 0, $endReferrer) !== substr($current, 0, $endCurrent)) {
+            if ($substrRef !== $substrCur) {
                 $url = $referrer;
             }
         }
