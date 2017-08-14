@@ -43,7 +43,8 @@ class Document extends yii\db\ActiveRecord
             [['registered_at', 'created_at', 'created_by'], 'integer'],
             [['description'], 'string'],
             [['type', 'category'], 'string'],
-            [['name', 'number', 'from', 'to'], 'string', 'max' => 255],
+            [['number'], 'string', 'max' => 15],
+            [['name', 'from', 'to'], 'string', 'max' => 255],
         ];
     }
 
