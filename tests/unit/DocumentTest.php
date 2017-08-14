@@ -164,12 +164,12 @@ namespace tracker\tests\unit {
             $newAttributes = [
                 'name' => 'Document for edit 2',
                 'number' => '1334-e',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit....',
-                'registeredAt' => '2017-08-14',
+                'description' => 'consectetur adipiscing elit....',
+                'registeredAt' => '2017-08-15',
                 'from' => 'Store 2',
                 'to' => 'Office 2',
                 'type' => 'Mail',
-                'category' => 'Orders',
+                'category' => 'Store orders',
             ];
 
             $this->assertTrue($documentEditor->load($newAttributes, ''));
