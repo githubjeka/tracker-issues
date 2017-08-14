@@ -194,10 +194,12 @@ class IssueSearch extends Model
     public function listTags($onlyKey = false)
     {
         $list = \yii\helpers\ArrayHelper::map(
-            \tracker\models\Tag::find()->byUser(\Yii::$app->user->id)->all(),
-            'id',
-            'name'
-        );
+            \tracker\models\Tag::find()
+                ->byUser(\Yii::$app->user->id)
+                ->orderBy([\tracker\models\Tag::tableName() . '.name' => SORT_ASC])
+                ->all(),
+            'id', 'name'
+        );;
 
         if ($list === []) {
             return [];
