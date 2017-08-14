@@ -115,6 +115,12 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
             <small class="help-block">
                 <?= Yii::t('TrackerIssuesModule.views', 'The planned time by which you should end work.'); ?>
             </small>
+
+            <button type="button" class="btn btn-link btn-sm"
+                    onclick="$('#issuerequest-deadlinedate').datepicker('setDate', null);$('#issuerequest-deadlinetime').val('');">
+                <?= Yii::t('TrackerIssuesModule.views', 'Has not deadline') ?>
+            </button>
+
             <hr>
             <div class="form-group">
                 <?= $form->field($issueForm, 'deadlineDate')
