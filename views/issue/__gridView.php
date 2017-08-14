@@ -14,6 +14,8 @@ use tracker\models\Issue;
 use tracker\widgets\DeadlineIssueWidget;
 use tracker\widgets\StatusIssueWidget;
 use yii\helpers\Html;
+
+$formatter = Yii::$app->formatter;
 ?>
 
 <?= \humhub\widgets\GridView::widget([
@@ -47,6 +49,24 @@ use yii\helpers\Html;
             'visible' => isset($hideTagsColumn) ? !$hideTagsColumn : true,
             'filter' => $searchModel ? \yii\bootstrap\Html::activeCheckboxList($searchModel, 'tag',
                 $searchModel->listTags()) : false,
+        ],
+        [
+            'attribute' => 'document',
+            'label' => Yii::t('TrackerIssuesModule.views', 'Document'),
+            'format' => 'html',
+            'value' => function (Issue $issue) use ($formatter) {
+                $html = '';
+                foreach ($issue->documents as $document) {
+                    $html .= Html::beginTag('strong');
+                    $html .= Html::a(Html::encode($document->number), ['document/view', 'id' => $document->id]);
+                    $html .= Html::endTag('strong');
+                    $html .= Html::tag('br');
+                    $html .= Html::beginTag('small');
+                    $html .= $formatter->asDate($document->registered_at);
+                    $html .= Html::endTag('small');
+                }
+                return $html;
+            },
         ],
         [
             'attribute' => 'title',

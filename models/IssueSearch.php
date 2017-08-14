@@ -22,6 +22,7 @@ class IssueSearch extends Model
     public $startStartedDate;
     public $endStartedDate;
     public $tag;
+    public $document;
 
     /**
      * The filter to return issues by which permanent work is being conducted.
@@ -116,9 +117,21 @@ class IssueSearch extends Model
             $query->contentContainer($contentContainer);
         }
 
+        $query->joinWith(['documents']);
+
         $dataProvider = new \yii\data\ActiveDataProvider([
             'query' => $query,
             'sort' => [
+                'attributes' => [
+                    'document' => [
+                        'asc' => [Document::tableName() . '.number' => SORT_ASC,],
+                        'desc' => [Document::tableName() . '.number' => SORT_DESC],
+                    ],
+                    'deadline',
+                    'title',
+                    'priority',
+                    'status',
+                ],
                 'defaultOrder' => ['deadline' => SORT_ASC],
             ],
             'pagination' => [
