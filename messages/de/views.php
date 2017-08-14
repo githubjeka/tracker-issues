@@ -44,6 +44,7 @@ return [
     'Delivered at' => '',
     'Description' => '',
     'Designate tag' => '',
+    'Document' => '',
     'Document ID' => '',
     'Documents' => '',
     'Done' => '',

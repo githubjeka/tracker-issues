@@ -18,10 +18,10 @@
  */
 return [
     'Are you sure you want to delete this item?' => '',
-    'Comments' => '',
+    'Comments' => 'Комментарии',
+    'Document' => 'Документ',
     'Document ID' => '',
-    'Filename' => '',
-    'For you' => 'Для вас',
+    'Filename' => 'Имя файла',
     'ID' => '',
     'Is Show' => '',
     'Only selected members from this space can get initial access to the viewing of the document in next step.' => '',
@@ -65,6 +65,7 @@ return [
     'Finish issue' => 'Завершить задачу',
     'Finished at' => 'Закончено в',
     'For each of receivers will be created new issue for familiarization with the document.' => 'Для каждого получателя будет создана новая задача для ознакомления с документом.',
+    'For you' => 'Для вас',
     'From' => 'От кого',
     'From this time recommended begin to start work' => 'Рекомендуемое время начала работ',
     'Has no direct receivers' => 'Нет прямых получателей',
