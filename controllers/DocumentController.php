@@ -5,6 +5,7 @@ namespace tracker\controllers;
 use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use tracker\controllers\services\DocumentCreator;
+use tracker\controllers\services\DocumentEditor;
 use tracker\models\Document;
 use tracker\models\DocumentFileEntity;
 use tracker\models\DocumentReceiver;
@@ -136,9 +137,32 @@ class DocumentController extends Controller
             );
     }
 
-    public function actionChangeCategory($id)
+    public function actionChangeInfo($id)
     {
+        $document = Document::find()->byId($id)->one();
 
+        if ($document === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if ((int)$document->created_by !== (int)Yii::$app->user->id) {
+            $this->forbidden();
+        }
+
+        $documentEditor = new DocumentEditor($document);
+
+        if ($documentEditor->load(Yii::$app->request->post())) {
+            if ($documentEditor->save() !== false) {
+                return $this->redirect(['view', 'id' => $document->id]);
+            }
+        }
+        return $this->renderAjax('form_change_info', [
+            'requestModel' => $documentEditor->getDocumentForm(),
+            'actionUrl' => \yii\helpers\Url::to([
+                '/' . Module::getIdentifier() . '/document/change-info',
+                'id' => $document->id,
+            ]),
+        ]);
     }
 
     public function actionAddFile($id)

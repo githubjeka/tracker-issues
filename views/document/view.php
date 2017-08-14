@@ -34,6 +34,13 @@ $user = $userClass::findOne($model->created_by);
                     <a href="<?= $url; ?>" class="btn btn-primary btn-sm text-uppercase" data-target="#globalModal">
                         <i class="fa fa-refresh"></i> <?= Yii::t('TrackerIssuesModule.views', 'Change file'); ?>
                     </a>
+                    <?php $url = Url::to([
+                        '/' . Module::getIdentifier() . '/document/change-info',
+                        'id' => $model->id,
+                    ]); ?>
+                    <a href="<?= $url; ?>" class="btn btn-primary btn-sm text-uppercase" data-target="#globalModal">
+                        <i class="fa fa-pencil"></i> <?= Yii::t('TrackerIssuesModule.views', 'Change info'); ?>
+                    </a>
                 </div>
             <?php endif; ?>
             <h1 class="panel-title text-center">
