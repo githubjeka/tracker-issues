@@ -58,37 +58,36 @@ $parent = $object->getParent()->one();
                         </i>
                         <?php if ($document->type) : ?>
                             <span class="label label-default">
-                <?= Html::encode(
-                    (isset(Document::types()[$document->type])) ?
-                        Document::types()[$document->type]
-                        : $document->type
-                ) ?>
-            </span>
+                                <?= Html::encode(
+                                    (isset(Document::types()[$document->type])) ?
+                                        Document::types()[$document->type]
+                                        : $document->type
+                                ) ?>
+                            </span>
                         <?php endif ?>
-
                         <?php if ($document->to && $document->from) : ?>
                             <span class="label label-default">
-                <?= Yii::t('TrackerIssuesModule.views', 'from') ?>
+                                <?= Yii::t('TrackerIssuesModule.views', 'from') ?>
                                 <?= Html::encode($document->from) ?>
                                 <i class="fa fa-arrow-right"></i>
-            </span>
-                            <span class="label label-default">
-               <?= Html::encode($document->to) ?>
-            </span>
+                            </span>
+                            <span class="label label-default"><?= Html::encode($document->to) ?></span>
                         <?php elseif ($document->to) : ?>
                             <span class="label label-default">
-                <?= Yii::t('TrackerIssuesModule.views', 'To') ?> <?= Html::encode($document->to) ?>
-            </span>
+                                <?= Yii::t('TrackerIssuesModule.views', 'To') ?>
+                                <?= Html::encode($document->to) ?>
+                            </span>
                         <?php elseif ($document->from) : ?>
                             <span class="label label-default">
-                  <?= Yii::t('TrackerIssuesModule.views', 'from') ?> <?= Html::encode($document->from) ?>
-            </span>
+                                <?= Yii::t('TrackerIssuesModule.views', 'from') ?>
+                                <?= Html::encode($document->from) ?>
+                            </span>
                         <?php endif ?>
-
+                        <div class="clearfix"></div>
                         <hr>
 
                         <mark class="text-uppercase">
-                            <?=  \tracker\widgets\LinkToDocFileWidget::widget(['document' => $document]) ?>
+                            <?= \tracker\widgets\LinkToDocFileWidget::widget(['document' => $document]) ?>
                         </mark>
                         <i>
                             <small class="text-lowercase">
