@@ -32,6 +32,7 @@ return [
     'Calendar' => '',
     'Category' => '',
     'Change file' => '',
+    'Change info' => '',
     'Comments' => '',
     'Create Document' => '',
     'Create Tag' => '',
