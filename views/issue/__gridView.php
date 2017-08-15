@@ -62,7 +62,7 @@ $formatter = Yii::$app->formatter;
                     $html .= Html::endTag('strong');
                     $html .= Html::tag('br');
                     $html .= Html::beginTag('small');
-                    $html .= $formatter->asDate($document->registered_at);
+                    $html .= $formatter->asDate($document->registered_at, 'short');
                     $html .= Html::endTag('small');
                 }
                 return $html;
