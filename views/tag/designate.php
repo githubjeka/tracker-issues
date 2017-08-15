@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Url;
 
 /**
@@ -23,9 +24,15 @@ use yii\helpers\Url;
 
             <?=
             $form->field($formModel, 'tags')
-                ->dropDownList(\yii\helpers\ArrayHelper::map(\tracker\models\Tag::find()->byUser(Yii::$app->user->id)->all(),
-                    'id', 'name'),
-                    ['text' => 'Please select', 'multiple' => true, 'class'=>'select-form']
+                ->dropDownList(
+                    \yii\helpers\ArrayHelper::map(
+                        \tracker\models\Tag::find()
+                            ->byUser(Yii::$app->user->id)
+                            ->orderBy([\tracker\models\Tag::tableName() . '.name' => SORT_ASC])
+                            ->all(),
+                        'id', 'name'
+                    ),
+                    ['text' => 'Please select', 'multiple' => true, 'class' => 'select-form']
                 );
             ?>
 
