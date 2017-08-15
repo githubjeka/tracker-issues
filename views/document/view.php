@@ -212,7 +212,7 @@ $user = $userClass::findOne($model->created_by);
                     echo StatusIssueWidget::widget(['status' => $issue->status]);
                     if (empty($issue->deadline) && $issue->status === \tracker\enum\IssueStatusEnum::TYPE_WORK) {
                         echo '&nbsp;';
-                        echo Html::beginTag('span', ['class' => 'label label-default']);
+                        echo Html::beginTag('span', ['class' => 'label label-success']);
                         echo Yii::t('TrackerIssuesModule.views', 'constantly');
                         echo Html::endTag('span');
                     }
