@@ -210,6 +210,12 @@ $user = $userClass::findOne($model->created_by);
                     echo Html::beginTag('i');
                     echo Html::beginTag('small');
                     echo StatusIssueWidget::widget(['status' => $issue->status]);
+                    if (empty($issue->deadline) && $issue->status === \tracker\enum\IssueStatusEnum::TYPE_WORK) {
+                        echo '&nbsp;';
+                        echo Html::beginTag('span', ['class' => 'label label-default']);
+                        echo Yii::t('TrackerIssuesModule.views', 'constantly');
+                        echo Html::endTag('span');
+                    }
                     echo '&nbsp;';
                     echo $formatter->asDate($issue->content->created_at);
                     echo '&nbsp;';
