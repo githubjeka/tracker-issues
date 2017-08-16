@@ -29,28 +29,31 @@ use tracker\models\Document;
                     <p>
                         <?php if (isset(Document::categories()[$model->category])) : ?>
                             <?= Html::encode(Document::categories()[$model->category]) ?>
+                        <?php else: ?>
+                            <?= Html::encode($model->category) ?>
                         <?php endif ?>
+                        <br>
                         <?php if ($model->number) : ?>
                             <small>
                                 <?= Html::encode($model->number) ?>
                             </small>
                         <?php endif ?>
+                        <i title="<?= Yii::t('TrackerIssuesModule.views', 'Registered at') ?>">
+                            <small>
+                                <?= Yii::$app->formatter->asDate($model->registered_at, 'long') ?>
+                            </small>
+                        </i>
                     </p>
 
                     <hr style="margin: 0">
-                    <i title="<?= Yii::t('TrackerIssuesModule.views', 'Created At') ?>">
-                        <small class="pull-right">
-                            <?= Yii::$app->formatter->asDate($model->created_at, 'long') ?>
-                        </small>
-                    </i>
                     <?php if ($model->type) : ?>
                         <span class="label label-default">
-                <?= Html::encode(
-                    (isset(Document::types()[$model->type])) ?
-                        Document::types()[$model->type]
-                        : $model->type
-                ) ?>
-            </span>
+                            <?= Html::encode(
+                                (isset(Document::types()[$model->type])) ?
+                                    Document::types()[$model->type]
+                                    : $model->type
+                            ) ?>
+                        </span>
                     <?php endif ?>
 
                     <?php if ($model->to && $model->from) : ?>
