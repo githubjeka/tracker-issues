@@ -89,7 +89,7 @@ return [
     'Priority' => 'Приоритет',
     'Receiver' => 'Получатель',
     'Receivers' => 'Получатели',
-    'Registered at' => 'Зарегистрировано в',
+    'Registered at' => 'Зарегистрировано',
     'Resolution, description' => 'Резолюция, описание',
     'Save' => 'Сохранить',
     'Search' => 'Поиск',
