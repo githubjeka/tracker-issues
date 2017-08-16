@@ -14,7 +14,7 @@ $formatter = \Yii::$app->formatter;
             <?= $formatter->asDatetime($startTime, 'eee d MMMM y, HH:mm') ?>
         </span>&nbsp;-&nbsp;
     <?php endif; ?>
-    <span class="label label-default">
+    <span class="label label-success">
          <?= \Yii::t('TrackerIssuesModule.views', 'Has not deadline') ?>
     </span>
 <?php else: ?>
