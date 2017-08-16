@@ -42,15 +42,18 @@ class DocumentSearch extends Model
         /**
          * Search documents by issues and permissions
          */
-        $queryMain = Document::find()
-            ->readable($user)
-            ->orderBy([Document::tableName() . '.id' => SORT_DESC]);
+        $queryMain = Document::find()->readable($user);
         $queryUnion = Document::find()->byCreator($user);
         $alias = 'u_q';
 
         $query = $this->unionToAlias($alias, $queryMain, $queryUnion);
 
-        $dataProvider = new ActiveDataProvider(['query' => $query,]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => ['registered_at' => SORT_DESC],
+            ],
+        ]);
 
         $this->load($params);
 
