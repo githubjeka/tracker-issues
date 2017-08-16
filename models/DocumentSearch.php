@@ -4,7 +4,7 @@ namespace tracker\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use yii\db\Query;
+use yii\db\ActiveQuery;
 
 /**
  * DocumentSearch represents the model behind the search form about `tracker\models\Document`.
@@ -45,12 +45,12 @@ class DocumentSearch extends Model
         $queryMain = Document::find()
             ->readable($user)
             ->orderBy([Document::tableName() . '.id' => SORT_DESC]);
-
         $queryUnion = Document::find()->byCreator($user);
+        $alias = 'u_q';
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $queryMain,
-        ]);
+        $query = $this->unionToAlias($alias, $queryMain, $queryUnion);
+
+        $dataProvider = new ActiveDataProvider(['query' => $query,]);
 
         $this->load($params);
 
@@ -58,26 +58,23 @@ class DocumentSearch extends Model
             return $dataProvider;
         }
 
-        $this->applyFilters($queryMain);
-
-        $this->applyFilters($queryUnion);
-        $queryMain->union($queryUnion->createCommand()->rawSql);
+        $query
+            ->andFilterWhere([$alias . '.type' => $this->type, $alias . '.category' => $this->category,])
+            ->andFilterWhere(['like', $alias . '.name', $this->name])
+            ->andFilterWhere(['like', $alias . '.number', $this->number])
+            ->andFilterWhere(['like', $alias . '.from', $this->from])
+            ->andFilterWhere(['like', $alias . '.to', $this->to]);
 
         return $dataProvider;
     }
 
-    private function applyFilters(Query $query)
+    private function unionToAlias($alias, ActiveQuery $query, ActiveQuery $queryUnion)
     {
-        $documentTable = Document::tableName();
+        $query = clone $query;
+        $query->union($queryUnion);
+        $newQuery = new ActiveQuery($query->modelClass);
+        $newQuery->from([$alias => $query]);
 
-        $query->andFilterWhere([
-            $documentTable . '.type' => $this->type,
-            $documentTable . '.category' => $this->category,
-        ]);
-
-        $query->andFilterWhere(['like', $documentTable . '.name', $this->name])
-            ->andFilterWhere(['like', $documentTable . '.number', $this->number])
-            ->andFilterWhere(['like', $documentTable . '.from', $this->from])
-            ->andFilterWhere(['like', $documentTable . '.to', $this->to]);
+        return $newQuery;
     }
 }
