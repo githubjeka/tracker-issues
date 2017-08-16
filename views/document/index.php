@@ -60,7 +60,7 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
 
         <div class="text-center">
             <p>
-                <a role="button" data-toggle="collapse" class="dropdown-toggle"
+                <a role="button" data-toggle="collapse" class="dropdown-toggle btn btn-sm btn-default"
                    href="#search-form-more" aria-expanded="false"
                    aria-controls="search-form-fields">
                     <small><?= Yii::t('TrackerIssuesModule.views', 'More filters') ?></small>
@@ -84,7 +84,7 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
             ]) ?>
 
         <div class="text-center">
-            <button class="btn btn-link btn-xs text-uppercase">
+            <button class="btn btn-success btn-xs text-uppercase">
                 <?= Yii::t('TrackerIssuesModule.views',                    'Search') ?>
             </button>
         </div>
