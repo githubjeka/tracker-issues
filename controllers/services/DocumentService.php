@@ -38,7 +38,7 @@ class DocumentService
         ]);
 
         if ($receiver === null) {
-            \Yii::warning('DocumentReceiver not found');
+            return $this;
         }
 
         $receiver->viewed_at = date('Y-m-d H:i');
