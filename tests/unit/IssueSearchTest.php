@@ -26,6 +26,7 @@ class IssueSearchTest extends \Codeception\Test\Unit
         $this->tester->haveFixtures([
             'content' => \tracker\tests\fixtures\ContentFixture::class,
             'issues' => \tracker\tests\fixtures\IssueFixture::class,
+            'links' => \tracker\tests\fixtures\LinkFixture::class,
             'space' => \humhub\modules\space\tests\codeception\fixtures\SpaceFixture::class,
         ]);
 
