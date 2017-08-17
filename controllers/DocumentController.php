@@ -6,9 +6,9 @@ use humhub\components\access\ControllerAccess;
 use humhub\components\Controller;
 use tracker\controllers\services\DocumentCreator;
 use tracker\controllers\services\DocumentEditor;
+use tracker\controllers\services\DocumentService;
 use tracker\models\Document;
 use tracker\models\DocumentFileEntity;
-use tracker\models\DocumentReceiver;
 use tracker\models\DocumentSearch;
 use tracker\Module;
 use tracker\permissions\AddDocument;
@@ -16,6 +16,7 @@ use tracker\permissions\AddReceiversToDocument;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * DocumentController implements the actions for Document model.
@@ -108,22 +109,17 @@ class DocumentController extends Controller
         $userComponent = \Yii::$app->user;
         $document = $this->findModelForUser($id, $userComponent->identity);
 
-        // TODO move to afterRequest
-        $receiver = DocumentReceiver::findOne([
-            'view_mark' => 0,
-            'user_id' => $userComponent->id,
-            'document_id' => $document->id,
-        ]);
-        if ($receiver !== null) {
-            $receiver->viewed_at = date('Y-m-d H:i');
-            $receiver->view_mark = 1;
-            if (!$receiver->save(true, ['viewed_at', 'view_mark'])) {
-                \Yii::warning(json_encode($receiver->errors));
-            }
-        }
-
         $documentEntity = new DocumentFileEntity($document);
         $attachmentName = $documentEntity->getDownloadName();
+
+        Yii::$app->response->on(Response::EVENT_AFTER_SEND, function ($event) {
+            /** @var Response $sender */
+            $sender = $event->sender;
+            if ($sender->isOk) {
+                $service = new DocumentService($event->data);
+                $service->markAsObserved(Yii::$app->user->getId());
+            }
+        }, $document);
 
         return Yii::$app
             ->response
