@@ -98,6 +98,20 @@ namespace tracker\tests\unit {
             $this->assertCount(0, $document->receivers);
             $this->assertCount(0, $document->issues);
 
+            // wrong receivers
+
+            //correct validation
+            $documentCreator->load(['receivers' => ['123', 'qwe'],], '');
+            $this->assertNotFalse($documentCreator->addReceiversTo($document));
+            $this->assertCount(0, $document->receivers);
+            $this->assertCount(0, $document->issues);
+            //wrong validation
+            $documentCreator->load(['receivers' => '123'], '');
+            $this->assertFalse($documentCreator->addReceiversTo($document));
+            $this->assertCount(0, $document->receivers);
+            $this->assertCount(0, $document->issues);
+
+            // correct receivers
             $this->tester->haveFixtures(['user' => UserFixture::class,]);
             $users = $this->tester->grabFixture('user')->data;
             $documentCreator->load(['receivers' => [$users[1]['guid'], $users[2]['guid']],], '');

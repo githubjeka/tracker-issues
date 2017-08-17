@@ -147,10 +147,13 @@ class DocumentCreator extends \yii\base\Model
 
         foreach ($this->requestForm->receivers as $userGuid) {
             $user = \humhub\modules\user\models\User::findOne(['guid' => $userGuid]);
-            // TODO User validate or filters
-            if (DocumentReceiver::find()->where(['user_id' => $user->id, 'document_id' => $document->id])->exists()) {
+
+            if ($user === null || DocumentReceiver::find()
+                    ->where(['user_id' => $user->id, 'document_id' => $document->id])
+                    ->exists()) {
                 continue;
             }
+
             $receiver = new DocumentReceiver();
             $receiver->user_id = $user->id;
             $receiver->document_id = $document->id;

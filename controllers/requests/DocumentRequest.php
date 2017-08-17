@@ -26,9 +26,10 @@ class DocumentRequest extends \yii\base\Model
     {
         return [
             [['receivers'], 'default', 'value' => []],
+            ['receivers', 'each', 'rule' => ['string']],
             [['name', 'registeredAt', 'number'], 'required'],
             [['registeredAt',], 'date', 'format' => 'php:Y-m-d'],
-            [['receivers', 'category', 'type'], 'safe'],
+            [['category', 'type'], 'safe'],
             [['name', 'from', 'to', 'number'], 'string', 'max' => 255],
             ['file', 'file', 'skipOnEmpty' => false,],
             ['description', 'string'],
