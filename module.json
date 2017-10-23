@@ -12,7 +12,7 @@
   ],
   "version": "0.0.10dev",
   "humhub": {
-    "minVersion": "1.2.2"
+    "minVersion": "master"
   },
   "screenshots": [
     "assets/screen1.jpg",
