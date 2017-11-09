@@ -107,7 +107,7 @@ class DocumentController extends Controller
     public function actionDownload($id)
     {
         $userComponent = \Yii::$app->user;
-        $document = $this->findModelForUser($id, $userComponent->identity);
+        $document = $this->findModelForUser($id, $userComponent->identity, true);
 
         $documentEntity = new DocumentFileEntity($document);
         $attachmentName = $documentEntity->getDownloadName();
@@ -229,13 +229,13 @@ class DocumentController extends Controller
      *
      * @param integer $id
      * @param \yii\web\IdentityInterface $user
-     *
+     * @param bool $andDownload @see \tracker\models\DocumentQuery::readable
      * @return Document the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModelForUser($id, \yii\web\IdentityInterface $user)
+    protected function findModelForUser($id, \yii\web\IdentityInterface $user, $andDownload = false)
     {
-        $model = Document::find()->readable($user)->byId($id)->one();
+        $model = Document::find()->readable($user, $andDownload)->byId($id)->one();
 
         if ($model === null) {
 

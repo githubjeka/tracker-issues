@@ -2,6 +2,7 @@
 
 namespace tracker\models;
 
+use tracker\permissions\GrandViewAllDocuments;
 use tracker\permissions\ViewAllDocuments;
 use yii\db\ActiveQuery;
 use yii\web\IdentityInterface;
@@ -15,12 +16,16 @@ class DocumentQuery extends ActiveQuery
      * Only returns user readable records via issues readable
      *
      * @param IdentityInterface|null $user
-     *
+     * @param bool $andDownload checks permission to download document. By default - no.
      * @return static
      */
-    public function readable(IdentityInterface $user)
+    public function readable(IdentityInterface $user, $andDownload = false)
     {
-        if (\Yii::$app->user->permissionmanager->can(new ViewAllDocuments())) {
+        if (\Yii::$app->user->permissionmanager->can(new GrandViewAllDocuments())) {
+            return $this;
+        }
+
+        if ($andDownload === false && \Yii::$app->user->permissionmanager->can(new ViewAllDocuments())) {
             return $this;
         }
 

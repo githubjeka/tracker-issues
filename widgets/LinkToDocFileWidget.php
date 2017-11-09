@@ -4,6 +4,7 @@ namespace tracker\widgets;
 
 
 use humhub\libs\Html;
+use tracker\models\Document;
 use tracker\Module;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
@@ -22,6 +23,14 @@ class LinkToDocFileWidget extends Widget
         if (!isset($this->document->id)) {
             return '';
         }
+
+        if (!Document::find()
+            ->readable(\Yii::$app->user->identity, true)
+            ->byId($this->document->id)
+            ->exists()) {
+            return \Yii::t('TrackerIssuesModule.views', 'Viewing the file is denied');
+        }
+
 
         if (empty($this->text)) {
             $this->text = \Yii::t('TrackerIssuesModule.views', 'Show the file');

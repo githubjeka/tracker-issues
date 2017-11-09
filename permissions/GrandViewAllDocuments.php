@@ -8,7 +8,7 @@ use tracker\Module;
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class ViewAllDocuments extends \humhub\libs\BasePermission
+class GrandViewAllDocuments extends \humhub\libs\BasePermission
 {
     /**
      * @inheritdoc
@@ -35,7 +35,7 @@ class ViewAllDocuments extends \humhub\libs\BasePermission
      */
     public function getTitle()
     {
-        return \Yii::t('TrackerIssuesModule.permissions', 'View all documents');
+        return \Yii::t('TrackerIssuesModule.permissions', 'View all documents and files');
     }
 
     /**
@@ -45,7 +45,7 @@ class ViewAllDocuments extends \humhub\libs\BasePermission
     {
         return \Yii::t(
             'TrackerIssuesModule.permissions',
-            'Allow to view all documents and their all issues, without access to files'
+            'Allow to view all documents and their all issues, with download files'
         );
     }
 

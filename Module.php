@@ -9,6 +9,7 @@ use tracker\permissions\AddDocument;
 use tracker\permissions\AddReceiversToDocument;
 use tracker\permissions\CreateIssue;
 use tracker\permissions\EditIssue;
+use tracker\permissions\GrandViewAllDocuments;
 use tracker\permissions\ViewAllDocuments;
 
 /**
@@ -55,6 +56,7 @@ class Module extends ContentContainerModule
             new AddDocument(),
             new AddReceiversToDocument(),
             new ViewAllDocuments(),
+            new GrandViewAllDocuments(),
         ];
     }
 
