@@ -13,6 +13,7 @@ The tracker focused on Enterprise and Private Social Networks.
 - A large functions of Humhub is available for tasks. Issues by spaces, commenting, attaching files, Rich Markdown,
  notifications and others. Thanks HumHub Community Edition.
 - Calendar and Timeline plugins are available for your analysis by tasks.
+- Keep track of incoming and outgoing documents. By them, create issues for your employees.
 
 ### To Install Manual
 - upload all files to `protected/modules/tracker/`
