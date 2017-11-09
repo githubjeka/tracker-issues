@@ -17,16 +17,18 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Add receivers to documents' => 'Добавлять получателей к документам',
     'Allow others to create new issue on your profile page' => '',
     'Allow others to edit issue on your profile page' => '',
+    'Allow to view all documents and their all issues, with download files' => 'Позволяет просматривать документы, их задачи и скачивать файлы',
+    'Allow to view all documents and their all issues, without access to files' => 'Позволяет просматривать документы, их задачи, без скачивания файлы',
+    'View all documents and files' => 'Просмотр всех документов и файлов',
+    'Add documents' => 'Добавлять документы',
+    'Add receivers to documents' => 'Добавлять получателей к документам',
     'Allow to added new receivers users to available documents' => 'Даёт права на добавление новых получателей к доступным документам',
+    'Allow to upload new documents and to add information on it' => 'Даёт права на загрузку новых документов и описание его',
     'Allows the user to create issue' => 'Позволяет пользователю создавать задачу',
     'Allows the user to edit issue' => 'Позволяет пользователю изменять задачу',
     'Create issue' => 'Создать задачу',
     'Edit issue' => 'Изменить задачу',
-    'Add documents' => 'Добавлять документы',
-    'Allow to upload new documents and to add information on it' => 'Даёт права на загрузку новых документов и описание его',
-    'Allow to view all documents and their all issues' => 'Даёт права на просмотр всех документов и списка всех их задач',
     'View all documents' => 'Просмотр всех документов',
 ];

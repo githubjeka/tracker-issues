@@ -18,11 +18,10 @@
  */
 return [
     'Are you sure you want to delete this item?' => '',
-    'Change info' => 'Изменить информацию',
     'Document ID' => '',
     'ID' => '',
     'Is Show' => '',
-    'Only selected members from this space can get initial access to the viewing of the document in next step.' => '',
+    'Viewing the file is denied' => 'Просмотр файла запрещён',
     '<strong>Designate</strong> tag to issue' => '<strong>Назначить</strong> номенклатуру к задаче',
     'Add' => 'Добавить',
     'Add Receivers' => 'Добавить получателей',
@@ -37,6 +36,7 @@ return [
     'Calendar' => 'Календарь',
     'Category' => 'Категория',
     'Change file' => 'Изменить файл',
+    'Change info' => 'Изменить информацию',
     'Comments' => 'Комментарии',
     'Create Document' => 'Создать документ',
     'Create Tag' => 'Создать номенклатуру',
