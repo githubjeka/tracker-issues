@@ -53,10 +53,7 @@ class DocumentFile extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('TrackerIssuesModule.views', 'ID'),
-            'document_id' => Yii::t('TrackerIssuesModule.views', 'Document ID'),
             'filename' => Yii::t('TrackerIssuesModule.views', 'Filename'),
-            'is_show' => Yii::t('TrackerIssuesModule.views', 'Is Show'),
             'comments' => Yii::t('TrackerIssuesModule.views', 'Comments'),
             'created_at' => Yii::t('TrackerIssuesModule.views', 'Created At'),
             'created_by' => Yii::t('TrackerIssuesModule.views', 'Created By'),
