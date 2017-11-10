@@ -11,6 +11,7 @@ use tracker\permissions\CreateIssue;
 use tracker\permissions\EditIssue;
 use tracker\permissions\GrandViewAllDocuments;
 use tracker\permissions\ViewAllDocuments;
+use yii\helpers\Url;
 
 /**
  * Main class of module tracker issue
@@ -76,5 +77,10 @@ class Module extends ContentContainerModule
         }
 
         parent::disable();
+    }
+
+    public function getConfigUrl()
+    {
+        return Url::to(['/' . $this->getIdentifier() . '/config']);
     }
 }

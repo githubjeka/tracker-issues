@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
 
 use yii\db\Migration;
 
@@ -14,7 +17,7 @@ class m170701_105128_document extends Migration
             'number' => $this->string(),
             'from' => $this->string(),
             'to' => $this->string(),
-            'type' => $this->string(),
+            'type' => $this->integer(),
             'category' => $this->string(),
         ]);
 

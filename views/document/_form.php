@@ -1,12 +1,16 @@
 <?php
+/**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $documentRequest \tracker\controllers\requests\DocumentRequest */
-/* @var $form yii\widgets\ActiveForm */
-
+/**
+ * @var $this yii\web\View
+ * @var $documentRequest \tracker\controllers\requests\DocumentRequest
+ * @var $form yii\widgets\ActiveForm
+ */
 ?>
 
 <div class="document-form">
@@ -52,8 +56,11 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div>
-        <?= $form->field($documentRequest, 'type')->dropDownList(\tracker\models\Document::types(),
-            ['prompt' => '-']) ?>
+        <?= $form->field($documentRequest, 'type')
+            ->dropDownList(
+                \yii\helpers\ArrayHelper::map(\tracker\models\Document::types(), 'id', 'name'),
+                ['prompt' => '-']
+            ) ?>
     </div>
 
     <div class="row">

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
 
 use tracker\models\Document;
 use tracker\models\Link;
@@ -9,8 +12,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model tracker\models\Document */
+/**
+ * @var $this yii\web\View
+ * @var $model tracker\models\Document
+ */
 
 $this->title = $model->name;
 $formatter = Yii::$app->formatter;
@@ -75,8 +80,8 @@ $user = $userClass::findOne($model->created_by);
                                 'format' => 'raw',
                                 'contentOptions' => ['class' => 'text-uppercase'],
                                 'value' => '<mark>' .
-                                           \tracker\widgets\LinkToDocFileWidget::widget(['document' => $model]) .
-                                           '</mark>',
+                                    \tracker\widgets\LinkToDocFileWidget::widget(['document' => $model]) .
+                                    '</mark>',
                             ],
                             [
                                 'attribute' => 'number',
@@ -88,8 +93,8 @@ $user = $userClass::findOne($model->created_by);
                             'to',
                             [
                                 'attribute' => 'type',
-                                'value' => (isset(Document::types()[$model->type])) ?
-                                    Document::types()[$model->type] : $model->type,
+                                'format' => 'html',
+                                'value' => \tracker\widgets\DocumentTypeLabel::widget(['type' => $model->typeModel]),
                             ],
                             [
                                 'label' => Yii::t('TrackerIssuesModule.views', 'Created By'),
@@ -99,8 +104,8 @@ $user = $userClass::findOne($model->created_by);
                                          class="img-rounded tt img_margin"
                                          height="24" width="24" alt="24x24" data-src="holder.js/24x24"
                                          style="width: 24px; height: 24px;"> ' .
-                                      Html::encode($user->displayName) . ' / ' .
-                                      Yii::$app->formatter->asDatetime($model->created_at) : '',
+                                    Html::encode($user->displayName) . ' / ' .
+                                    Yii::$app->formatter->asDatetime($model->created_at) : '',
                             ],
                         ],
                     ]) ?>
@@ -113,7 +118,7 @@ $user = $userClass::findOne($model->created_by);
         <div class="panel-body">
 
             <?php if (\Yii::$app->user->can(new AddReceiversToDocument()) ||
-                      (int)$model->created_by === (int)Yii::$app->user->id) : ?>
+                (int)$model->created_by === (int)Yii::$app->user->id) : ?>
                 <div class="text-right">
                     <?php $url = Url::to([
                         '/' . tracker\Module::getIdentifier() . '/document/to-add-receivers',

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
 
 namespace tracker\models;
 
@@ -14,13 +17,14 @@ use yii\db\ActiveQuery;
  * @property string $number
  * @property string $from
  * @property string $to
- * @property integer $type
+ * @property null|integer $type id from tracker\models\DocumentType
  * @property integer $category
  * @property integer $registered_at
  * @property integer $created_at
  * @property string $created_by
  * @property DocumentReceiver[] $receivers
  * @property Issue[] $issues
+ * @property DocumentType|null $typeModel
  * @property DocumentFile $file
  */
 class Document extends yii\db\ActiveRecord
@@ -75,22 +79,20 @@ class Document extends yii\db\ActiveRecord
     }
 
     /**
-     * TODO убрать это, сделать по аналогии с категориями
-     *
-     * @return array
+     * Returns List of DocumentType models
+     * @return DocumentType[]
      */
     public static function types()
     {
-        return [
-            'fax' => Yii::t('TrackerIssuesModule.views', 'Fax'),
-            'email' => Yii::t('TrackerIssuesModule.views', 'EMail'),
-            'lotus' => Yii::t('TrackerIssuesModule.views', 'EMail Lotus'),
-            'mail' => Yii::t('TrackerIssuesModule.views', 'Letter'),
-            'ordered' => Yii::t('TrackerIssuesModule.views', 'Ordered Letter'),
-            'ordered-with-notify' => Yii::t('TrackerIssuesModule.views', 'Ordered Letter with notification'),
-            'ordered-with-ordered-notify' => Yii::t('TrackerIssuesModule.views',
-                'Ordered Letter with ordered notification'),
-        ];
+        return DocumentType::findByType(DocumentType::class)->all();
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getTypeModel()
+    {
+        return $this->hasOne(DocumentType::class, ['id' => 'type']);
     }
 
     /**

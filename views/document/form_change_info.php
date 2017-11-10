@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
 
 use humhub\widgets\ActiveForm;
 use yii\helpers\Html;
@@ -53,8 +56,11 @@ use yii\helpers\Html;
                 </div>
 
                 <div>
-                    <?= $form->field($requestModel, 'type')->dropDownList(\tracker\models\Document::types(),
-                        ['prompt' => '-']) ?>
+                    <?= $form->field($requestModel, 'type')
+                        ->dropDownList(
+                            \yii\helpers\ArrayHelper::map(\tracker\models\Document::types(), 'id', 'name'),
+                            ['prompt' => '-']
+                        ) ?>
                 </div>
 
                 <div class="row">

@@ -1,5 +1,9 @@
 <?php
 /**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
+
+/**
  * @var $model Document, the data model
  * @var $key mixed, the key value associated with the data item
  * @var $index  integer, the zero-based index of the data item in the items array returned by [[dataProvider]].
@@ -46,15 +50,7 @@ use tracker\models\Document;
                     </p>
 
                     <hr style="margin: 0">
-                    <?php if ($model->type) : ?>
-                        <span class="label label-default">
-                            <?= Html::encode(
-                                (isset(Document::types()[$model->type])) ?
-                                    Document::types()[$model->type]
-                                    : $model->type
-                            ) ?>
-                        </span>
-                    <?php endif ?>
+                    <?= \tracker\widgets\DocumentTypeLabel::widget(['type' => $model->typeModel]) ?>
 
                     <?php if ($model->to && $model->from) : ?>
                         <span class="label label-default">

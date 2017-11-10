@@ -1,13 +1,19 @@
 <?php
+/**
+ * @author Evgeniy Tkachenko <et.coder@gmail.com>
+ */
 
 use tracker\models\Document;
 use tracker\permissions\AddDocument;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
-/* @var $this yii\web\View */
-/* @var $searchModel tracker\models\DocumentSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel tracker\models\DocumentSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
+
 \tracker\assets\IssueAsset::register($this);
 $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
 ?>
@@ -23,7 +29,7 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
             'layout' => 'horizontal',
             'enableClientValidation' => false,
             'method' => 'get',
-            'id'=>'filters-form-document'
+            'id' => 'filters-form-document'
         ]); ?>
 
         <div id="search-form-more" class="content collapse">
@@ -39,7 +45,13 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
             <?= $form
                 ->field($searchModel, 'type')
                 ->label(false)
-                ->dropDownList(Document::types(), ['prompt' => Yii::t('TrackerIssuesModule.views', 'Filter by Type'), 'class' => 'input-sm form-control']) ?>
+                ->dropDownList(
+                    \yii\helpers\ArrayHelper::map(\tracker\models\Document::types(), 'id', 'name'),
+                    [
+                        'prompt' => Yii::t('TrackerIssuesModule.views', 'Filter by Type'),
+                        'class' => 'input-sm form-control'
+                    ]
+                ) ?>
 
             <?= $form
                 ->field($searchModel, 'from')
@@ -85,7 +97,7 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
 
         <div class="text-center">
             <button class="btn btn-success btn-xs text-uppercase">
-                <?= Yii::t('TrackerIssuesModule.views',                    'Search') ?>
+                <?= Yii::t('TrackerIssuesModule.views', 'Search') ?>
             </button>
         </div>
 
