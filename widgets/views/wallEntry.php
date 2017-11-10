@@ -54,15 +54,7 @@ $parent = $object->getParent()->one();
                                 <?= Yii::$app->formatter->asDate($document->created_at, 'long') ?>
                             </small>
                         </i>
-                        <?php if ($document->type) : ?>
-                            <span class="label label-default">
-                                <?= Html::encode(
-                                    (isset(Document::types()[$document->type])) ?
-                                        Document::types()[$document->type]
-                                        : $document->type
-                                ) ?>
-                            </span>
-                        <?php endif ?>
+                        <?= \tracker\widgets\DocumentTypeLabel::widget(['type'=>$document->typeModel]) ?>
                         <?php if ($document->to && $document->from) : ?>
                             <span class="label label-default">
                                 <?= Yii::t('TrackerIssuesModule.views', 'from') ?>
