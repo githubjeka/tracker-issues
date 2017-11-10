@@ -18,7 +18,7 @@ class m170701_105128_document extends Migration
             'from' => $this->string(),
             'to' => $this->string(),
             'type' => $this->integer(),
-            'category' => $this->string(),
+            'category' => $this->integer(),
         ]);
 
         $this->createTable('{{%tracker_receiver_document}}', [

@@ -239,7 +239,7 @@ class DocumentCreator extends \yii\base\Model
 
         /** @var Module $module */
         $module = \Yii::$app->moduleManager->getModule(Module::getIdentifier());
-        $category = isset(Document::categories()[$documentModel->category]) ? $documentModel->category : 'no-category';
+        $category = $documentModel->categoryModel !== null ? $documentModel->categoryModel->id : 'no-category';
         $path = $module->documentRootPath . $category . '/' . $documentModel->id . '/';
 
         if (!file_exists($path) && !mkdir($path, 0774, true)) {

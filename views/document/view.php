@@ -3,7 +3,6 @@
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 
-use tracker\models\Document;
 use tracker\models\Link;
 use tracker\Module;
 use tracker\permissions\AddReceiversToDocument;
@@ -49,8 +48,7 @@ $user = $userClass::findOne($model->created_by);
                 </div>
             <?php endif; ?>
             <h1 class="panel-title text-center">
-                <?= (isset(Document::categories()[$model->category])) ?
-                    Html::encode(Document::categories()[$model->category]) : Html::encode($model->category) ?>
+                <?= \tracker\widgets\DocumentCategoryLabel::widget(['category' => $model->categoryModel]) ?>
             </h1>
         </div>
         <div class="clearfix"></div>

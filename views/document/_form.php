@@ -33,7 +33,10 @@ use yii\widgets\ActiveForm;
     <hr>
 
     <?= $form->field($documentRequest, 'category')
-        ->dropDownList(\tracker\models\Document::categories(), ['prompt' => '-']); ?>
+        ->dropDownList(
+            \yii\helpers\ArrayHelper::map(\tracker\models\Document::categories(), 'id', 'name'),
+            ['prompt' => '-']
+        ); ?>
 
     <div class="row">
         <div class="col-md-6">

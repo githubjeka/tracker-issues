@@ -18,13 +18,14 @@ use yii\db\ActiveQuery;
  * @property string $from
  * @property string $to
  * @property null|integer $type id from tracker\models\DocumentType
- * @property integer $category
+ * @property null|integer $category id from tracker\models\DocumentCategory
  * @property integer $registered_at
  * @property integer $created_at
  * @property string $created_by
  * @property DocumentReceiver[] $receivers
  * @property Issue[] $issues
  * @property DocumentType|null $typeModel
+ * @property DocumentCategory|null $categoryModel
  * @property DocumentFile $file
  */
 class Document extends yii\db\ActiveRecord
@@ -46,7 +47,7 @@ class Document extends yii\db\ActiveRecord
             [['name', 'created_by', 'registered_at', 'created_at'], 'required'],
             [['registered_at', 'created_at', 'created_by'], 'integer'],
             [['description'], 'string'],
-            [['type', 'category'], 'string'],
+            [['type', 'category'], 'integer'],
             [['number'], 'string', 'max' => 15],
             [['name', 'from', 'to'], 'string', 'max' => 255],
         ];
@@ -96,16 +97,20 @@ class Document extends yii\db\ActiveRecord
     }
 
     /**
-     * TODO: should be created via user interface and stored in database
-     *
-     * @return array where key is index of category, should be valid to create path on store of documents,
-     * value - string, name of category.
+     * Returns List of DocumentCategory models
+     * @return DocumentCategory[]
      */
     public static function categories()
     {
-        return isset(Yii::$app->params['categories-document']) && !empty(Yii::$app->params['categories-document'])
-            ? Yii::$app->params['categories-document']
-            : [];
+        return DocumentCategory::findByType(DocumentCategory::class)->all();
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCategoryModel()
+    {
+        return $this->hasOne(DocumentCategory::class, ['id' => 'category']);
     }
 
     /** @return IssueQuery|ActiveQuery */

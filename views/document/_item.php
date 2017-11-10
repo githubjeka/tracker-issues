@@ -31,11 +31,7 @@ use tracker\models\Document;
             <div class="row">
                 <div class="col-md-4">
                     <p>
-                        <?php if (isset(Document::categories()[$model->category])) : ?>
-                            <?= Html::encode(Document::categories()[$model->category]) ?>
-                        <?php else: ?>
-                            <?= Html::encode($model->category) ?>
-                        <?php endif ?>
+                        <?= \tracker\widgets\DocumentCategoryLabel::widget(['category' => $model->categoryModel]) ?>
                         <br>
                         <?php if ($model->number) : ?>
                             <small>

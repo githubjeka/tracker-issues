@@ -3,7 +3,6 @@
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 
-use tracker\models\Document;
 use tracker\permissions\AddDocument;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
@@ -82,10 +81,13 @@ $this->title = Yii::t('TrackerIssuesModule.views', 'Documents');
 
         <?= $form->field($searchModel, 'category')
             ->label(false)
-            ->dropDownList(Document::categories(), [
-                'prompt' => Yii::t('TrackerIssuesModule.views', 'Filter by Category'),
-                'class' => 'input-sm form-control',
-            ]) ?>
+            ->dropDownList(
+                \yii\helpers\ArrayHelper::map(\tracker\models\Document::categories(), 'id', 'name'),
+                [
+                    'prompt' => Yii::t('TrackerIssuesModule.views', 'Filter by Category'),
+                    'class' => 'input-sm form-control',
+                ]
+            ) ?>
 
         <?= $form
             ->field($searchModel, 'name')

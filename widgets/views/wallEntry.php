@@ -41,9 +41,7 @@ $parent = $object->getParent()->one();
                     <div class="panel-body">
 
                         <p>
-                            <?php if (isset(Document::categories()[$document->category])) : ?>
-                                <?= Html::encode(Document::categories()[$document->category]) ?>
-                            <?php endif ?>
+                            <?= \tracker\widgets\DocumentCategoryLabel::widget(['category' => $document->categoryModel]) ?>
                             <?php if ($document->number) : ?>
                                 <small>
                                     <?= Html::encode($document->number) ?>

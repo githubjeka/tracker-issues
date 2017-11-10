@@ -40,8 +40,8 @@ class DocumentFileEntity
     {
         /** @var Module $module */
         $module = \Yii::$app->getModule(Module::getIdentifier());
-        if (isset(Document::categories()[$this->document->category])) {
-            $category = $this->document->category;
+        if ($this->document->categoryModel !== null) {
+            $category = $this->document->categoryModel->id;
         } else {
             $category = 'no-category';
         }

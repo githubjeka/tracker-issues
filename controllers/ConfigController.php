@@ -9,6 +9,7 @@ use humhub\modules\admin\components\Controller;
 use humhub\modules\admin\permissions\ManageModules;
 use humhub\modules\content\models\ContentTag;
 use tracker\models\Document;
+use tracker\models\DocumentCategory;
 use tracker\models\DocumentType;
 use tracker\Module;
 use yii\data\ActiveDataProvider;
@@ -32,26 +33,31 @@ class ConfigController extends Controller
 
     /**
      * The action list of categories.
+     *
      * @return string
      */
     public function actionCategories()
     {
-        return $this->render('categories');
+        return $this->render('categories', [
+            'dataProvider' => new ActiveDataProvider(['query' => DocumentCategory::findByType(DocumentCategory::class)]),
+        ]);
     }
 
     /**
      * The action list of types.
+     *
      * @return string
      */
     public function actionTypes()
     {
         return $this->render('types', [
-            'dataProvider' => new ActiveDataProvider(['query' => DocumentType::findGlobal()]),
+            'dataProvider' => new ActiveDataProvider(['query' => DocumentType::findByType(DocumentType::class)]),
         ]);
     }
 
     /**
      * The action to create a type document model
+     *
      * @return string
      */
     public function actionCreateType()
@@ -64,7 +70,22 @@ class ConfigController extends Controller
     }
 
     /**
+     * The action to create a type document model
+     *
+     * @return string
+     */
+    public function actionCreateCategory()
+    {
+        $documentCategoryModel = new DocumentCategory();
+        if ($this->saveTagModel($documentCategoryModel)) {
+            return $this->redirectToCategoriesPage();
+        }
+        return $this->renderAjax('editCategoryModal', ['model' => $documentCategoryModel]);
+    }
+
+    /**
      * The action to edit the type document model
+     *
      * @param $id
      * @return string
      * @throws NotFoundHttpException
@@ -76,6 +97,22 @@ class ConfigController extends Controller
             return $this->redirectToTypesPage();
         }
         return $this->renderAjax('editTypeModal', ['model' => $documentTypeModel]);
+    }
+
+    /**
+     * The action to edit the type document model
+     *
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionEditCategory($id)
+    {
+        $documentCategoryModel = $this->findTagModel(DocumentCategory::class, $id);
+        if ($this->saveTagModel($documentCategoryModel)) {
+            return $this->redirectToCategoriesPage();
+        }
+        return $this->renderAjax('editCategoryModal', ['model' => $documentCategoryModel]);
     }
 
     public function actionDeleteType($id)
@@ -92,12 +129,40 @@ class ConfigController extends Controller
             $transaction->rollBack();
         }
 
-        return $this->htmlRedirect(URL::to(['/' . Module::getIdentifier() . '/config/types']));
+        return $this->redirectToTypesPage();
+    }
+
+    public function actionDeleteCategory($id)
+    {
+        $entryType = $this->findTagModel(DocumentCategory::class, $id);
+
+        if (Document::find()->where(['category' => $id])->exists()) {
+            $this->view->error(
+                \Yii::t(
+                    'TrackerIssuesModule.views',
+                    'Can not be deleted while documents exist for this category'
+                )
+            );
+            // because files of documents stored in directories by category
+        } else {
+            if ($entryType->delete()) {
+                $this->view->success(\Yii::t('TrackerIssuesModule.views', 'Deleted.'));
+            } else {
+                $this->view->error(\Yii::t('TrackerIssuesModule.views', 'Not deleted.'));
+            }
+        }
+
+        return $this->redirectToCategoriesPage();
     }
 
     private function redirectToTypesPage()
     {
         return $this->htmlRedirect(URL::to(['/' . Module::getIdentifier() . '/config/types']));
+    }
+
+    private function redirectToCategoriesPage()
+    {
+        return $this->htmlRedirect(URL::to(['/' . Module::getIdentifier() . '/config/categories']));
     }
 
     private function saveTagModel(ContentTag $model)
