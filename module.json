@@ -1,7 +1,7 @@
 {
   "id": "tracker_issue",
   "name": "Tracker issues",
-  "description": "Issue tracking system.",
+  "description": "Issue tracking system. Workflow documents.",
   "keywords": [
     "task",
     "todo",
@@ -10,7 +10,7 @@
     "workflow",
     "documents"
   ],
-  "version": "0.1.1dev",
+  "version": "0.1.0",
   "humhub": {
     "minVersion": "1.2.3"
   },
