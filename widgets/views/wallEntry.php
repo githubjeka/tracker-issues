@@ -10,7 +10,6 @@ use humhub\modules\space\models\Space;
 use humhub\modules\space\widgets\Image as SpaceImage;
 use humhub\modules\user\widgets\Image as UserImage;
 use humhub\widgets\TimeAgo;
-use tracker\models\Document;
 use tracker\models\Issue;
 
 $user = $object->content->createdBy;
@@ -54,7 +53,7 @@ $parent = $object->getParent()->one();
                                 <?= Yii::$app->formatter->asDate($document->created_at, 'long') ?>
                             </small>
                         </i>
-                        <?= \tracker\widgets\DocumentTypeLabel::widget(['type'=>$document->typeModel]) ?>
+                        <?= \tracker\widgets\DocumentTypeLabel::widget(['type' => $document->typeModel]) ?>
                         <?php if ($document->to && $document->from) : ?>
                             <span class="label label-default">
                                 <?= Yii::t('TrackerIssuesModule.views', 'from') ?>
@@ -95,6 +94,14 @@ $parent = $object->getParent()->one();
                 </div>
             </div>
         <?php endforeach; ?>
+    <?php else : ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    <strong><?= Html::encode($object->title) ?></strong>
+                </h1>
+            </div>
+        </div>
     <?php endif; ?>
 <?php endif; ?>
 
