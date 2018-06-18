@@ -29,8 +29,15 @@ $user = $userClass::findOne($model->created_by);
     <div class="panel">
         <div class="panel-heading">
             <?= \tracker\widgets\BackBtn::widget(['alternativeUrl' => ['index']]) ?>
-            <?php if ((int)$model->created_by === (int)Yii::$app->user->id) : ?>
-                <div class="pull-right">
+            <div class="pull-right">
+                <?= $this->trigger(
+                    'RENDER-ACTION-BUTTONS-DOCUMENT',
+                    new \yii\base\Event([
+                        'sender' => $model,
+                        'data' => []
+                    ])
+                ) ?>
+                <?php if ((int)$model->created_by === (int)Yii::$app->user->id) : ?>
                     <?php $url = Url::to([
                         '/' . Module::getIdentifier() . '/document/add-file',
                         'id' => $model->id,
@@ -45,8 +52,8 @@ $user = $userClass::findOne($model->created_by);
                     <a href="<?= $url; ?>" class="btn btn-primary btn-sm text-uppercase" data-target="#globalModal">
                         <i class="fa fa-pencil"></i> <?= Yii::t('TrackerIssuesModule.views', 'Change info'); ?>
                     </a>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
             <h1 class="panel-title text-center">
                 <?= \tracker\widgets\DocumentCategoryLabel::widget(['category' => $model->categoryModel]) ?>
             </h1>
@@ -202,6 +209,7 @@ $user = $userClass::findOne($model->created_by);
                     \tracker\models\Issue::tableName() . '.id = child_id'
                 )
                 ->andWhere('parent_id IS NULL')
+                ->orderBy([\tracker\models\Issue::tableName() . '.deadline' => SORT_ASC])
                 ->all();
             ?>
             <?php if (count($issues) > 0) : ?>
@@ -219,8 +227,17 @@ $user = $userClass::findOne($model->created_by);
                         echo Yii::t('TrackerIssuesModule.views', 'constantly');
                         echo Html::endTag('span');
                     }
-                    echo '&nbsp;';
-                    echo $formatter->asDate($issue->content->created_at);
+
+                    if ($issue->deadline) {
+                        echo '&nbsp;';
+                        echo Html::beginTag('span', [
+                            'data-toggle' => 'tooltip',
+                            'title' => Yii::t('TrackerIssuesModule.views', 'Deadline')
+                        ]);
+                        echo $formatter->asDate($issue->deadline);
+                        echo Html::endTag('span');
+                    }
+
                     echo '&nbsp;';
                     $user = $issue->content->getCreatedBy()->one();
                     $createrImage = \humhub\modules\user\widgets\Image::widget([
