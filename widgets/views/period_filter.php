@@ -18,12 +18,18 @@ $this->registerJs('
     Html::checkbox(
         Html::getInputName($searchModel, 'isConstantly'),
         $searchModel->isConstantly,
-        ['label' => Yii::t('TrackerIssuesModule.views', 'constantly'), 'uncheck' => '0']
+        ['label' => Yii::t('TrackerIssuesModule.views', 'Continuous use'), 'uncheck' => '0']
+    ) ?>
+    <?=
+    Html::checkbox(
+        Html::getInputName($searchModel, 'onlyWithoutDeadline'),
+        $searchModel->onlyWithoutDeadline,
+        ['label' => Yii::t('TrackerIssuesModule.views', 'Without deadline'), 'uncheck' => '0']
     ) ?>
 </div>
 <?php if ($searchModel->isConstantly === false) : ?>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <?= \yii\jui\DatePicker::widget([
                 'model' => $searchModel,
                 'attribute' => 'startStartedDate',
@@ -34,7 +40,7 @@ $this->registerJs('
                 ],
             ]) ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
 
             <?= \yii\jui\DatePicker::widget([
                 'model' => $searchModel,

@@ -83,3 +83,7 @@ li.size {
   text-overflow: ellipsis;
   list-style-position: inside;
 }
+
+.issue-panel:hover{
+    box-shadow: 0 0 3px 2px #dadada !important;
+}

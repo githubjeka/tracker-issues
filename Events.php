@@ -80,7 +80,7 @@ class Events extends \yii\base\Object
             'url' => ['/tracker-issues/document'],
             'icon' => '<i class="fa fa-files-o"></i>',
             'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'document'),
-            'sortOrder' => 300,
+            'sortOrder' => 310,
         ]);
 
         $event->sender->addItem([
@@ -88,7 +88,7 @@ class Events extends \yii\base\Object
             'url' => ['/tracker-issues/tag/index'],
             'icon' => '<i class="fa fa-tags"></i>',
             'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'tag'),
-            'sortOrder' => 300,
+            'sortOrder' => 320,
         ]);
     }
 

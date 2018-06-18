@@ -12,7 +12,6 @@
  */
 
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 
 \tracker\assets\IssueAsset::register($this);
 ?>
@@ -23,8 +22,8 @@ use yii\widgets\Pjax;
         <?php if (!($contentContainer instanceof \humhub\modules\space\models\Space)) : ?>
             <div class="pull-right">
                 <?= \yii\helpers\Html::a(
-                    Yii::t('TrackerIssuesModule.views', 'List'),,
-                    ['/' . tracker\Module::getIdentifier() . '/dashboard/issues', 'list' => 1],
+                    'Как таблица',
+                    ['/' . tracker\Module::getIdentifier() . '/dashboard/issues', 'list' => 0],
                     ['class' => 'btn btn-link']
                 ); ?>
                 <?= \yii\helpers\Html::a(
@@ -54,15 +53,11 @@ use yii\widgets\Pjax;
             <hr>
         <?php endif; ?>
 
-        <?php Pjax::begin() ?>
-
-        <?= $this->render('__gridView', [
+        <?= $this->render('__index', [
             'contentContainer' => $contentContainer,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]) ?>
-
-        <?php Pjax::end() ?>
 
     </div>
 </div>

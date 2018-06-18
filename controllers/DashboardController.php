@@ -24,7 +24,7 @@ class DashboardController extends Controller
         ];
     }
 
-    public function actionIssues()
+    public function actionIssues($list = true)
     {
         $userComponent = \Yii::$app->user;
 
@@ -38,7 +38,7 @@ class DashboardController extends Controller
             'isConstantly' => false,
         ]);
 
-        return $this->render('/issue/show', [
+        return $this->render($list ? '/issue/list' : '/issue/show', [
             'dataProvider' => $searchModel->search(\Yii::$app->request->get()),
             'searchModel' => $searchModel,
             'contentContainer' => $userComponent->getIdentity(),

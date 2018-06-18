@@ -2,7 +2,9 @@
 
 namespace tracker\models;
 
+use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\Content;
+use humhub\modules\content\models\ContentContainer;
 use tracker\enum\IssueStatusEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -17,6 +19,7 @@ use yii\db\Expression;
  */
 class IssueSearch extends Model
 {
+    public $title;
     public $status;
 
     public $startStartedDate;
@@ -25,14 +28,29 @@ class IssueSearch extends Model
     public $document;
 
     /**
+     * Filter by Space
+     *
+     * @var string|null
+     */
+    public $space;
+
+    /**
+     * The filter to return issues by which permanent work is being conducted.
+     * If true will be returned issues which marked by $continuous_use
+     * If false will be returned issues which non marked by $continuous_use
+     *
+     * @var boolean
+     */
+    public $isConstantly = false;
+
+    /**
      * The filter to return issues by which permanent work is being conducted.
      * If true will be returned issues without deadline. $endStartedDate will be set to NULL
      * If false will be returned issues with deadline.
-     * If null then filter by deadline is not applied.
      *
-     * @var null|boolean
+     * @var boolean
      */
-    public $isConstantly;
+    public $onlyWithoutDeadline = false;
 
     /**
      * Returns dataProvider when model is valid only.
@@ -66,6 +84,15 @@ class IssueSearch extends Model
                 'skipOnArray' => true,
             ],
             [
+                'onlyWithoutDeadline',
+                'filter',
+                'filter' => function ($value) {
+                    return $value == true ? true : false;
+                },
+                'skipOnEmpty' => true,
+                'skipOnArray' => true,
+            ],
+            [
                 ['endStartedDate',],
                 'filter',
                 'filter' => function () {
@@ -83,11 +110,13 @@ class IssueSearch extends Model
                     return !$model->isConstantly;
                 },
             ],
-            [['isConstantly',], 'boolean'],
+            [['title', 'document'], 'string', 'max' => 255],
+            [['isConstantly', 'onlyWithoutDeadline'], 'boolean'],
             [['onlyNotFulfilled',], 'in', 'range' => ['0', '1', '2']],
             ['tag', 'in', 'range' => $this->listTags(true), 'allowArray' => true],
             ['startStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['endStartedDate', 'date', 'format' => 'php:Y-m-d'],
+            ['space', 'safe'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList()), 'allowArray' => true],
         ];
     }
@@ -96,8 +125,7 @@ class IssueSearch extends Model
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     * @param null $contentContainer
-     *
+     * @param null|ContentContainerActiveRecord $contentContainer
      * @return ActiveDataProvider
      */
     public function search($params, $contentContainer = null)
@@ -105,6 +133,7 @@ class IssueSearch extends Model
         $tableIssue = Issue::tableName();
         $tableLink = Link::tableName();
         $tableContent = Content::tableName();
+        $tableContentContainer = ContentContainer::tableName();
 
         $query = Issue::find()->readable()
             ->leftJoin(Link::tableName(), "$tableLink.child_id = $tableIssue.id")
@@ -155,10 +184,21 @@ class IssueSearch extends Model
             $query->andWhere(['IN', Tag::tableName() . '.id', $this->tag]);
         }
 
+        if ($this->space) {
+            $query->andWhere(['IN', $tableContentContainer . '.guid', $this->space]);
+        }
+
         if ($this->isConstantly === true) {
-            $query->withoutDeadline();
-        } elseif ($this->isConstantly === false) {
-            $query->withDeadline();
+            $query->constantly();
+            $query->orderBy(['priority' => SORT_DESC]);
+        } else {
+            $query->nonConstantly();
+            if ($this->onlyWithoutDeadline === true) {
+                $query->withoutDeadline();
+                $query->orderBy(['priority' => SORT_DESC]);
+            } else {
+                $query->withDeadline();
+            }
         }
 
         $query->andFilterWhere(['IN', Issue::tableName() . '.status', $this->status]);
@@ -187,6 +227,13 @@ class IssueSearch extends Model
                 Assignee::tableName() . '.finish_mark' => false,
             ]);
         }
+
+        $query->andFilterWhere(['LIKE', Issue::tableName() . '.title', $this->title]);
+        $query->andFilterWhere(['OR',
+                ['LIKE', Document::tableName() . '.name', $this->document],
+                ['LIKE', Document::tableName() . '.number', $this->document]
+            ]
+        );
 
         return $dataProvider;
     }
