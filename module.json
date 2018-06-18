@@ -10,9 +10,9 @@
     "workflow",
     "documents"
   ],
-  "version": "0.1.2dev",
+  "version": "0.1.2",
   "humhub": {
-    "minVersion": "1.2.3"
+    "minVersion": "1.2.7"
   },
   "screenshots": [
     "assets/screen1.jpg",
