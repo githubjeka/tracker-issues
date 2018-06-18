@@ -8,6 +8,7 @@
  * @var \tracker\controllers\requests\IssueRequest $issueForm
  * @var boolean $submitAjax
  */
+
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -78,7 +79,12 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                 ['text' => 'Please select', 'multiple' => true]
             ); ?>
     </div>
+</div>
 
+<div class="row">
+    <div class="col-md-12">
+        <?= $form->field($issueForm, 'constantly')->checkbox() ?>
+    </div>
 </div>
 
 <div class="row">
@@ -176,8 +182,8 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                 data-ui-loader
                 data-action-click="editSubmit"
                 data-action-url="<?= $this->context->contentContainer->createUrl('/' .
-                                                                                 \tracker\Module::getIdentifier() .
-                                                                                 '/issue/edit',
+                    \tracker\Module::getIdentifier() .
+                    '/issue/edit',
                     ['id' => $issueForm->id]) ?>"
             <?php endif; ?>
         >

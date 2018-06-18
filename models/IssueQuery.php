@@ -6,8 +6,8 @@ use humhub\modules\content\components\ActiveQueryContent;
 use humhub\modules\content\models\Content;
 use humhub\modules\space\models\Space;
 use humhub\modules\user\models\User;
-use tracker\enum\IssueStatusEnum;
 use tracker\enum\ContentVisibilityEnum;
+use tracker\enum\IssueStatusEnum;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -18,7 +18,6 @@ class IssueQuery extends ActiveQueryContent
      * Only returns user readable records
      *
      * @param \humhub\modules\user\models\User $user
-     *
      * @return $this
      */
     public function readable($user = null)
@@ -48,7 +47,7 @@ class IssueQuery extends ActiveQueryContent
             $conditionUser = 'cuser.id IS NOT NULL AND (';                                         // user content
             $conditionUser .= '   (content.visibility = 1) OR';                                     // public visible content
             $conditionUser .= '   ((content.visibility = 0 OR content.visibility = 2) AND content.created_by=' . $user->id .
-                              ')';  // private content of user
+                ')';  // private content of user
             if (\Yii::$app->getModule('friendship')->getIsEnabled()) {
                 $this->leftJoin('user_friendship cff', 'cuser.id=cff.user_id AND cff.friend_user_id=:fuid',
                     [':fuid' => $user->id]);
@@ -81,7 +80,7 @@ class IssueQuery extends ActiveQueryContent
             $this->leftJoin('space', 'contentcontainer.pk=space.id AND contentcontainer.class=:spaceClass',
                 [':spaceClass' => Space::className()]);
             $this->andWhere('space.id IS NOT NULL and space.visibility=' . Space::VISIBILITY_ALL .
-                            ' AND content.visibility=1');
+                ' AND content.visibility=1');
         }
 
         return $this;
@@ -93,6 +92,24 @@ class IssueQuery extends ActiveQueryContent
     public function withoutDeadline()
     {
         $this->andWhere('deadline IS NULL');
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function constantly()
+    {
+        $this->andWhere(['continuous_use' => true]);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function nonConstantly()
+    {
+        $this->andWhere(['continuous_use' => false]);
         return $this;
     }
 

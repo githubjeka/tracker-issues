@@ -27,6 +27,7 @@ use Yii;
  * @property Issue|null $parent
  * @property Issue[] $subtasks
  * @property Document[] $documents
+ * @property boolean $continuous_use
  */
 class Issue extends ContentActiveRecord
 {
@@ -50,6 +51,7 @@ class Issue extends ContentActiveRecord
             [['deadline', 'started_at'], 'date', 'format' => 'php:Y-m-d H:i'],
             [['status', 'priority',], 'integer'],
             [['title'], 'string', 'max' => 255],
+            [['continuous_use'], 'boolean'],
         ];
     }
 
@@ -152,5 +154,10 @@ class Issue extends ContentActiveRecord
             'finished_at' => \Yii::t('TrackerIssuesModule.views', 'Finished at'),
             'started_at' => \Yii::t('TrackerIssuesModule.views', 'Started at'),
         ];
+    }
+
+    public function getUrl()
+    {
+        return $this->content->container->createUrl(null, ['contentId' => $this->content->id]);
     }
 }

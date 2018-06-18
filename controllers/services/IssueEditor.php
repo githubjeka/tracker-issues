@@ -29,6 +29,7 @@ class IssueEditor extends IssueService
         $this->requestForm->status = $issue->status;
         $this->requestForm->visibility = $issue->content->visibility;
         $this->requestForm->priority = $issue->priority;
+        $this->requestForm->constantly = $issue->continuous_use;
 
         $assignedUsers = [];
         foreach ($this->issueModel->assignees as $assignee) {
@@ -51,8 +52,10 @@ class IssueEditor extends IssueService
             $this->requestForm->deadlineDate = $formatter->asDate($issue->deadline, 'php:Y-m-d');
         }
 
+        $this->requestForm->notifyAssignors = false;
+
         if (!$this->requestForm->validate()) {
-            throw new \LogicException();
+            throw new \LogicException(json_encode($this->requestForm->getFirstErrors()));
         }
     }
 
@@ -73,6 +76,7 @@ class IssueEditor extends IssueService
         $this->issueModel->description = $this->requestForm->description;
         $this->issueModel->status = $this->requestForm->status;
         $this->issueModel->priority = $this->requestForm->priority;
+        $this->issueModel->continuous_use = $this->requestForm->constantly;
 
         if ($this->requestForm->startedDate && $this->requestForm->startedTime) {
             $this->issueModel->started_at = $this->requestForm->startedDate . ' ' . $this->requestForm->startedTime;

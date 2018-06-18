@@ -24,6 +24,7 @@ class IssueRequest extends \yii\base\Model
     public $visibility = ContentVisibilityEnum::TYPE_PROTECTED;
     public $priority = IssuePriorityEnum::TYPE_NORMAL;
     public $notifyAssignors = true;
+    public $constantly = false;
     public $container;
 
     public function rules()
@@ -31,6 +32,7 @@ class IssueRequest extends \yii\base\Model
         return [
             [['assignedUsers', 'tags'], 'default', 'value' => []],
             ['notifyAssignors', 'default', 'value' => true],
+            ['constantly', 'default', 'value' => false],
             ['status', 'default', 'value' => IssueStatusEnum::TYPE_DRAFT],
             ['visibility', 'default', 'value' => ContentVisibilityEnum::TYPE_PROTECTED],
             ['priority', 'default', 'value' => IssuePriorityEnum::TYPE_NORMAL],
@@ -44,7 +46,7 @@ class IssueRequest extends \yii\base\Model
             ['visibility', 'in', 'range' => array_keys(ContentVisibilityEnum::getList())],
             ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
             ['assignedUsers', 'safe'],
-            ['notifyAssignors', 'boolean'],
+            [['notifyAssignors', 'constantly'], 'boolean'],
         ];
     }
 
@@ -64,6 +66,7 @@ class IssueRequest extends \yii\base\Model
             'priority' => \Yii::t('TrackerIssuesModule.views', 'Priority'),
             'notifyAssignors' => \Yii::t('TrackerIssuesModule.views', 'Notify assignors'),
             'tags' => \Yii::t('TrackerIssuesModule.views', 'Tags'),
+            'constantly' => \Yii::t('TrackerIssuesModule.views', 'Continuous use'),
         ];
     }
 }
