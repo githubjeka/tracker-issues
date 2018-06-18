@@ -26,7 +26,11 @@ class DocumentFileEntity
         $date = \Yii::$app->formatter->asDate($this->document->registered_at);
         $name = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $this->document->name);
 
-        $extensions = FileHelper::getExtensionsByMimeType($this->getMimeType());
+        try {
+            $extensions = FileHelper::getExtensionsByMimeType($this->getMimeType());
+        } catch (\LogicException $e) {
+            $extensions = [];
+        }
         if (isset($extensions[0])) {
             $extension = $extensions[0];
         } else {
@@ -50,6 +54,10 @@ class DocumentFileEntity
 
     public function getMimeType()
     {
-        return FileHelper::getMimeType($this->getPath() . $this->document->file->filename);
+        $fullPathToFile = $this->getPath() . $this->document->file->filename;
+        if (!is_file($fullPathToFile)) {
+            throw new \LogicException();
+        }
+        return FileHelper::getMimeType($fullPathToFile);
     }
 }
