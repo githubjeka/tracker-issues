@@ -15,6 +15,7 @@ use tracker\permissions\AddDocument;
 use tracker\permissions\AddReceiversToDocument;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -69,8 +70,8 @@ class DocumentController extends Controller
      * Displays a single Document model.
      *
      * @param integer $id
-     *
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -84,7 +85,7 @@ class DocumentController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      *
      * @return mixed
-     * @throws NotFoundHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionCreate()
     {
@@ -121,10 +122,22 @@ class DocumentController extends Controller
             }
         }, $document);
 
+        $fullPathToFile = $documentEntity->getPath() . $document->file->filename;
+
+        if (!is_file($fullPathToFile)) {
+            Yii::error('File not founded. Path is' . $fullPathToFile);
+            throw new NotFoundHttpException('Can not find the file');
+        }
+
+        $contentFile = file_get_contents($fullPathToFile);
+        if ($contentFile === false) {
+            Yii::error('File not read. Path is - ' . $fullPathToFile);
+            throw new HttpException(500, 'Can not read the file');
+        }
         return Yii::$app
             ->response
             ->sendContentAsFile(
-                file_get_contents($documentEntity->getPath() . $document->file->filename),
+                $contentFile,
                 $attachmentName,
                 [
                     'inline' => true,
