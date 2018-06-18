@@ -79,7 +79,11 @@ class IssueSearchTest extends \Codeception\Test\Unit
     public function testSearch()
     {
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(4, $dataProvider->getTotalCount());
+        $this->assertEquals(3, $dataProvider->getTotalCount());
+
+        $this->searchModel->onlyWithoutDeadline = 1;
+        $dataProvider = $this->searchModel->search([]);
+        $this->assertEquals(1, $dataProvider->getTotalCount());
     }
 
     public function testValidation()
@@ -107,7 +111,7 @@ class IssueSearchTest extends \Codeception\Test\Unit
 
         $this->searchModel->status = [IssueStatusEnum::TYPE_DRAFT];
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(1, $dataProvider->getTotalCount());
+        $this->assertEquals(0, $dataProvider->getTotalCount());
     }
 
     public function testSearchByStartTime()
@@ -120,7 +124,7 @@ class IssueSearchTest extends \Codeception\Test\Unit
         $this->searchModel->startStartedDate = '2017-01-01';
         $this->searchModel->endStartedDate = null;
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(4, $dataProvider->getTotalCount());
+        $this->assertEquals(3, $dataProvider->getTotalCount());
 
         $this->searchModel->startStartedDate = '2017-01-10';
         $this->searchModel->endStartedDate = null;
@@ -138,24 +142,19 @@ class IssueSearchTest extends \Codeception\Test\Unit
         $this->assertEquals(0, $dataProvider->getTotalCount());
 
         $this->searchModel->startStartedDate = null;
-        $this->searchModel->endStartedDate = '2017-01-05';
-        $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(1, $dataProvider->getTotalCount());
-
-        $this->searchModel->startStartedDate = null;
         $this->searchModel->endStartedDate = '2017-01-20';
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(3, $dataProvider->getTotalCount());
+        $this->assertEquals(2, $dataProvider->getTotalCount());
 
         $this->searchModel->startStartedDate = null;
         $this->searchModel->endStartedDate = '2017-02-01';
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(4, $dataProvider->getTotalCount());
+        $this->assertEquals(3, $dataProvider->getTotalCount());
 
         $this->searchModel->startStartedDate = '2016-12-31';
         $this->searchModel->endStartedDate = '2017-01-11';
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(3, $dataProvider->getTotalCount(), $dataProvider->query->createCommand()->rawSql);
+        $this->assertEquals(2, $dataProvider->getTotalCount(), $dataProvider->query->createCommand()->rawSql);
 
         $this->searchModel->startStartedDate = '2017-01-31';
         $this->searchModel->endStartedDate = '2017-02-28';
@@ -167,7 +166,7 @@ class IssueSearchTest extends \Codeception\Test\Unit
     {
         $this->searchModel->isConstantly = null;
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(4, $dataProvider->getTotalCount());
+        $this->assertEquals(3, $dataProvider->getTotalCount());
 
         $this->searchModel->isConstantly = false;
         $dataProvider = $this->searchModel->search([]);
@@ -175,7 +174,7 @@ class IssueSearchTest extends \Codeception\Test\Unit
 
         $this->searchModel->isConstantly = true;
         $dataProvider = $this->searchModel->search([]);
-        $this->assertEquals(1, $dataProvider->getTotalCount());
+        $this->assertEquals(0, $dataProvider->getTotalCount());
     }
 }
 

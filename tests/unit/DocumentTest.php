@@ -18,6 +18,7 @@ namespace tracker\controllers\services {
 
 namespace tracker\tests\unit {
 
+    use humhub\modules\space\tests\codeception\fixtures\SpaceFixture;
     use humhub\modules\user\models\User;
     use humhub\modules\user\tests\codeception\fixtures\UserFixture;
     use tracker\controllers\services\DocumentCreator;
@@ -41,7 +42,8 @@ namespace tracker\tests\unit {
         {
             $this->tester->haveFixtures([
                 'document' => DocumentFileFixture::class,
-                'space' => \humhub\modules\space\tests\codeception\fixtures\SpaceFixture::class,
+                'space' => SpaceFixture::class,
+                'user' => UserFixture::class,
             ]);
 
             \Yii::$app->user->switchIdentity(User::findOne(['id' => 1]));
@@ -151,8 +153,8 @@ namespace tracker\tests\unit {
                 'registered_at' => strtotime('2017-08-14'),
                 'from' => 'Store',
                 'to' => 'Office',
-                'category' => 'Orders',
-                'type' => 'Email',
+                'category' => 1,
+                'type' => 1,
             ];
 
             $this->tester->dontSeeRecord(Document::class, ['name' => $defaultAttributes['name']]);
@@ -182,8 +184,8 @@ namespace tracker\tests\unit {
                 'registeredAt' => '2017-08-15',
                 'from' => 'Store 2',
                 'to' => 'Office 2',
-                'type' => 'Mail',
-                'category' => 'Store orders',
+                'type' => 2,
+                'category' => 2,
             ];
 
             $this->assertTrue($documentEditor->load($newAttributes, ''));
