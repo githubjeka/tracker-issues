@@ -4,3 +4,4 @@ nbproject
 .gitmodules
 /composer.lock
 /tests/config-local.php
+codecept.phar

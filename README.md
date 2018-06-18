@@ -1,6 +1,7 @@
 #### Issue Tracker integrated to [Humhub](https://github.com/humhub/humhub)
 
 The tracker focused on Enterprise and Private Social Networks.
+
 ![screenshot of one issue](https://cloud.githubusercontent.com/assets/874234/25657653/907516a0-3007-11e7-9430-0956bc2febf2.jpg)
 
 ## Features
@@ -16,6 +17,9 @@ The tracker focused on Enterprise and Private Social Networks.
 - Keep track of incoming and outgoing documents. By them, create issues for your employees.
 
 ### To Install Manual
+
+[![Build Status](https://travis-ci.org/githubjeka/tracker-issues.svg?branch=master)](https://travis-ci.org/githubjeka/tracker-issues)
+
 - upload all files to `protected/modules/tracker/`
 - init module in admin setting and in your spaces
 

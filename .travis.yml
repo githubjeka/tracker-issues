@@ -1,0 +1,41 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+matrix:
+  fast_finish: true
+
+dist: trusty
+
+sudo: required
+
+# cache vendor dirs
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services: mysql
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - echo "extension=ldap.so" >>php --ini | grep "Loaded Configuration" | sed -e "s|.:\s||"``
+
+install:
+  - wget -O humhub.zip "https://www.humhub.org/en/download/start?version=1.2.7&type=zip&ee=0"
+  - unzip -qq -d $HOME humhub.zip
+
+  - cp --recursive $TRAVIS_BUILD_DIR $HOME/humhub-1.2.7/protected/modules/tracker
+  - cd $HOME/humhub-1.2.7/protected/modules/tracker
+
+  - mysql -e 'CREATE DATABASE `humhub_test` CHARACTER SET utf8 COLLATE utf8_general_ci;'
+
+  - php yii_travis.php migrate/up --includeModuleMigrations=1 --interactive=0
+  - php yii_travis.php installer/auto
+  - php yii_travis.php migrate/up -p=migrations --interactive=0
+
+  - wget https://codeception.com/php5/codecept.phar
+
+script:
+  - php codecept.phar run -f -c codecept_travis.yml unit

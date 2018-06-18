@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Test console bootstrap file.
+ * Travis console bootstrap file.
  */
 
 defined('YII_DEBUG') or define('YII_DEBUG', true);
@@ -12,7 +12,7 @@ require(__DIR__ . '/../../vendor/autoload.php');
 require(__DIR__ . '/../../vendor/yiisoft/yii2/Yii.php');
 
 $config = yii\helpers\ArrayHelper::merge(
-    require(__DIR__ . '/tests/config.php'),
+    require(__DIR__ . '/tests/config-travis.php'),
     require(YII_APP_BASE_PATH . '/humhub/config/console.php'),
     (is_readable(YII_APP_BASE_PATH . '/config/dynamic.php')) ? require(YII_APP_BASE_PATH . '/config/dynamic.php') : []
 );
