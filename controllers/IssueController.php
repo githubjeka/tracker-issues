@@ -3,14 +3,17 @@
 namespace tracker\controllers;
 
 use humhub\modules\content\components\ContentContainerController;
+use humhub\modules\user\models\User;
 use tracker\controllers\actions\DashboardStreamAction;
 use tracker\controllers\actions\StreamAction;
 use tracker\controllers\services\IssueCreator;
 use tracker\controllers\services\IssueEditor;
+use tracker\controllers\services\IssueRemindService;
 use tracker\models\Assignee;
 use tracker\models\Issue;
 use tracker\models\IssueSearch;
 use tracker\Module;
+use tracker\permissions\EditIssue;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -90,7 +93,7 @@ class IssueController extends ContentContainerController
                 throw new NotFoundHttpException('Issue not founded.');
             }
 
-            if (!$this->canUserDo(new \tracker\permissions\EditIssue())) {
+            if (!$this->canUserDo(new EditIssue())) {
                 $this->forbidden();
             }
 
@@ -121,7 +124,7 @@ class IssueController extends ContentContainerController
             throw new NotFoundHttpException('Issue not founded.');
         }
 
-        if (!$this->canUserDo(new \tracker\permissions\EditIssue())) {
+        if (!$this->canUserDo(new EditIssue())) {
             $this->forbidden();
         }
 
@@ -134,6 +137,40 @@ class IssueController extends ContentContainerController
         }
 
         return $this->renderAjax('edit', ['issueForm' => $issueEditor->getIssueForm()]);
+    }
+
+    public function actionRemind($id, $user)
+    {
+        $this->forcePostRequest();
+
+        /** @var Issue|null $issueModel */
+        $issueModel = Issue::find()
+            ->contentContainer($this->contentContainer)
+            ->readable()
+            ->where([Issue::tableName() . '.id' => $id,])
+            ->one();
+
+        if ($issueModel === null) {
+            throw new NotFoundHttpException('Issue not founded.');
+        }
+
+        if (!$this->canUserDo(new EditIssue())) {
+            $this->forbidden();
+        }
+
+        $userModel = User::findOne(['guid' => $user]);
+
+        if ($userModel === null) {
+            throw new NotFoundHttpException('User not founded.');
+        }
+
+        /** @var User $originatorModel */
+        $originatorModel = \Yii::$app->user->getIdentity();
+
+        $issueRemind = new IssueRemindService($issueModel, $originatorModel, $userModel);
+        $issueRemind->sendNotify();
+
+        \Yii::$app->response->setStatusCode(204, 'No Content');
     }
 
     public function actionFinishIssue($id)
@@ -149,7 +186,7 @@ class IssueController extends ContentContainerController
             throw new NotFoundHttpException('Issue not founded.');
         }
 
-        if (!$this->canUserDo(new \tracker\permissions\EditIssue())) {
+        if (!$this->canUserDo(new EditIssue())) {
             $this->forbidden();
         }
 
@@ -203,7 +240,6 @@ class IssueController extends ContentContainerController
      * @param $permission
      * @param array $params
      * @param bool $allowCaching
-     *
      * @return bool
      */
     protected function canUserDo($permission, $params = [], $allowCaching = true)

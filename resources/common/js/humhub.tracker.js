@@ -36,6 +36,14 @@ humhub.module('tracker', function (module, require, $) {
         });
     };
 
+    var remindIssue = function (evt) {
+        client.post(evt).then(function () {
+            evt.$trigger.hide();
+        }).catch(function (err) {
+            module.log.error(err, true);
+        });
+    };
+
     var modal = require('ui.modal');
     var getCreateForm = function (event) {
         var value = $('[name="space[]"]').val();
@@ -51,6 +59,7 @@ humhub.module('tracker', function (module, require, $) {
     module.export({
         designateTag: designateTag,
         finishIssue: finishIssue,
-        getCreateForm: getCreateForm
+        getCreateForm: getCreateForm,
+        remindIssue: remindIssue
     });
 });
