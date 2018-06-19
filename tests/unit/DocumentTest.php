@@ -27,6 +27,7 @@ namespace tracker\tests\unit {
     use tracker\enum\IssuePriorityEnum;
     use tracker\enum\IssueStatusEnum;
     use tracker\models\Document;
+    use tracker\models\DocumentFileEntity;
     use tracker\tests\fixtures\DocumentFileFixture;
 
     /**
@@ -189,7 +190,20 @@ namespace tracker\tests\unit {
             ];
 
             $this->assertTrue($documentEditor->load($newAttributes, ''));
+
+            $docFile = $this->make(
+                DocumentFileEntity::class,
+                [
+                    'moveToNewCategory' => function () {
+                        return true;
+                    },
+                    'prepareToMoveCategory' => function () {
+                    },
+                ]);
+
+            $documentEditor->documentFileEntity = $docFile;
             $document = $documentEditor->save();
+
             $this->assertNotFalse($document, json_encode($documentEditor->getDocumentForm()->errors));
             $this->assertEquals($newAttributes['name'], $document->name);
             $this->assertEquals($newAttributes['description'], $document->description);

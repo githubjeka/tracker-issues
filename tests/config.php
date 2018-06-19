@@ -18,11 +18,6 @@ return yii\helpers\ArrayHelper::merge(
                 'enableSession' => false,
                 'loginUrl' => ['/user/auth/login'],
             ],
-            'urlManager' => [
-                'showScriptName' => true,
-                'baseUrl' => 'http://localhost:8080',
-                'hostInfo' => 'http://localhost:8080',
-            ],
             'cache' => [
                 'class' => 'yii\caching\DummyCache',
             ],
@@ -34,6 +29,7 @@ return yii\helpers\ArrayHelper::merge(
             ],
         ],
     ],
-    require(__DIR__ . '/config-local.php')
+    (is_readable(__DIR__ . '/config-local.php')) ?  require(__DIR__ . '/config-local.php') : []
+
 );
 

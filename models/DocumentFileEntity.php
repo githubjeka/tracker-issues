@@ -18,7 +18,7 @@ class DocumentFileEntity
     }
 
     /**
-     * @return string name to dow
+     * @return string name to download
      */
     public function getDownloadName()
     {
@@ -42,14 +42,10 @@ class DocumentFileEntity
 
     public function getPath()
     {
-        /** @var Module $module */
-        $module = \Yii::$app->getModule(Module::getIdentifier());
-        if ($this->document->categoryModel !== null) {
-            $category = $this->document->categoryModel->id;
-        } else {
-            $category = 'no-category';
-        }
-        return $module->documentRootPath . $category . '/' . $this->document->id . '/';
+        $rootPath = $this->getDocumentsRootPath();
+        $categoryPath = $this->getDirByCategory($this->document->categoryModel);
+        $documentPath = $this->document->id;
+        return $rootPath . DIRECTORY_SEPARATOR . $categoryPath . DIRECTORY_SEPARATOR . $documentPath . DIRECTORY_SEPARATOR;
     }
 
     public function getMimeType()
@@ -59,5 +55,64 @@ class DocumentFileEntity
             throw new \LogicException();
         }
         return FileHelper::getMimeType($fullPathToFile);
+    }
+
+    /**
+     * @var string path's to move document files
+     */
+    private $fromPath, $toPath;
+
+    /**
+     * @param null|DocumentCategory $category
+     */
+    public function prepareToMoveCategory(DocumentCategory $category = null)
+    {
+        $this->fromPath = $this->getPath();
+        $this->toPath = $this->getDocumentsRootPath() . DIRECTORY_SEPARATOR .  $this->getDirByCategory($category) . DIRECTORY_SEPARATOR . $this->document->id . '/';
+    }
+
+    /**
+     * @return bool
+     */
+    public function moveToNewCategory()
+    {
+        $fromPath = $this->fromPath;
+        $toPath = $this->toPath;
+
+        if ($toPath === null || $fromPath === null) {
+            return true;
+        }
+
+        try {
+            FileHelper::copyDirectory($fromPath, $toPath);
+        } catch (\yii\base\InvalidParamException $e) {
+            \Yii::error($e->getMessage() . "Copy from $fromPath to $toPath", Module::getIdentifier());
+            return false;
+        }
+
+        try {
+            FileHelper::removeDirectory($fromPath);
+        } catch (\yii\base\ErrorException $e) {
+            \Yii::error($e->getMessage() . "Remove $fromPath", Module::getIdentifier());
+            return false;
+        }
+
+        return true;
+    }
+
+    private function getDirByCategory(DocumentCategory $category = null)
+    {
+        if ($category === null) {
+            return 'no-category';
+        }
+
+        return $category->id;
+    }
+
+    private function getDocumentsRootPath()
+    {
+        /** @var Module $module */
+        $module = \Yii::$app->moduleManager->getModule(Module::getIdentifier());
+        return FileHelper::normalizePath($module->documentRootPath);
     }
 }
