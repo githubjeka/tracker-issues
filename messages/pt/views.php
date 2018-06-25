@@ -76,6 +76,7 @@ return [
     'For you' => '',
     'From' => '',
     'From this time recommended begin to start work' => '',
+    'Grid' => '',
     'Has no direct receivers' => '',
     'Has not deadline' => '',
     'Here you must manage your categories of documents and their text colors. After, you can found theirs in edit form of a document.' => '',

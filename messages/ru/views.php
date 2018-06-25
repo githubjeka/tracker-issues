@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'List' => 'Список',
+    'Grid' => 'Таблица',
     '<strong>Designate</strong> tag to issue' => '<strong>Назначить</strong> номенклатуру к задаче',
     'Add' => 'Добавить',
     'Add Receivers' => 'Добавить получателей',
@@ -81,6 +81,7 @@ return [
     'Has not deadline' => 'Без крайнего срока',
     'Here you must manage your categories of documents and their text colors. After, you can found theirs in edit form of a document.' => 'Здесь вы управляете категориями докуметнов и цветом их текста. Впоследствии, их можно встретить в форме редактирования документа.',
     'Here you must manage your types of documents and their colors. After, you can found theirs in edit form of a document.' => 'Здесь вы управляете типами документов и их цветами. Впоследствии, их можно встретить в форме изменения документа.',
+    'List' => 'Список',
     'More details, please...' => 'Подробнее, пожалуйста...',
     'More filters' => 'Больше фильтров',
     'Must be completed by' => 'Срок до',
