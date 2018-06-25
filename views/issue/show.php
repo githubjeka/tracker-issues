@@ -23,7 +23,7 @@ use yii\widgets\Pjax;
         <?php if (!($contentContainer instanceof \humhub\modules\space\models\Space)) : ?>
             <div class="pull-right">
                 <?= \yii\helpers\Html::a(
-                    Yii::t('TrackerIssuesModule.views', 'List'),,
+                    Yii::t('TrackerIssuesModule.views', 'List'),
                     ['/' . tracker\Module::getIdentifier() . '/dashboard/issues', 'list' => 1],
                     ['class' => 'btn btn-link']
                 ); ?>
