@@ -79,7 +79,7 @@ class DocumentFileEntity
         $fromPath = $this->fromPath;
         $toPath = $this->toPath;
 
-        if ($toPath === null || $fromPath === null) {
+        if ($toPath === null || $fromPath === null || $toPath === $fromPath) {
             return true;
         }
 

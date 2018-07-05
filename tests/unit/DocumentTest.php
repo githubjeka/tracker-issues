@@ -29,6 +29,7 @@ namespace tracker\tests\unit {
     use tracker\models\Document;
     use tracker\models\DocumentFileEntity;
     use tracker\tests\fixtures\DocumentFileFixture;
+    use tracker\tests\fixtures\DocumentFixture;
 
     /**
      * @author Evgeniy Tkachenko <et.coder@gmail.com>
@@ -145,38 +146,30 @@ namespace tracker\tests\unit {
 
         public function testWorkWithEditor()
         {
-            $defaultAttributes = [
-                'name' => 'Document for edit',
-                'number' => '1333-e',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit....',
-                'created_by' => 1,
-                'created_at' => time(),
-                'registered_at' => strtotime('2017-08-14'),
-                'from' => 'Store',
-                'to' => 'Office',
-                'category' => 1,
-                'type' => 1,
-            ];
+            $this->tester->haveFixtures([
+                'documents' => [
+                    'class' => DocumentFixture::class,
+                    'dataFile' => '@tracker/tests/fixtures/data/documents.php'
+                ]
+            ]);
 
-            $this->tester->dontSeeRecord(Document::class, ['name' => $defaultAttributes['name']]);
-            $this->tester->haveRecord(Document::class, $defaultAttributes);
-            $this->tester->seeRecord(Document::class, ['name' => $defaultAttributes['name']]);
+            /** @var Document $defaultDocument */
+            $defaultDocument = $this->tester->grabFixture('documents', 'default');
 
-            $defaultDocument = Document::find()->where(['name' => $defaultAttributes['name']])->one();
             $documentEditor = new DocumentEditor($defaultDocument);
 
             $requestModel = $documentEditor->getDocumentForm();
 
-            $this->assertEquals($defaultAttributes['name'], $requestModel->name);
-            $this->assertEquals($defaultAttributes['description'], $requestModel->description);
-            $this->assertEquals($defaultAttributes['registered_at'],
+            $this->assertEquals($defaultDocument['name'], $requestModel->name);
+            $this->assertEquals($defaultDocument['description'], $requestModel->description);
+            $this->assertEquals($defaultDocument['registered_at'],
                 date_create_from_format('Y-m-d', $requestModel->registeredAt)
                     ->setTime(0, 0)
                     ->format('U'));
-            $this->assertEquals($defaultAttributes['from'], $requestModel->from);
-            $this->assertEquals($defaultAttributes['to'], $requestModel->to);
-            $this->assertEquals($defaultAttributes['type'], $requestModel->type);
-            $this->assertEquals($defaultAttributes['category'], $requestModel->category);
+            $this->assertEquals($defaultDocument['from'], $requestModel->from);
+            $this->assertEquals($defaultDocument['to'], $requestModel->to);
+            $this->assertEquals($defaultDocument['type'], $requestModel->type);
+            $this->assertEquals($defaultDocument['category'], $requestModel->category);
 
             $newAttributes = [
                 'name' => 'Document for edit 2',
