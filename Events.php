@@ -12,7 +12,7 @@ use yii\base\Event;
  *
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class Events extends \yii\base\Object
+class Events extends \yii\base\BaseObject
 {
     public static function onSpaceMenuInit(Event $event)
     {
