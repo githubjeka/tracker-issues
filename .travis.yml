@@ -26,6 +26,9 @@ before_install:
 install:
   - wget -O humhub.zip "https://www.humhub.org/en/download/start?type=zip&ee=0"
   - unzip -qq -d $HOME humhub.zip
+  # rename rename directory humhub-VERSION_NUMBER to humhub
+  # To show debug process without execute used `-n`
+  - rename -n 's/(humhub)-(.*)$/$1/' $HOME/*
   - rename 's/(humhub)-(.*)$/$1/' $HOME/*
 
   - cp --recursive $TRAVIS_BUILD_DIR $HOME/humhub/protected/modules/tracker
