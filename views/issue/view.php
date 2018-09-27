@@ -22,10 +22,7 @@ $formatter = Yii::$app->formatter;
     <div class="row">
         <div class="col-md-8">
             <p data-ui-markdown data-ui-show-more>
-                <?= humhub\widgets\RichText::widget([
-                    'text' => $issue->description,
-                    'record' => $issue,
-                ]) ?>
+                <?= \humhub\modules\content\widgets\richtext\RichText::output($issue->description, ['record' => $issue,]) ?>
             </p>
         </div>
 

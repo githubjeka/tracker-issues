@@ -5,13 +5,13 @@ namespace tracker\controllers\services;
 use humhub\modules\space\models\Space;
 use tracker\models\IssueSearch;
 use tracker\widgets\TagsWidget;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\helpers\Html;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class CalendarContainer extends Object
+class CalendarContainer extends BaseObject
 {
     /** @var IssueSearch */
     private $searchModel;

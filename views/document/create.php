@@ -6,7 +6,7 @@
 $this->title = Yii::t('TrackerIssuesModule.views', 'Create Document');
 ?>
 
-<div class="modal-dialog modal-dialog-normal animated fadeIn">
+<div class="modal-dialog modal-dialog-normal animated fadeIn" data-backdrop="static">
     <div class="modal-content">
 
         <div class="modal-header">

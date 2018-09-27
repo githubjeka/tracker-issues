@@ -42,16 +42,14 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
         'placeholder' => Yii::t('TrackerIssuesModule.views', 'What is to do?'),
     ]); ?>
 
-<?= humhub\widgets\RichtextField::widget([
-    'id' => 'issue_description_' . $issueForm->id,
-    'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
-    'model' => $issueForm,
-    'attribute' => 'description',
-    'label' => true,
-    'options' => [
-        'class' => 'atwho-input form-control humhub-ui-richtext issue-description-textarea',
-    ],
-]); ?>
+<?= $form->field($issueForm, 'description')
+    ->widget(
+        \humhub\modules\content\widgets\richtext\RichTextField::class,
+        [
+            'id' => 'issue_description_' . $issueForm->id,
+            'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
+        ])
+    ->label(true) ?>
 
 <div class="row">
 

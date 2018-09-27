@@ -8,3 +8,5 @@ require_once(__DIR__ . '/../../../vendor/yiisoft/yii2/Yii.php');
 
 Yii::setAlias('@tracker', __DIR__ . '/../');
 Yii::setAlias('@modules', __DIR__ . '/../../../humhub/modules');
+Yii::setAlias('@web-static', '/static');
+Yii::setAlias('@webroot-static', __DIR__ . '/../../../static');

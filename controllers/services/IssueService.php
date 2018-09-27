@@ -4,12 +4,12 @@ namespace tracker\controllers\services;
 
 use tracker\controllers\requests\IssueRequest;
 use tracker\models\Issue;
-use yii\base\Object;
+use yii\base\BaseObject;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class IssueService extends Object
+class IssueService extends BaseObject
 {
     /** @var IssueRequest */
     protected $requestForm;

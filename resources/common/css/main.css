@@ -2,10 +2,6 @@
   padding-left: 0;
 }
 
-.issue-description-textarea {
-  min-height: 200px !important;
-}
-
 .issue-label {
   text-transform: uppercase;
   display: inline-block;
