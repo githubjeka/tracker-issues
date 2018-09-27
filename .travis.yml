@@ -26,9 +26,10 @@ before_install:
 install:
   - wget -O humhub.zip "https://www.humhub.org/en/download/start?type=zip&ee=0"
   - unzip -qq -d $HOME humhub.zip
+  - rename 's/^(humhub)-(\d*)$/$1/' *
 
-  - cp --recursive $TRAVIS_BUILD_DIR $HOME/humhub-1.2.7/protected/modules/tracker
-  - cd $HOME/humhub-*/protected/modules/tracker
+  - cp --recursive $TRAVIS_BUILD_DIR $HOME/humhub/protected/modules/tracker
+  - cd $HOME/humhub/protected/modules/tracker
 
   - mysql -e 'CREATE DATABASE `humhub_test` CHARACTER SET utf8 COLLATE utf8_general_ci;'
 
