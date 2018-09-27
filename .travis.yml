@@ -24,7 +24,7 @@ before_install:
   - echo "extension=ldap.so" >>php --ini | grep "Loaded Configuration" | sed -e "s|.:\s||"``
 
 install:
-  - wget -O humhub.zip "https://www.humhub.org/en/download/start?version=1.2.7&type=zip&ee=0"
+  - wget -O humhub.zip "https://www.humhub.org/en/download/start?type=zip&ee=0"
   - unzip -qq -d $HOME humhub.zip
 
   - cp --recursive $TRAVIS_BUILD_DIR $HOME/humhub-1.2.7/protected/modules/tracker
