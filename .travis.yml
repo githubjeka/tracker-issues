@@ -28,7 +28,7 @@ install:
   - unzip -qq -d $HOME humhub.zip
 
   - cp --recursive $TRAVIS_BUILD_DIR $HOME/humhub-1.2.7/protected/modules/tracker
-  - cd $HOME/humhub-1.2.7/protected/modules/tracker
+  - cd $HOME/humhub-*/protected/modules/tracker
 
   - mysql -e 'CREATE DATABASE `humhub_test` CHARACTER SET utf8 COLLATE utf8_general_ci;'
 
