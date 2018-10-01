@@ -27,6 +27,8 @@ class IssueContent extends \humhub\modules\content\models\Content
     {
         if ($user === null && !\Yii::$app->user->isGuest) {
             $user = \Yii::$app->user->getIdentity();
+        } else if (!$user instanceof User) {
+            $user = User::findOne(['id' => $user]);
         }
 
         $visibility = (int)$this->visibility;
