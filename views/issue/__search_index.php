@@ -28,6 +28,12 @@ $formatter = Yii::$app->formatter;
     )->label(false); ?>
 <?php endif; ?>
 
+<?=
+$form->field($searchModel, 'assignee')
+    ->widget(\humhub\modules\user\widgets\UserPickerField::class, ['placeholder' => '  ',])
+    ->label(Yii::t('TrackerIssuesModule.views', 'Assignee'))
+?>
+
 <?= $form->field($searchModel, 'space')
     ->widget(humhub\modules\space\widgets\SpacePickerField::class)
     ->label(Yii::t('SpaceModule.base', 'Space')) ?>

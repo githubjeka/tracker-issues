@@ -5,6 +5,7 @@ namespace tracker\models;
 use humhub\modules\content\components\ContentContainerActiveRecord;
 use humhub\modules\content\models\Content;
 use humhub\modules\content\models\ContentContainer;
+use humhub\modules\user\models\User;
 use tracker\enum\IssueStatusEnum;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -69,6 +70,13 @@ class IssueSearch extends Model
     public $onlyNotFulfilled;
 
     /**
+     * Guids of assignees
+     *
+     * @var string[]
+     */
+    public $assignee = [];
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -118,6 +126,7 @@ class IssueSearch extends Model
             ['endStartedDate', 'date', 'format' => 'php:Y-m-d'],
             ['space', 'safe'],
             ['status', 'in', 'range' => array_keys(IssueStatusEnum::getList()), 'allowArray' => true],
+            ['assignee', 'each', 'rule' => ['string']],
         ];
     }
 
@@ -229,11 +238,19 @@ class IssueSearch extends Model
         }
 
         $query->andFilterWhere(['LIKE', Issue::tableName() . '.title', $this->title]);
-        $query->andFilterWhere(['OR',
+        $query->andFilterWhere([
+                'OR',
                 ['LIKE', Document::tableName() . '.name', $this->document],
-                ['LIKE', Document::tableName() . '.number', $this->document]
+                ['LIKE', Document::tableName() . '.number', $this->document],
             ]
         );
+
+        if (!empty($this->assignee)) {
+            $query
+                ->leftJoin(['all_assignee' => Assignee::tableName()], "all_assignee.issue_id = $tableIssue.id")
+                ->leftJoin(['user_a' => User::tableName()], 'user_a.id = all_assignee.user_id')
+                ->andWhere(['IN', 'user_a.guid', $this->assignee]);
+        }
 
         return $dataProvider;
     }
