@@ -28,7 +28,7 @@ class Events extends \yii\base\BaseObject
             throw new \LogicException();
         }
 
-        if ($space->isModuleEnabled('tracker-issues') && $space->isMember()) {
+        if ($space->isModuleEnabled('tracker-issues')) {
             $sender->addItem([
                 'label' => \Yii::t('TrackerIssuesModule.base', 'Tracker issues'),
                 'group' => 'modules',
