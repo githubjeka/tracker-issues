@@ -15,20 +15,20 @@ use tracker\enum\ContentVisibilityEnum;
 class IssueContent extends \humhub\modules\content\models\Content
 {
     /**
-     * Checks if user can view this content
-     *
-     * @since 1.1
-     *
+     * Checks if user can view issue and extra items(files, comments ...)
      * @param User $user
-     *
      * @return boolean can view this content
      */
     public function canView($user = null)
     {
-        if ($user === null && !\Yii::$app->user->isGuest) {
+        if (!$user && !\Yii::$app->user->isGuest) {
             $user = \Yii::$app->user->getIdentity();
         } else if (!$user instanceof User) {
             $user = User::findOne(['id' => $user]);
+        }
+
+        if ($user !== null && (int)$this->created_by === (int)$user->id) {
+            return true;
         }
 
         $visibility = (int)$this->visibility;
