@@ -3,20 +3,33 @@
 namespace tracker\widgets;
 
 use tracker\enum\IssuePriorityEnum;
+use yii\helpers\Html;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 class PriorityIssueWidget extends \yii\bootstrap\Widget
 {
+    /**
+     * @var int one of IssuePriorityEnum
+     */
     public $priority;
+
+    /**
+     * For example `btn-block`
+     *
+     * @var string
+     */
+    public $extraCssClass;
 
     public function run()
     {
         $text = IssuePriorityEnum::getLabel($this->priority);
         $class = $this->getCssClass();
-
-        return "<span class=\"issue-label $class\">$text</span>";
+        if (is_string($this->extraCssClass)) {
+            $class .= ' ' . $this->extraCssClass;
+        }
+        return Html::tag('span', $text, ['class' => "issue-label $class"]);
     }
 
     private function getCssClass()

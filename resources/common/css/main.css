@@ -16,19 +16,24 @@
   text-align: center;
 }
 
+.issue-label_full-width {
+  width: 100%;
+  padding: 7px 0;
+}
+
 .issue-priority-urgent {
   background-color: #e30000 !important;
   color: white !important;
 }
 
 .issue-priority-critical {
-  background-color: #ffc8ea !important;
-  color: #7a7a7a !important;
+  background-color: #ff4149 !important;
+  color: white !important;
 }
 
 .issue-priority-serious {
-  background-color: #ffee9c !important;
-  color: #7a7a7a !important;
+  background-color: #ff803b !important;
+  color: white !important;
 }
 
 .issue-priority-normal {

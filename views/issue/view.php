@@ -9,6 +9,7 @@
  */
 
 use humhub\libs\Html;
+use tracker\enum\IssuePriorityEnum;
 use tracker\models\Issue;
 use tracker\widgets\DeadlineIssueWidget;
 use tracker\widgets\StatusIssueWidget;
@@ -21,6 +22,9 @@ $formatter = Yii::$app->formatter;
 
     <div class="row">
         <div class="col-md-8">
+            <?php if ($issue->priority > IssuePriorityEnum::TYPE_NORMAL) : ?>
+                <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority, 'extraCssClass' => 'issue-label_full-width']) ?>
+            <?php endif; ?>
             <p data-ui-markdown data-ui-show-more>
                 <?= \humhub\modules\content\widgets\richtext\RichText::output($issue->description, ['record' => $issue,]) ?>
             </p>
