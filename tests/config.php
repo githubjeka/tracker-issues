@@ -1,7 +1,6 @@
 <?php
 
 return yii\helpers\ArrayHelper::merge(
-    require(__DIR__ . '/../../../humhub/config/common.php'),
     [
         'id' => 'tracker-tests',
         'controllerMap' => [
@@ -30,6 +29,5 @@ return yii\helpers\ArrayHelper::merge(
         ],
     ],
     (is_readable(__DIR__ . '/config-local.php')) ?  require(__DIR__ . '/config-local.php') : []
-
 );
 

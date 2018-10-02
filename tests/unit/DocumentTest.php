@@ -46,6 +46,7 @@ namespace tracker\tests\unit {
                 'document' => DocumentFileFixture::class,
                 'space' => SpaceFixture::class,
                 'user' => UserFixture::class,
+                \tracker\tests\fixtures\AssigneeFixture::class,
             ]);
 
             \Yii::$app->user->switchIdentity(User::findOne(['id' => 1]));

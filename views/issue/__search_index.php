@@ -14,7 +14,7 @@ $formatter = Yii::$app->formatter;
 ?>
 <?php $form = ActiveForm::begin(['method' => 'get']) ?>
 
-<button class="btn btn-link btn-block text-uppercase">
+<button class="btn btn-success btn-block text-uppercase">
     <?= Yii::t('TrackerIssuesModule.views', 'Search') ?>
 </button>
 
@@ -30,8 +30,18 @@ $formatter = Yii::$app->formatter;
 
 <?=
 $form->field($searchModel, 'assignee')
-    ->widget(\humhub\modules\user\widgets\UserPickerField::class, ['placeholder' => '  ',])
+    ->widget(
+        \humhub\modules\user\widgets\UserPickerField::class,
+        ['placeholder' => Yii::t('TrackerIssuesModule.views', 'Assignee'),]
+    )
     ->label(Yii::t('TrackerIssuesModule.views', 'Assignee'))
+?>
+<?= $form->field($searchModel, 'canBeFinished')
+    ->dropDownList([
+        '1' => Yii::t('TrackerIssuesModule.views', 'Finished all assignees'),
+        '0' => Yii::t('TrackerIssuesModule.views', 'Not finished all assignees'),
+    ], ['prompt' => ''])
+    ->label(Yii::t('TrackerIssuesModule.views', 'Readiness'))
 ?>
 
 <?= $form->field($searchModel, 'space')

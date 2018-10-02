@@ -12,4 +12,4 @@ settings:
 modules:
     config:
         Yii2:
-            configFile: tests/config.php
+            configFile: tests/config-codecept.php

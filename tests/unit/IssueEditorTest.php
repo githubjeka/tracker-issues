@@ -27,6 +27,7 @@ class IssueEditorTest extends ServiceTest
         $this->tester->haveFixtures([
             'issues' => \tracker\tests\fixtures\IssueFixture::class,
             'space' => \humhub\modules\space\tests\codeception\fixtures\SpaceFixture::class,
+            \tracker\tests\fixtures\AssigneeFixture::class,
         ]);
 
         $spaceContent = Space::findOne(['id' => 1]);

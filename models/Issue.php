@@ -28,6 +28,7 @@ use Yii;
  * @property Issue[] $subtasks
  * @property Document[] $documents
  * @property boolean $continuous_use
+ * @property boolean $can_be_finished
  */
 class Issue extends ContentActiveRecord
 {
@@ -85,7 +86,7 @@ class Issue extends ContentActiveRecord
      */
     public function getAssignees()
     {
-        return $this->hasMany(Assignee::className(), ['issue_id' => 'id']);
+        return $this->hasMany(Assignee::class, ['issue_id' => 'id']);
     }
 
     /**
@@ -111,8 +112,8 @@ class Issue extends ContentActiveRecord
     public function getContent()
     {
         $tableName = IssueContent::tableName();
-        return $this->hasOne(IssueContent::className(), ['object_id' => 'id'])
-            ->andWhere(["$tableName.object_model" => self::className()]);
+        return $this->hasOne(IssueContent::class, ['object_id' => 'id'])
+            ->andWhere(["$tableName.object_model" => self::class]);
     }
 
     /**

@@ -77,6 +77,13 @@ class IssueSearch extends Model
     public $assignee = [];
 
     /**
+     * True - all assignees marked issue as finished. False - not all of assignees.
+     *
+     * @var null|bool
+     */
+    public $canBeFinished = null;
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -119,7 +126,7 @@ class IssueSearch extends Model
                 },
             ],
             [['title', 'document'], 'string', 'max' => 255],
-            [['isConstantly', 'onlyWithoutDeadline'], 'boolean'],
+            [['isConstantly', 'onlyWithoutDeadline', 'canBeFinished'], 'boolean'],
             [['onlyNotFulfilled',], 'in', 'range' => ['0', '1', '2']],
             ['tag', 'in', 'range' => $this->listTags(true), 'allowArray' => true],
             ['startStartedDate', 'date', 'format' => 'php:Y-m-d'],
@@ -251,6 +258,8 @@ class IssueSearch extends Model
                 ->leftJoin(['user_a' => User::tableName()], 'user_a.id = all_assignee.user_id')
                 ->andWhere(['IN', 'user_a.guid', $this->assignee]);
         }
+
+        $query->andFilterWhere(['can_be_finished' => $this->canBeFinished]);
 
         return $dataProvider;
     }

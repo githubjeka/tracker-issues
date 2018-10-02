@@ -28,6 +28,7 @@ class IssueSearchTest extends \Codeception\Test\Unit
             'issues' => \tracker\tests\fixtures\IssueFixture::class,
             'links' => \tracker\tests\fixtures\LinkFixture::class,
             'space' => \humhub\modules\space\tests\codeception\fixtures\SpaceFixture::class,
+            \tracker\tests\fixtures\AssigneeFixture::class,
         ]);
 
         \Yii::$app->user->switchIdentity(User::findOne(['id' => 1]));

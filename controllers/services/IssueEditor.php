@@ -180,6 +180,8 @@ class IssueEditor extends IssueService
 
         $this->issueModel->fileManager->attach(\Yii::$app->request->post('fileList'));
 
+        (new IssueCanBeFinishedService($this->issueModel))->updateIssue();
+
         $transaction->commit();
         return $this->issueModel;
     }
