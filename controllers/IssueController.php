@@ -124,7 +124,7 @@ class IssueController extends ContentContainerController
             throw new NotFoundHttpException('Issue not founded.');
         }
 
-        if (!$this->canUserDo(new EditIssue())) {
+        if (!$issue->content->canEdit() && !$this->canUserDo(new EditIssue())) {
             $this->forbidden();
         }
 
@@ -217,6 +217,8 @@ class IssueController extends ContentContainerController
         $assignee->finish_mark = 1;
         $assignee->finished_at = date('Y-m-d H:i');
         $assignee->save();
+
+        (new \tracker\controllers\services\IssueCanBeFinishedService($assignee->issue))->updateIssue();
 
         \Yii::$app->response->setStatusCode(204, 'No Content');
     }
