@@ -2,6 +2,7 @@
 
 namespace tracker;
 
+use humhub\modules\content\models\Content;
 use humhub\modules\space\models\Space;
 use humhub\modules\space\widgets\Menu;
 use tracker\models\Issue;
@@ -40,6 +41,34 @@ class Events extends \yii\base\BaseObject
     }
 
     /**
+     * @param Event $event
+     * @return bool|\yii\web\Response
+     */
+    public static function onBeforeSpaceActions(Event $event)
+    {
+        $contentId = \Yii::$app->request->getQueryParam('contentId');
+
+        if ($contentId === null) {
+            return true;
+        }
+
+        if (!Content::find()
+            ->where(['id' => $contentId, 'object_model' => Issue::class])
+            ->exists()) {
+            return true;
+        }
+
+        return \Yii::$app->controller->redirect(
+            [
+                '/' . Module::getIdentifier() . '/stream/index',
+                'contentId' => $contentId,
+                'cguid' => \Yii::$app->request->getQueryParam('cguid'),
+                'sguid' => \Yii::$app->request->getQueryParam('sguid'),
+                'uguid' => \Yii::$app->request->getQueryParam('uguid'),
+            ]);
+    }
+
+    /**
      * NOTE: It's may doesn't worked if other modules uses it too. Issue https://github.com/humhub/humhub/issues/2412
      *
      * @param Event $event
@@ -71,7 +100,7 @@ class Events extends \yii\base\BaseObject
             'url' => ['/tracker-issues/dashboard/issues'],
             'icon' => '<i class="fa fa-tasks"></i>',
             'isActive' => ($module && $module->id === 'tracker-issues' && $controller->id === 'dashboard' &&
-                           $controller->action->id === 'issues'),
+                $controller->action->id === 'issues'),
             'sortOrder' => 300,
         ]);
 

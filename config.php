@@ -25,6 +25,16 @@ return [
             'callback' => [\tracker\Events::class, 'onStreamViewerCreate'],
         ],
         [
+            'class' => \humhub\modules\space\controllers\SpaceController::class,
+            'event' => \humhub\modules\space\controllers\SpaceController::EVENT_BEFORE_ACTION,
+            'callback' => [\tracker\Events::class, 'onBeforeSpaceActions'],
+        ],
+        [
+            'class' => \humhub\modules\user\controllers\ProfileController::class,
+            'event' => \humhub\modules\user\controllers\ProfileController::EVENT_BEFORE_ACTION,
+            'callback' => [\tracker\Events::class, 'onBeforeSpaceActions'],
+        ],
+        [
             'class' => TopMenu::class,
             'event' => TopMenu::EVENT_INIT,
             'callback' => [\tracker\Events::class, 'onTopMenuInit'],
