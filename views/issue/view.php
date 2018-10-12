@@ -10,6 +10,7 @@
 
 use humhub\libs\Html;
 use tracker\enum\IssuePriorityEnum;
+use tracker\enum\IssueStatusEnum;
 use tracker\models\Issue;
 use tracker\widgets\DeadlineIssueWidget;
 use tracker\widgets\StatusIssueWidget;
@@ -22,226 +23,97 @@ $formatter = Yii::$app->formatter;
 
     <div class="row">
         <div class="col-md-8">
-            <?php if ($issue->priority > IssuePriorityEnum::TYPE_NORMAL) : ?>
-                <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority, 'extraCssClass' => 'issue-label_full-width']) ?>
-            <?php endif; ?>
-            <p data-ui-markdown data-ui-show-more>
-                <?= \humhub\modules\content\widgets\richtext\RichText::output($issue->description, ['record' => $issue,]) ?>
-            </p>
+            <div class="issue-description">
+                <?php if ($issue->priority > IssuePriorityEnum::TYPE_NORMAL) : ?>
+                    <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority, 'extraCssClass' => 'issue-label_full-width']) ?>
+                <?php endif; ?>
+                <p data-ui-markdown data-ui-show-more>
+                    <?= \humhub\modules\content\widgets\richtext\RichText::output($issue->description, ['record' => $issue,]) ?>
+                </p>
+            </div>
+
+            <?= $this->render('__issue_assignees', ['issue' => $issue]) ?>
+
         </div>
 
         <div class="col-md-4">
-            <div class="panel panel-info collapse in" id="issue-details-<?= $issue->getUniqueId(); ?>">
+            <div class="panel panel-info">
                 <div class="panel-body">
-                    <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Visibility') ?>">
-                        <span class="label label-default">
-                          <i class="fa fa-dot-circle-o fa-fw" aria-hidden="true"></i>
-                        </span>
-                        <?= \tracker\widgets\VisibilityIssueWidget::widget(['visibilityContent' => $issue->content->visibility]); ?>
-                        <br>
-                        <p style="margin-left: 26px;display: block;">
-                            <small><?= Html::containerLink($issue->content->container); ?></small>
-                        </p>
-                    </div>
-
-                    <hr>
 
                     <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Status') ?>">
                         <span class="label label-default"><i class="fa fa-flag fa-fw" aria-hidden="true"></i></span>
                         <?= StatusIssueWidget::widget(['status' => $issue->status]) ?>
                     </div>
 
+                    <div class="collapse <?= $issue->status == IssueStatusEnum::TYPE_FINISHED ? '' : 'in' ?>"
+                         id="issue-details-<?= $issue->getUniqueId(); ?>">
 
-                    <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Priority') ?>">
+                        <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Priority') ?>">
                         <span class="label label-default"><i class="fa fa-exclamation fa-fw"
                                                              aria-hidden="true"></i></span>
-                        <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority]) ?>
-                    </div>
+                            <?= \tracker\widgets\PriorityIssueWidget::widget(['priority' => $issue->priority]) ?>
+                        </div>
 
-                    <hr>
+                        <hr>
 
-                    <?= \tracker\widgets\ContinuousUseWidget::widget(['show' => $issue->continuous_use]) ?>
+                        <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Visibility') ?>">
+                        <span class="label label-default">
+                          <i class="fa fa-dot-circle-o fa-fw" aria-hidden="true"></i>
+                        </span>
+                            <?= \tracker\widgets\VisibilityIssueWidget::widget(['visibilityContent' => $issue->content->visibility]); ?>
+                            <br>
+                            <p style="margin-left: 26px;display: block;">
+                                <small><?= Html::containerLink($issue->content->container); ?></small>
+                            </p>
+                        </div>
 
-                    <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views',
-                        'From this time recommended begin to start work') ?>">
+                        <hr>
+
+                        <?= \tracker\widgets\ContinuousUseWidget::widget(['show' => $issue->continuous_use]) ?>
+
+                        <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views',
+                            'From this time recommended begin to start work') ?>">
                         <span class="label label-default"><i class="fa fa-calendar-o fa-fw"
                                                              aria-hidden="true"></i></span>
-                        <span class="label label-default">
+                            <span class="label label-default">
                             <?= $formatter->asDatetime($issue->started_at, 'eee d MMMM y, HH:mm') ?>
                         </span>
-                    </div>
+                        </div>
 
-                    <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views',
-                        'Deadline') ?>">
-                        <span class="label label-default"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i></span>
-                        <?= DeadlineIssueWidget::widget(['deadline' => $issue->deadline, 'short' => true]) ?>
-                    </div>
-
-                    <?php if ($issue->finished_at) : ?>
                         <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views',
-                            'Finished at') ?>">
+                            'Deadline') ?>">
+                            <span class="label label-default"><i class="fa fa-clock-o fa-fw"
+                                                                 aria-hidden="true"></i></span>
+                            <?= DeadlineIssueWidget::widget(['deadline' => $issue->deadline, 'short' => true]) ?>
+                        </div>
+
+                        <?php if ($issue->finished_at) : ?>
+                            <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views',
+                                'Finished at') ?>">
                             <span class="label label-default"><i class="fa fa-calendar-check-o fa-fw"
                                                                  aria-hidden="true"></i></span>
-                            <span class="label label-default">
+                                <span class="label label-default">
                              <?= $formatter->asDatetime($issue->finished_at, 'eee d MMMM y, HH:mm') ?>
                             </span>
-                        </div>
-                    <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if (count($issue->personalTags) > 0) : ?>
-                        <hr>
-                        <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Tags') ?>">
-                            <span class="label label-default"><i class="fa fa-tags fa-fw" aria-hidden="true"></i></span>
-                            <?= \tracker\widgets\TagsWidget::widget([
-                                'tagsModels' => $issue->personalTags,
-                                'asLink' => true,
-                            ]) ?>
-                        </div>
+                        <?php if (count($issue->personalTags) > 0) : ?>
+                            <hr>
+                            <div data-toggle="tooltip" title="<?= Yii::t('TrackerIssuesModule.views', 'Tags') ?>">
+                                <span class="label label-default"><i class="fa fa-tags fa-fw"
+                                                                     aria-hidden="true"></i></span>
+                                <?= \tracker\widgets\TagsWidget::widget([
+                                    'tagsModels' => $issue->personalTags,
+                                    'asLink' => true,
+                                ]) ?>
+                            </div>
 
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
 
                 </div>
             </div>
         </div>
     </div>
-
-    <?php if (count($issue->assignees) > 0) : ?>
-        <div class="table-responsive">
-            <table class="table table-condensed">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>
-                        <i class="fa fa-users" aria-hidden="true"></i>
-                        <?= Yii::t('TrackerIssuesModule.views', 'Assignee') ?>
-                    </th>
-                    <th>
-                        <i class="fa fa-calendar-o" aria-hidden="true"></i>
-                        <?= Yii::t('TrackerIssuesModule.views', 'Assigned at') ?>
-                    </th>
-                    <th>
-                        <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
-                        <?= Yii::t('TrackerIssuesModule.views', 'Adopted at') ?>
-                    </th>
-                    <?php if (!$issue->continuous_use) : ?>
-                        <th>
-                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                            <?= Yii::t('TrackerIssuesModule.views', 'Finished at') ?>
-                        </th>
-                    <?php endif; ?>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($issue->assignees as $assigner) : ?>
-                    <tr>
-                        <td>
-                            <img src="<?= $assigner->user->getProfileImage()->getUrl(); ?>"
-                                 class="img-rounded tt img_margin"
-                                 height="24" width="24" alt="24x24" data-src="holder.js/24x24"
-                                 style="width: 24px; height: 24px;">
-                        </td>
-                        <td>
-                            <a href="<?= $assigner->user->getUrl(); ?>">
-                                <small><?= Html::encode($assigner->user->displayName); ?></small>
-                            </a>
-                        </td>
-                        <td>
-                            <span data-toggle="tooltip"
-                                  title="<?= $formatter->asDatetime($assigner->created_at, 'HH:mm, d MMMM yyyy') ?>">
-                                <?= $formatter->asDatetime($assigner->created_at, 'HH:mm, eee. d MMM') ?>
-                            </span>
-                        </td>
-                        <td>
-                            <?php if ($assigner->view_mark) : ?>
-                                <span data-toggle="tooltip"
-                                      title="<?= $formatter->asDatetime($assigner->viewed_at, 'HH:mm, d MMMM yyyy') ?>">
-                                <?= $formatter->asDatetime($assigner->viewed_at, 'HH:mm, eee. d MMM') ?>
-                                </span>
-                            <?php elseif ($assigner->user_id == Yii::$app->user->id) : ?>
-
-                                <?= \humhub\widgets\AjaxButton::widget([
-                                    'label' => Yii::t('TrackerIssuesModule.views', 'Adopted'),
-                                    'ajaxOptions' => [
-                                        'type' => 'POST',
-                                        'success' => new yii\web\JsExpression('function(){humhub.modules.client.reload();}'),
-                                        'url' => $issue->content->container->createUrl(
-                                            '/' . \tracker\Module::getIdentifier() . '/issue/mark-adopted',
-                                            ['id' => $assigner->id,]
-                                        ),
-                                    ],
-                                    'htmlOptions' => [
-                                        'class' => 'btn btn-primary btn-xs btn-block',
-                                    ],
-                                ]);
-                                ?>
-
-                            <?php elseif ($issue->continuous_use && $issue->content->canEdit()) : ?>
-                                <?= Html::button(
-                                    Yii::t('TrackerIssuesModule.views', 'Remind'),
-                                    [
-                                        'class' => 'btn btn-xs btn-default',
-                                        'data-action-click' => 'tracker.remindIssue',
-                                        'data-action-url' => $issue->content->container->createUrl(
-                                            '/' . \tracker\Module::getIdentifier() . '/issue/remind',
-                                            ['id' => $issue->id, 'user' => $assigner->user->getAuthKey(),]
-                                        )
-                                    ]
-                                ) ?>
-                            <?php endif; ?>
-                        </td>
-                        <?php if (!$issue->continuous_use) : ?>
-                            <td>
-                                <?php if ($assigner->finish_mark) : ?>
-                                    <span data-toggle="tooltip"
-                                          title="<?= $formatter->asDatetime($assigner->finished_at, 'HH:mm, d MMMM yyyy') ?>">
-                                <?= $formatter->asDatetime($assigner->finished_at, 'HH:mm, eee. d MMM') ?>
-                                </span>
-                                <?php else: ?>
-
-                                    <?php if ($assigner->user_id == Yii::$app->user->id) : ?>
-                                        <?php if ($assigner->view_mark && !$assigner->finish_mark): ?>
-                                            <?= \humhub\widgets\AjaxButton::widget([
-                                                'label' => Yii::t('TrackerIssuesModule.views', 'Done'),
-                                                'ajaxOptions' => [
-                                                    'type' => 'POST',
-                                                    'success' => new yii\web\JsExpression('function(){humhub.modules.client.reload();}'),
-                                                    'url' => $issue->content->container->createUrl(
-                                                        '/' . \tracker\Module::getIdentifier() . '/issue/mark-done',
-                                                        ['id' => $assigner->id,]
-                                                    ),
-                                                ],
-                                                'htmlOptions' => [
-                                                    'class' => 'btn btn-primary btn-xs btn-block',
-                                                ],
-                                            ]);
-                                            ?>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                        <?php if ($issue->content->canEdit()) : ?>
-                                            <?= Html::button(
-                                                Yii::t('TrackerIssuesModule.views', 'Remind'),
-                                                [
-                                                    'class' => 'btn btn-xs btn-default',
-                                                    'data-action-click' => 'tracker.remindIssue',
-                                                    'data-action-url' => $issue->content->container->createUrl(
-                                                        '/' . \tracker\Module::getIdentifier() . '/issue/remind',
-                                                        ['id' => $issue->id, 'user' => $assigner->user->getAuthKey(),]
-                                                    )
-                                                ]
-                                            ) ?>
-                                        <?php else: ?>
-                                            -
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php endif; ?>
-
 </div>

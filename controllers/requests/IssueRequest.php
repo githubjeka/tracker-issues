@@ -26,6 +26,7 @@ class IssueRequest extends \yii\base\Model
     public $notifyAssignors = true;
     public $constantly = false;
     public $container;
+    public $cancelFinish;
 
     public function rules()
     {
@@ -46,7 +47,7 @@ class IssueRequest extends \yii\base\Model
             ['visibility', 'in', 'range' => array_keys(ContentVisibilityEnum::getList())],
             ['priority', 'in', 'range' => array_keys(IssuePriorityEnum::getList())],
             ['assignedUsers', 'safe'],
-            [['notifyAssignors', 'constantly'], 'boolean'],
+            [['notifyAssignors', 'constantly', 'cancelFinish'], 'boolean'],
         ];
     }
 
@@ -67,6 +68,7 @@ class IssueRequest extends \yii\base\Model
             'notifyAssignors' => \Yii::t('TrackerIssuesModule.views', 'Notify assignors'),
             'tags' => \Yii::t('TrackerIssuesModule.views', 'Tags'),
             'constantly' => \Yii::t('TrackerIssuesModule.views', 'Continuous use'),
+            'cancelFinish' => \Yii::t('TrackerIssuesModule.views', 'Cancel Finish'),
         ];
     }
 }

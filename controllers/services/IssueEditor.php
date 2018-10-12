@@ -74,7 +74,6 @@ class IssueEditor extends IssueService
 
         $this->issueModel->title = $this->requestForm->title;
         $this->issueModel->description = $this->requestForm->description;
-        $this->issueModel->status = $this->requestForm->status;
         $this->issueModel->priority = $this->requestForm->priority;
         $this->issueModel->continuous_use = $this->requestForm->constantly;
 
@@ -88,8 +87,16 @@ class IssueEditor extends IssueService
 
         $this->issueModel->content->visibility = $this->requestForm->visibility;
 
-        if ($this->issueModel->status == IssueStatusEnum::TYPE_FINISHED) {
-            $this->issueModel->finished_at = date('Y-m-d H:i');
+        if ((int)$this->issueModel->status !== (int)$this->requestForm->status) {
+            $this->issueModel->status = $this->requestForm->status;
+            if ((int)$this->issueModel->status === IssueStatusEnum::TYPE_FINISHED) {
+                $this->issueModel->finished_at = date('Y-m-d H:i');
+            } else {
+                $this->issueModel->status = IssueStatusEnum::TYPE_WORK;
+            }
+        } elseif ((int)$this->issueModel->status === IssueStatusEnum::TYPE_FINISHED && $this->requestForm->cancelFinish) {
+            $this->issueModel->finished_at = null;
+            $this->issueModel->status = IssueStatusEnum::TYPE_WORK;
         } else {
             $this->issueModel->status = IssueStatusEnum::TYPE_WORK;
         }
