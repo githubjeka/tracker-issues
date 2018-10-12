@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'Readiness' => 'Готовность',
+    'Cancel Finish' => 'Отменить завершение',
     '<strong>Designate</strong> tag to issue' => '<strong>Прикрепить</strong> ярлык к задаче',
     'Add' => 'Добавить',
     'Add Receivers' => 'Добавить получателей',
@@ -82,6 +82,7 @@ return [
     'Number' => 'Номер',
     'Owner' => 'Владелец',
     'Priority' => 'Приоритет',
+    'Readiness' => 'Готовность',
     'Receiver' => 'Получатель',
     'Receivers' => 'Получатели',
     'Registered at' => 'Зарегистрировано',

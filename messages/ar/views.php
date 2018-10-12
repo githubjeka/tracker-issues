@@ -17,6 +17,7 @@ return [
     'Background Color' => '',
     'Calendar' => '',
     'Can not be deleted while documents exist for this category' => '',
+    'Cancel Finish' => '',
     'Categories of documents' => '',
     'Category' => '',
     'Change file' => '',
