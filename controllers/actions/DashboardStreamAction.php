@@ -3,13 +3,12 @@
 
 namespace tracker\controllers\actions;
 
-use humhub\modules\dashboard\components\actions\DashboardStream;
 use tracker\models\Issue;
 
 /**
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
-class DashboardStreamAction extends DashboardStream
+class DashboardStreamAction extends \humhub\modules\dashboard\components\actions\DashboardStreamAction
 {
     public function setupCriteria()
     {
