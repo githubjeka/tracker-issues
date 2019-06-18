@@ -150,32 +150,6 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
 
     </div>
 
-<div id="post_upload_progress_<?= $issueForm->id ?>" style="display:none;margin:10px 0px;"></div>
-
-<?=
-\humhub\modules\file\widgets\FilePreview::widget([
-    'id' => 'post_upload_preview_' . $issueForm->id,
-    'options' => ['style' => 'margin-top:10px'],
-    'model' => new \tracker\models\Issue,
-    'edit' => true,
-])
-?>
-
-<div class="row">
-    <div class="col-md-12">
-        <?=
-        \humhub\modules\file\widgets\UploadButton::widget([
-            'id' => 'post_upload_' . $issueForm->id,
-            'model' => new \tracker\models\Issue,
-            'dropZone' => '#post_edit_' . $issueForm->id . ':parent',
-            'preview' => '#post_upload_preview_' . $issueForm->id,
-            'progress' => '#post_upload_progress_' . $issueForm->id,
-            'max' => Yii::$app->getModule('content')->maxAttachedFiles,
-        ])
-        ?>
-    </div>
-</div>
-
 <?php endif ?>
 
 <div class="row">
