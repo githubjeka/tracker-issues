@@ -3,6 +3,7 @@
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 
+use tracker\models\Document;
 use tracker\models\Link;
 use tracker\Module;
 use tracker\permissions\AddReceiversToDocument;
@@ -190,6 +191,11 @@ $user = $userClass::findOne($model->created_by);
         </div>
     </div>
 
+    <?php if (!\Yii::$app->user->isGuest && Document::find()
+        ->readable(\Yii::$app->user->identity, true)
+        ->byId($model->id)
+        ->exists()) : ?>
+
     <div class="panel">
         <div class="panel-heading">
             <h1 class="panel-title text-uppercase">
@@ -280,4 +286,6 @@ $user = $userClass::findOne($model->created_by);
             <?php endif; ?>
         </div>
     </div>
+    <?php endif; ?>
+
 </div>
