@@ -78,9 +78,4 @@ class DashboardController extends Controller
             ]),
         ]);
     }
-
-    public function actionFiles()
-    {
-        return $this->render('elfinder');
-    }
 }
