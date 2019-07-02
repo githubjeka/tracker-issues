@@ -9,7 +9,7 @@
  */
 ?>
 
-<div class="modal-dialog modal-dialog-normal animated fadeIn" data-backdrop="static">
+<div class="modal-dialog modal-dialog-large animated fadeIn" data-backdrop="static">
   <div class="modal-content">
 
     <div class="modal-header">

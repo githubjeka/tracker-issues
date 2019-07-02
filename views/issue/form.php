@@ -9,6 +9,7 @@
  * @var boolean $submitAjax
  */
 
+use tracker\models\Issue;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -27,36 +28,103 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
     <?= $form->field($issueForm, 'cancelFinish')->checkbox(); ?>
 <?php else : ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
+
+            <?= $form->field($issueForm, 'title')
+                ->textInput([
+                    'id' => 'itemTask',
+                    'class' => 'form-control input-lg',
+                    'maxlength' => true,
+                    'placeholder' => Yii::t('TrackerIssuesModule.views', 'What is to do?'),
+                ]); ?>
+
+            <?= $form->field($issueForm, 'description')
+                ->widget(
+                    \humhub\modules\content\widgets\richtext\RichTextField::class,
+                    [
+                        'id' => 'issue_description_' . $issueForm->id,
+                        'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
+                    ])
+                ->label(true) ?>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div>
+                        <strong><?= Yii::t('TrackerIssuesModule.views', 'Started Date') ?></strong>
+                        <small class="help-block">
+                            <?= Yii::t('TrackerIssuesModule.views', 'From this time recommended begin to start work'); ?>
+                        </small>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?= $form->field($issueForm, 'constantly')->checkbox() ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <?= $form->field($issueForm, 'startedDate')
+                                ->widget(yii\jui\DatePicker::className(), [
+                                    'dateFormat' => 'php:Y-m-d',
+                                    'clientOptions' => [],
+                                    'options' => [
+                                        'class' => 'form-control',
+                                        'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
+                                    ],
+                                ])->label(false); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <?= $form->field($issueForm, 'startedTime')->input('time')->label(false); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div>
+                        <strong><?= Yii::t('TrackerIssuesModule.views', 'Deadline') ?></strong>
+                        <small class="help-block">
+                            <?= Yii::t('TrackerIssuesModule.views', 'The planned time by which you should end work.'); ?>
+                        </small>
+
+                        <button type="button" class="btn btn-link btn-sm"
+                                onclick="$('#issuerequest-deadlinedate').datepicker('setDate', null);$('#issuerequest-deadlinetime').val('');">
+                            <?= Yii::t('TrackerIssuesModule.views', 'Has not deadline') ?>
+                        </button>
+
+                        <hr>
+                        <div class="form-group">
+                            <?= $form->field($issueForm, 'deadlineDate')
+                                ->widget(yii\jui\DatePicker::className(), [
+                                    'dateFormat' => 'php:Y-m-d',
+                                    'clientOptions' => [],
+                                    'options' => [
+                                        'class' => 'form-control',
+                                        'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
+                                    ],
+                                ])->label(false); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <?= $form->field($issueForm, 'deadlineTime')->input('time')->label(false); ?>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
             <?= $form->field($issueForm, 'visibility')
                 ->dropDownList(\tracker\enum\ContentVisibilityEnum::getList()); ?>
-        </div>
-        <div class="col-md-6">
+
             <?= $form->field($issueForm, 'priority')
                 ->dropDownList(\tracker\enum\IssuePriorityEnum::getList()); ?>
-        </div>
-    </div>
-
-    <?= $form->field($issueForm, 'title')
-        ->textInput([
-            'id' => 'itemTask',
-            'class' => 'form-control',
-            'maxlength' => true,
-            'placeholder' => Yii::t('TrackerIssuesModule.views', 'What is to do?'),
-        ]); ?>
-
-    <?= $form->field($issueForm, 'description')
-        ->widget(
-            \humhub\modules\content\widgets\richtext\RichTextField::class,
-            [
-                'id' => 'issue_description_' . $issueForm->id,
-                'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
-            ])
-        ->label(true) ?>
-
-    <div class="row">
-
-        <div class="col-md-8">
 
             <?php if ($isSpace) : ?>
                 <?= $form->field($issueForm, 'assignedUsers')
@@ -67,6 +135,38 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                         ]
                     ); ?>
             <?php endif; ?>
+
+            <hr>
+
+            <h4><?= Yii::t('AdminModule.base', 'Files') ?></h4>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div id="post_upload_progress_<?= $issueForm->id ?>" style="display:none;margin:10px 0px;"></div>
+                    <?=
+                    \humhub\modules\file\widgets\UploadButton::widget([
+                        'id' => 'post_upload_' . $issueForm->id,
+                        'model' => new Issue,
+                        'dropZone' => '#post_edit_' . $issueForm->id . ':parent',
+                        'preview' => '#post_upload_preview_' . $issueForm->id,
+                        'progress' => '#post_upload_progress_' . $issueForm->id,
+                        'max' => Yii::$app->getModule('content')->maxAttachedFiles,
+                    ])
+                    ?>
+                </div>
+                <div class="col-md-10">
+                    <?=
+                    \humhub\modules\file\widgets\FilePreview::widget([
+                        'id' => 'post_upload_preview_' . $issueForm->id,
+                        'options' => ['style' => 'margin-top:10px'],
+                        'model' => ($issue = Issue::findOne($issueForm->id)) !== null ? $issue : new Issue,
+                        'edit' => true,
+                    ])
+                    ?>
+                </div>
+            </div>
+
+            <hr>
 
             <?= $form->field($issueForm, 'tags')
                 ->dropDownList(
@@ -79,75 +179,8 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                     ),
                     ['text' => 'Please select', 'multiple' => true]
                 ); ?>
+
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <?= $form->field($issueForm, 'constantly')->checkbox() ?>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-
-            <div>
-                <strong><?= Yii::t('TrackerIssuesModule.views', 'Started Date') ?></strong>
-                <small class="help-block">
-                    <?= Yii::t('TrackerIssuesModule.views', 'From this time recommended begin to start work'); ?>
-                </small>
-                <hr>
-
-                <div class="form-group">
-                    <?= $form->field($issueForm, 'startedDate')
-                        ->widget(yii\jui\DatePicker::className(), [
-                            'dateFormat' => 'php:Y-m-d',
-                            'clientOptions' => [],
-                            'options' => [
-                                'class' => 'form-control',
-                                'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
-                            ],
-                        ])->label(false); ?>
-                </div>
-
-                <div class="form-group">
-                    <?= $form->field($issueForm, 'startedTime')->input('time')->label(false); ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div>
-                <strong><?= Yii::t('TrackerIssuesModule.views', 'Deadline') ?></strong>
-                <small class="help-block">
-                    <?= Yii::t('TrackerIssuesModule.views', 'The planned time by which you should end work.'); ?>
-                </small>
-
-                <button type="button" class="btn btn-link btn-sm"
-                        onclick="$('#issuerequest-deadlinedate').datepicker('setDate', null);$('#issuerequest-deadlinetime').val('');">
-                    <?= Yii::t('TrackerIssuesModule.views', 'Has not deadline') ?>
-                </button>
-
-                <hr>
-                <div class="form-group">
-                    <?= $form->field($issueForm, 'deadlineDate')
-                        ->widget(yii\jui\DatePicker::className(), [
-                            'dateFormat' => 'php:Y-m-d',
-                            'clientOptions' => [],
-                            'options' => [
-                                'class' => 'form-control',
-                                'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
-                            ],
-                        ])->label(false); ?>
-                </div>
-
-                <div class="form-group">
-                    <?= $form->field($issueForm, 'deadlineTime')->input('time')->label(false); ?>
-                </div>
-
-            </div>
-        </div>
-
     </div>
 
 <?php endif ?>
@@ -158,7 +191,7 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
             <?= $form->field($issueForm, 'notifyAssignors')->checkbox() ?>
         <?php endif; ?>
 
-        <button type="submit" class="btn btn-block btn-primary btn-sm"
+        <button type="submit" class="btn btn-block btn-primary"
             <?php if ($submitAjax) : ?>
                 data-ui-loader
                 data-action-click="editSubmit"

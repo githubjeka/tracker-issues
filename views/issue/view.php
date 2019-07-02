@@ -19,7 +19,7 @@ tracker\assets\IssueAsset::register($this);
 $formatter = Yii::$app->formatter;
 ?>
 
-<div class="issue" id="issue_<?php echo $issue->id; ?>">
+<div class="issue" id="issue_<?= $issue->id; ?>">
 
     <div class="row">
         <div class="col-md-8">

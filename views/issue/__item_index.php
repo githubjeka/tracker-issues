@@ -27,7 +27,10 @@ $formatter = Yii::$app->formatter;
             <?= StatusIssueWidget::widget(['status' => $issue->status]) ?>
         </div>
         <h5 class="panel-title">
-            <?= Html::a(Html::tag('strong', Html::encode($issue->title)), $issue->content->getUrl()) ?>
+            <?= Html::a(
+                Html::tag('strong', $issue->title ? Html::encode($issue->title) : "#$issue->id"),
+                $issue->content->getUrl()
+            ) ?>
         </h5>
     </div>
     <div class="panel-body">

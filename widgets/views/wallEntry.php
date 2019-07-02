@@ -180,7 +180,9 @@ $parent = $object->getParent()->one();
 
             <div class="stream-entry-addons clearfix">
                 <?php if ($canViewIssue) : ?>
-                    <?= \humhub\modules\content\widgets\WallEntryAddons::widget(['object' => $object]); ?>
+                    <?= \humhub\modules\content\widgets\WallEntryAddons::widget([
+                        'object' => $object,
+                    ]); ?>
                 <?php endif; ?>
             </div>
         </div>
