@@ -71,6 +71,7 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                                     'dateFormat' => 'php:Y-m-d',
                                     'clientOptions' => [],
                                     'options' => [
+                                        'style'=>'position: relative; z-index: 17;',
                                         'class' => 'form-control',
                                         'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
                                     ],
@@ -102,6 +103,7 @@ $isSpace = $this->context->contentContainer instanceof \humhub\modules\space\mod
                                     'dateFormat' => 'php:Y-m-d',
                                     'clientOptions' => [],
                                     'options' => [
+                                        'style'=>'position: relative; z-index: 17;',
                                         'class' => 'form-control',
                                         'placeholder' => Yii::t('TrackerIssuesModule.views', 'Date'),
                                     ],
