@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'Cancel Finish' => 'Отменить завершение',
     '<strong>Designate</strong> tag to issue' => '<strong>Прикрепить</strong> ярлык к задаче',
     'Add' => 'Добавить',
     'Add Receivers' => 'Добавить получателей',
@@ -18,6 +17,7 @@ return [
     'Background Color' => 'Цвет фона',
     'Calendar' => 'Календарь',
     'Can not be deleted while documents exist for this category' => 'Не может быть удалено, пока существуют документы для этой категории',
+    'Cancel Finish' => 'Отменить завершение',
     'Categories of documents' => 'Категории документов',
     'Category' => 'Категория',
     'Change file' => 'Изменить файл',
@@ -57,6 +57,7 @@ return [
     'Finish issue' => 'Завершить задачу',
     'Finished all assignees' => 'Завершено всеми ответственными',
     'Finished at' => 'Закончено в',
+    'For each of members from this Space will be created new issue for familiarization with the document.' => 'Для каждого участника пространства будет создана новая задача для ознакомления с документом.',
     'For each of receivers will be created new issue for familiarization with the document.' => 'Для каждого получателя будет создана новая задача для ознакомления с документом.',
     'For me' => 'Для меня',
     'For you' => 'Для вас',
@@ -93,8 +94,10 @@ return [
     'Select a space in which the new issue will be added. If nothing is selected, the task will be attached to your profile.' => 'Выберите пространство, в которое будет добавлена новая задача. Если ничего не выбрано, то задача будет присоединена к вашему профилю.',
     'Select assignees' => 'Выберите ответственных',
     'Select receivers' => 'Выберите получателей',
+    'Select space' => 'Выберите пространство',
     'Show the file' => 'Посмотреть файл',
     'Showing <b>{begin, number}-{end, number}</b> of <b>{totalCount, number}</b> {totalCount, plural, one{document} other{documents}}.' => 'Показаны <b>{begin, number}-{end, number}</b> из <b>{totalCount, number}</b> {totalCount, plural, one{документа} other{документов}}.',
+    'Space' => 'Пространство',
     'Specification' => 'Спецификация',
     'Started Date' => 'Дата начала',
     'Started Time' => 'Время начала',
@@ -128,4 +131,6 @@ return [
     '{userName} changed the issue {issue} wherever you are assigned.' => '{userName} изменил задачу {issue}, по которой вы ответственны.',
     '{userName} has seen your reminding by the issue {issue}' => '{userName} посмотрел ваше напоминание по задаче {issue}',
     '{userName} reminds you of the issue. {issue}' => '\'{userName} напомнил вам о задаче. {issue}\'',
+    'new first' => 'сначало новые',
+    'old first' => 'сначало старые',
 ];
