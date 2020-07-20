@@ -22,7 +22,7 @@ class IssueCreator extends IssueService
     public function createDraft(ContentContainerActiveRecord $content)
     {
         $issueModel = new Issue();
-        $issueModel->content->muteDefaultSocialActivities = true;
+        $issueModel->silentContentCreation = true;
         $issueModel->content->setContainer($content);
         $issueModel->started_at = date('Y-m-d H:i');
 

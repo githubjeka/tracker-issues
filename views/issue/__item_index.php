@@ -51,11 +51,11 @@ $formatter = Yii::$app->formatter;
         <div>
             <hr>
             <?= \humhub\modules\user\widgets\Image::widget([
-                'user' => $issue->content->user,
+                'user' => $issue->content->createdBy,
                 'link' => true,
                 'width' => 20,
                 'showTooltip' => true,
-                'tooltipText' => Html::encode($issue->content->user->getDisplayName())
+                'tooltipText' => Html::encode($issue->content->createdBy->getDisplayName())
             ]) ?>
             |
             <?php
