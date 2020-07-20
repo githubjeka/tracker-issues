@@ -158,27 +158,29 @@ $user = $userClass::findOne($model->created_by);
                         </thead>
                         <tbody>
                         <?php foreach ($model->receivers as $receiver) : ?>
-                            <tr>
-                                <td>
-                                    <img src="<?= $receiver->user->getProfileImage()->getUrl(); ?>"
-                                         class="img-rounded tt img_margin"
-                                         height="24" width="24" alt="24x24" data-src="holder.js/24x24"
-                                         style="width: 24px; height: 24px;">
-                                </td>
-                                <td>
-                                    <a href="<?= $receiver->user->getUrl(); ?>">
-                                        <small><?= Html::encode($receiver->user->displayName); ?></small>
-                                    </a>
-                                </td>
-                                <td>
-                                    <?= $formatter->asDatetime($receiver->created_at, 'HH:mm, eee. d MMM yyyy') ?>
-                                </td>
-                                <td>
-                                    <?php if ($receiver->view_mark) : ?>
-                                        <?= $formatter->asDatetime($receiver->viewed_at, 'HH:mm, eee. d MMM yyyy') ?>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
+                            <?php if ($receiver->user) : ?>
+                                <tr>
+                                    <td>
+                                        <img src="<?= $receiver->user->getProfileImage()->getUrl(); ?>"
+                                             class="img-rounded tt img_margin"
+                                             height="24" width="24" alt="24x24" data-src="holder.js/24x24"
+                                             style="width: 24px; height: 24px;">
+                                    </td>
+                                    <td>
+                                        <a href="<?= $receiver->user->getUrl(); ?>">
+                                            <small><?= Html::encode($receiver->user->displayName); ?></small>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <?= $formatter->asDatetime($receiver->created_at, 'HH:mm, eee. d MMM yyyy') ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($receiver->view_mark) : ?>
+                                            <?= $formatter->asDatetime($receiver->viewed_at, 'HH:mm, eee. d MMM yyyy') ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
