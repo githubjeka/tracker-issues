@@ -2,6 +2,9 @@
 
 namespace tracker\controllers\services;
 
+use humhub\modules\space\models\Membership;
+use humhub\modules\space\models\Space;
+use humhub\modules\user\models\User;
 use tracker\controllers\requests\DocumentRequest;
 use tracker\enum\ContentVisibilityEnum;
 use tracker\enum\IssuePriorityEnum;
@@ -105,6 +108,13 @@ class DocumentCreator extends \yii\base\Model
         }
 
         try {
+            $this->addReceiversBySpace($documentModel);
+        } catch (\LogicException $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
+        try {
             $this->addFileToDocument($documentModel);
         } catch (\LogicException $e) {
             $transaction->rollBack();
@@ -131,6 +141,30 @@ class DocumentCreator extends \yii\base\Model
     }
 
     /**
+     * @param Document $document
+     * @return bool
+     */
+    public function addReceiversBySpace(Document $document)
+    {
+        if (!$this->requestForm->validate(['space'])) {
+            return false;
+        }
+
+        $space = Space::findOne(['guid' => $this->requestForm->space]);
+        if ($space === null) {
+            return false;
+        }
+        $memberships = Membership::findAll([
+            'group_id' => Space::USERGROUP_MEMBER,
+            'space_id' => $space->id,
+            'status' => Membership::STATUS_MEMBER
+        ]);
+        foreach ($memberships as $membership) {
+            $this->createIssueForUser($membership->user, $document);
+        }
+    }
+
+    /**
      * Public API to add new receivers to the document
      *
      * @param Document $document
@@ -146,64 +180,72 @@ class DocumentCreator extends \yii\base\Model
         $transaction = \Yii::$app->db->beginTransaction();
 
         foreach ($this->requestForm->receivers as $userGuid) {
+            /** @var User $user */
             $user = \humhub\modules\user\models\User::findOne(['guid' => $userGuid]);
 
-            if ($user === null || DocumentReceiver::find()
-                    ->where(['user_id' => $user->id, 'document_id' => $document->id])
-                    ->exists()) {
-                continue;
-            }
-
-            $receiver = new DocumentReceiver();
-            $receiver->user_id = $user->id;
-            $receiver->document_id = $document->id;
-            $receiver->created_at = date('Y-m-d H:i');
-            if (!$receiver->save()) {
+            try {
+                $this->createIssueForUser($user, $document);
+            } catch (\LogicException $exception) {
                 $transaction->rollBack();
-                throw new \LogicException(json_encode($receiver->errors));
+                throw $exception;
             }
-
-            $issueCreator = new IssueCreator();
-            $issueModel = $issueCreator->createDraft($user);
-            $issueModel->content->updateAttributes(['created_by' => $user->id]);
-
-            $issueCreator->load([
-                'title' => $document->name,
-                'description' => $document->description,
-                'visibility' => ContentVisibilityEnum::TYPE_PRIVATE,
-                'status' => IssueStatusEnum::TYPE_WORK,
-                'startedDate' => date('Y-m-d'),
-                'startedTime' => date('H:i'),
-                'deadlineDate' => date('Y-m-d'),
-                'deadlineTime' => '23:59',
-                'priority' => IssuePriorityEnum::TYPE_URGENT,
-            ], '');
-
-            $issueModel = $issueCreator->create();
-            if ($issueModel === false) {
-                $transaction->rollBack();
-                throw new \LogicException(json_encode($issueCreator->getIssueForm()->errors));
-            }
-
-            $link = new DocumentIssue([
-                'document_id' => $document->id,
-                'issue_id' => $issueModel->id,
-            ]);
-
-            if ($link->save() === false) {
-                $transaction->rollBack();
-                throw new \LogicException(json_encode($link->errors));
-            }
-
-            $notification = new DocumentShared();
-            $notification->source = $document;
-            $notification->originator = \Yii::$app->user->identity;
-            $notification->send($user);
         }
 
         $transaction->commit();
 
         return $document;
+    }
+
+    private function createIssueForUser($user, $document)
+    {
+        if ($user === null || DocumentReceiver::find()
+                ->where(['user_id' => $user->id, 'document_id' => $document->id])
+                ->exists()) {
+            return;
+        }
+
+        $receiver = new DocumentReceiver();
+        $receiver->user_id = $user->id;
+        $receiver->document_id = $document->id;
+        $receiver->created_at = date('Y-m-d H:i');
+        if (!$receiver->save()) {
+            throw new \LogicException(json_encode($receiver->errors));
+        }
+
+        $issueCreator = new IssueCreator();
+        $issueModel = $issueCreator->createDraft($user);
+        $issueModel->content->updateAttributes(['created_by' => $user->id]);
+
+        $issueCreator->load([
+            'title' => $document->name,
+            'description' => $document->description,
+            'visibility' => ContentVisibilityEnum::TYPE_PRIVATE,
+            'status' => IssueStatusEnum::TYPE_WORK,
+            'startedDate' => date('Y-m-d'),
+            'startedTime' => date('H:i'),
+            'deadlineDate' => date('Y-m-d'),
+            'deadlineTime' => '23:59',
+            'priority' => IssuePriorityEnum::TYPE_URGENT,
+        ], '');
+
+        $issueModel = $issueCreator->create();
+        if ($issueModel === false) {
+            throw new \LogicException(json_encode($issueCreator->getIssueForm()->errors));
+        }
+
+        $link = new DocumentIssue([
+            'document_id' => $document->id,
+            'issue_id' => $issueModel->id,
+        ]);
+
+        if ($link->save() === false) {
+            throw new \LogicException(json_encode($link->errors));
+        }
+
+        $notification = new DocumentShared();
+        $notification->source = $document;
+        $notification->originator = \Yii::$app->user->identity;
+        $notification->send($user);
     }
 
     /**

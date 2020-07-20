@@ -21,12 +21,14 @@ class DocumentRequest extends \yii\base\Model
     public $category;
     /** @var array of uid users to DocumentReceiver */
     public $receivers = [];
+    public $space;
 
     public function rules()
     {
         return [
-            [['receivers'], 'default', 'value' => []],
+            [['receivers', 'space'], 'default', 'value' => []],
             ['receivers', 'each', 'rule' => ['string']],
+            ['space', 'each', 'rule' => ['string']],
             [['name', 'registeredAt', 'number'], 'required'],
             [['registeredAt',], 'date', 'format' => 'php:Y-m-d'],
             [['category', 'type'], 'safe'],
@@ -49,6 +51,7 @@ class DocumentRequest extends \yii\base\Model
             'category' => \Yii::t('TrackerIssuesModule.views', 'Category'),
             'receivers' => \Yii::t('TrackerIssuesModule.views', 'Receivers'),
             'registeredAt' => \Yii::t('TrackerIssuesModule.views', 'Registered at'),
+            'space' => \Yii::t('TrackerIssuesModule.views', 'Space'),
         ];
     }
 }

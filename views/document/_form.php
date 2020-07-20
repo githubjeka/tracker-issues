@@ -30,6 +30,16 @@ use yii\widgets\ActiveForm;
         )->hint(Yii::t('TrackerIssuesModule.views',
             'For each of receivers will be created new issue for familiarization with the document.')); ?>
 
+    <?= $form->field($documentRequest, 'space')
+        ->widget(\humhub\modules\space\widgets\SpacePickerField::class,
+            [
+                'placeholder' => Yii::t('TrackerIssuesModule.views', 'Select space'),
+                'maxSelection' => 1,
+                'options' => ['autofocus' => false],
+            ]
+        )->hint(Yii::t('TrackerIssuesModule.views',
+            'For each of members from this Space will be created new issue for familiarization with the document.')); ?>
+
     <hr>
 
     <?= $form->field($documentRequest, 'category')
