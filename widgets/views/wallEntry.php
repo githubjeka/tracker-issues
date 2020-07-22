@@ -127,15 +127,16 @@ $parent = $object->getParent()->one();
                 <?php if ($canViewIssue) : ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i></a>
-                        <ul class="dropdown-menu pull-right">
-                            <?= WallEntryControls::widget([
-                                'object' => $object,
-                                'wallEntryWidget' => $wallEntryWidget,
-                            ]); ?>
-                        </ul>
                     </li>
                 <?php endif; ?>
             </ul>
+
+            <?php if ($canViewIssue) : ?>
+                <?= WallEntryControls::widget([
+                    'object' => $object,
+                    'wallEntryWidget' => $wallEntryWidget,
+                ]); ?>
+            <?php endif; ?>
 
             <?=
             UserImage::widget([

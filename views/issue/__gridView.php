@@ -108,11 +108,11 @@ $formatter = Yii::$app->formatter;
             'label' => Yii::t('TrackerIssuesModule.views', 'Owner'),
             'format' => 'html',
             'value' => function (Issue $issue) {
-                return '<a href="' . $issue->content->user->getUrl() . '">
-  <img src="' . $issue->content->user->getProfileImage()->getUrl() . '" class="img-rounded tt img_margin"
+                return '<a href="' . $issue->content->createdBy->getUrl() . '">
+  <img src="' . $issue->content->createdBy->getProfileImage()->getUrl() . '" class="img-rounded tt img_margin"
        height="24" width="24" alt="24x24" data-src="holder.js/24x24"
        style="width: 24px; height: 24px;" data-toggle="tooltip" data-placement="top" title=""
-       data-original-title="' . Html::encode($issue->content->user->getDisplayName()) . '">
+       data-original-title="' . Html::encode($issue->content->createdBy->getDisplayName()) . '">
 </a>';
             },
         ],
