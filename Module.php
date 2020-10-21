@@ -23,6 +23,11 @@ class Module extends ContentContainerModule
     public $id = 'tracker-issues';
 
     public $documentRootPath;
+    
+    /**
+     * @inheritdoc
+     */
+    public $resourcesPath = 'resources';
 
     public function init()
     {
