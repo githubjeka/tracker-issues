@@ -17,8 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Allow others to create new issue on your profile page' => '',
-    'Allow others to edit issue on your profile page' => '',
+    'Allow others to create new issue on your profile page' => 'Позволяет другим создавать новые задачи в вашем профиле',
+    'Allow others to edit issue on your profile page' => 'Позволяет другим изменять задачи в вашем профиле',
     'Allow to view all documents and their all issues, with download files' => 'Позволяет просматривать документы, их задачи и скачивать файлы',
     'Allow to view all documents and their all issues, without access to files' => 'Позволяет просматривать документы, их задачи, без скачивания файлы',
     'View all documents and files' => 'Просмотр всех документов и файлов',

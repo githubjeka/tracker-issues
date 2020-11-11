@@ -2,6 +2,7 @@
 
 return [
     '<strong>Designate</strong> tag to issue' => '',
+    'Accessible to all' => '',
     'Add' => '',
     'Add Receivers' => '',
     'Add Subtask' => '',

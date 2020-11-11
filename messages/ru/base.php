@@ -17,8 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Deleted.' => '',
-    'Not deleted.' => '',
+    'Deleted.' => 'Удалено',
+    'Not deleted.' => 'Не удалено',
     'Issue' => 'Задача',
     'Tracker issues' => 'Список задач',
 ];
