@@ -88,14 +88,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($documentRequest, 'name')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
 
     <div class="form-group">
-        <?= humhub\widgets\RichtextField::widget([
+        <?= \humhub\modules\content\widgets\richtext\RichTextField::widget([
             'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
             'model' => $documentRequest,
             'attribute' => 'description',
             'label' => true,
-            'options' => [
-                'class' => 'atwho-input form-control humhub-ui-richtext issue-description-textarea',
-            ],
         ]); ?>
     </div>
 

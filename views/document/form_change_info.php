@@ -3,13 +3,18 @@
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 
+use humhub\components\View;
+use humhub\modules\content\widgets\richtext\RichTextField;
 use humhub\widgets\ActiveForm;
+use tracker\controllers\requests\DocumentRequest;
+use tracker\models\Document;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 /**
- * @var $this \humhub\components\View
+ * @var $this View
  * @var $actionUrl string
- * @var $requestModel \tracker\controllers\requests\DocumentRequest
+ * @var $requestModel DocumentRequest
  */
 ?>
 <div class="modal-dialog modal-dialog-normal animated fadeIn">
@@ -34,7 +39,7 @@ use yii\helpers\Html;
 
                 <?= $form->field($requestModel, 'category')
                     ->dropDownList(
-                        \yii\helpers\ArrayHelper::map(\tracker\models\Document::categories(), 'id', 'name'),
+                        ArrayHelper::map(Document::categories(), 'id', 'name'),
                         ['prompt' => '-']
                     ); ?>
 
@@ -46,7 +51,7 @@ use yii\helpers\Html;
                     <div class="col-md-6">
                         <div class="form-group">
                             <?= $form->field($requestModel, 'registeredAt')
-                                ->widget(yii\jui\DatePicker::className(), [
+                                ->widget(yii\jui\DatePicker::class, [
                                     'dateFormat' => 'php:Y-m-d',
                                     'clientOptions' => [],
                                     'options' => [
@@ -61,7 +66,7 @@ use yii\helpers\Html;
                 <div>
                     <?= $form->field($requestModel, 'type')
                         ->dropDownList(
-                            \yii\helpers\ArrayHelper::map(\tracker\models\Document::types(), 'id', 'name'),
+                            ArrayHelper::map(Document::types(), 'id', 'name'),
                             ['prompt' => '-']
                         ) ?>
                 </div>
@@ -78,14 +83,11 @@ use yii\helpers\Html;
                 <?= $form->field($requestModel, 'name')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
 
                 <div class="form-group">
-                    <?= humhub\widgets\RichtextField::widget([
+                    <?= RichTextField::widget([
                         'placeholder' => Yii::t('TrackerIssuesModule.views', 'More details, please...'),
                         'model' => $requestModel,
                         'attribute' => 'description',
                         'label' => true,
-                        'options' => [
-                            'class' => 'atwho-input form-control humhub-ui-richtext issue-description-textarea',
-                        ],
                     ]); ?>
                 </div>
 

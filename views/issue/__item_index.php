@@ -4,6 +4,7 @@
  */
 
 use humhub\libs\Html;
+use humhub\modules\content\widgets\richtext\RichText;
 use tracker\widgets\DeadlineIssueWidget;
 use tracker\widgets\PriorityIssueWidget;
 use tracker\widgets\StatusIssueWidget;
@@ -45,7 +46,7 @@ $formatter = Yii::$app->formatter;
                     ['class' => 'mark']
                 ) ?>
             <?php endforeach; ?>
-            <?= \humhub\modules\content\widgets\richtext\RichText::widget(['maxLength' => 150, 'minimal' => true, 'text' => $issue->description,]) ?>
+            <?= RichText::widget(['maxLength' => 150, 'minimal' => true, 'text' => $issue->description,]) ?>
         </div>
         <div>
             <hr>
