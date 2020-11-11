@@ -19,24 +19,7 @@ use tracker\permissions\ViewAllDocuments;
  */
 class StreamAction extends ContentContainerStream
 {
-    public $streamQueryClass = IssueWallStreamQuery::class;
-
-    public function setupFilters()
-    {
-        if (!empty($this->streamQuery->contentId) && \Yii::$app->user->permissionmanager->can(new ViewAllDocuments())) {
-            $tableIssue = Issue::tableName();
-            $documentsIssuesTable = DocumentIssue::tableName();
-            $this->streamQuery
-                ->query()
-                ->leftJoin($documentsIssuesTable, "$documentsIssuesTable.issue_id = $tableIssue.id")
-                ->orWhere(
-                    "$documentsIssuesTable.issue_id IS NOT NULL AND content.id = :id",
-                    [':id' => $this->streamQuery->contentId]
-                );
-        }
-    }
-
-    public function setupCriteria()
+    public function afterApplyFilters()
     {
         if (empty($this->streamQuery->contentId)) {
             $this->streamQuery
@@ -71,6 +54,20 @@ class StreamAction extends ContentContainerStream
                     " OR $tableAssignee.id IS NOT NULL)) ",
                     [':user' => \Yii::$app->user->id]
                 );
+
+            if (\Yii::$app->user->permissionmanager->can(new ViewAllDocuments())) {
+                $tableIssue = Issue::tableName();
+                $documentsIssuesTable = DocumentIssue::tableName();
+                $this->streamQuery
+                    ->query()
+                    ->leftJoin($documentsIssuesTable, "$documentsIssuesTable.issue_id = $tableIssue.id")
+                    ->orWhere(
+                        "$documentsIssuesTable.issue_id IS NOT NULL AND content.id = :id",
+                        [':id' => $this->streamQuery->contentId]
+                    );
+            }
         }
+
+        parent::afterApplyFilters();
     }
 }

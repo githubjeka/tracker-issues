@@ -3,6 +3,7 @@
  * @author Evgeniy Tkachenko <et.coder@gmail.com>
  */
 
+use humhub\modules\content\widgets\richtext\RichText;
 use tracker\models\Document;
 use tracker\models\Link;
 use tracker\Module;
@@ -67,7 +68,7 @@ $user = $userClass::findOne($model->created_by);
                         <legend><?= Html::encode($this->title) ?></legend>
                         <?php if ($model->description) : ?>
                             <blockquote>
-                                <?= \humhub\widgets\RichText::widget([
+                                <?= RichText::widget([
                                     'text' => $model->description,
                                 ]) ?>
                             </blockquote>
