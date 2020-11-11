@@ -24,6 +24,8 @@ class Module extends ContentContainerModule
 
     public $documentRootPath;
 
+    public $resourcesPath = 'resources';
+
     public function init()
     {
         \Yii::setAlias('tracker', __DIR__);
