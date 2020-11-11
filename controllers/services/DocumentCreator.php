@@ -94,6 +94,7 @@ class DocumentCreator extends \yii\base\Model
         $documentModel->type = $this->requestForm->type;
         $documentModel->created_by = \Yii::$app->user->id;
         $documentModel->created_at = time();
+        $documentModel->access_for_all = $this->requestForm->access;
 
         $registeredAtDateObj = \DateTime::createFromFormat('Y-m-d', $this->requestForm->registeredAt);
         if ($registeredAtDateObj === false) {

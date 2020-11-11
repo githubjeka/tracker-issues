@@ -21,6 +21,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($documentRequest, 'file')->fileInput() ?>
 
+    <?= $form->field($documentRequest, 'access')->checkbox(); ?>
+
     <?= $form->field($documentRequest, 'receivers')
         ->widget(\humhub\modules\user\widgets\UserPickerField::class,
             [

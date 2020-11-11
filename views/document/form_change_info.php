@@ -37,6 +37,8 @@ use yii\helpers\Html;
 
                 <?= $form->errorSummary($requestModel); ?>
 
+                <?= $form->field($requestModel, 'access')->checkbox(); ?>
+
                 <?= $form->field($requestModel, 'category')
                     ->dropDownList(
                         ArrayHelper::map(Document::categories(), 'id', 'name'),

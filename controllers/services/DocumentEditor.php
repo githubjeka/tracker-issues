@@ -41,6 +41,7 @@ class DocumentEditor extends \yii\base\Model
         $this->requestForm->to = $this->document->to;
         $this->requestForm->type = $this->document->type;
         $this->requestForm->category = $this->document->category;
+        $this->requestForm->access = $this->document->access_for_all;
     }
 
     /**
@@ -67,6 +68,7 @@ class DocumentEditor extends \yii\base\Model
             'from',
             'to',
             'category',
+            'access',
         ])) {
             return false;
         }
@@ -79,6 +81,7 @@ class DocumentEditor extends \yii\base\Model
         $this->document->to = $this->requestForm->to;
         $this->document->from = $this->requestForm->from;
         $this->document->type = $this->requestForm->type;
+        $this->document->access_for_all = $this->requestForm->access;
 
         $registeredAtDateObj = \DateTime::createFromFormat('Y-m-d', $this->requestForm->registeredAt);
         if ($registeredAtDateObj === false) {

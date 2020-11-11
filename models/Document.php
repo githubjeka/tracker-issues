@@ -22,6 +22,7 @@ use yii\db\ActiveQuery;
  * @property integer $registered_at
  * @property integer $created_at
  * @property string $created_by
+ * @property bool|int $access_for_all
  * @property DocumentReceiver[] $receivers
  * @property Issue[] $issues
  * @property DocumentType|null $typeModel
@@ -39,12 +40,42 @@ class Document extends yii\db\ActiveRecord
     }
 
     /**
+     * Returns List of DocumentType models
+     *
+     * @return DocumentType[]
+     */
+    public static function types()
+    {
+        return DocumentType::findByType(DocumentType::class)->all();
+    }
+
+    /**
+     * Returns List of DocumentCategory models
+     *
+     * @return DocumentCategory[]
+     */
+    public static function categories()
+    {
+        return DocumentCategory::findByType(DocumentCategory::class)->all();
+    }
+
+    /**
+     * @inheritdoc
+     * @return DocumentQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new DocumentQuery(get_called_class());
+    }
+
+    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['name', 'created_by', 'registered_at', 'created_at'], 'required'],
+            ['access_for_all', 'default', 'value' => false],
+            [['name', 'created_by', 'registered_at', 'created_at', 'access_for_all'], 'required'],
             [['registered_at', 'created_at', 'created_by'], 'integer'],
             [['description'], 'string'],
             [['type', 'category'], 'integer'],
@@ -68,6 +99,7 @@ class Document extends yii\db\ActiveRecord
             'type' => Yii::t('TrackerIssuesModule.views', 'Type'),
             'category' => Yii::t('TrackerIssuesModule.views', 'Category'),
             'registered_at' => Yii::t('TrackerIssuesModule.views', 'Registered at'),
+            'access_for_all' => Yii::t('TrackerIssuesModule.views', 'Accessible to all'),
         ];
     }
 
@@ -80,29 +112,11 @@ class Document extends yii\db\ActiveRecord
     }
 
     /**
-     * Returns List of DocumentType models
-     * @return DocumentType[]
-     */
-    public static function types()
-    {
-        return DocumentType::findByType(DocumentType::class)->all();
-    }
-
-    /**
      * @return ActiveQuery
      */
     public function getTypeModel()
     {
         return $this->hasOne(DocumentType::class, ['id' => 'type']);
-    }
-
-    /**
-     * Returns List of DocumentCategory models
-     * @return DocumentCategory[]
-     */
-    public static function categories()
-    {
-        return DocumentCategory::findByType(DocumentCategory::class)->all();
     }
 
     /**
@@ -123,14 +137,5 @@ class Document extends yii\db\ActiveRecord
     public function getFile()
     {
         return $this->hasOne(DocumentFile::class, ['document_id' => 'id'])->andWhere(['is_show' => true]);
-    }
-
-    /**
-     * @inheritdoc
-     * @return DocumentQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new DocumentQuery(get_called_class());
     }
 }

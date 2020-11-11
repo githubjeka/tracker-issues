@@ -248,17 +248,23 @@ class DocumentController extends Controller
      */
     protected function findModelForUser($id, \yii\web\IdentityInterface $user, $andDownload = false)
     {
-        $model = Document::find()->readable($user, $andDownload)->byId($id)->one();
+        $document = Document::find()->byId($id)->one();
 
-        if ($model === null) {
+        if ((bool)$document->access_for_all === true) {
+            return $document;
+        }
 
-            $model = Document::find()->byCreator($user)->byId($id)->one();
+        $document = Document::find()->readable($user, $andDownload)->byId($id)->one();
 
-            if ($model === null) {
+        if ($document === null) {
+
+            $document = Document::find()->byCreator($user)->byId($id)->one();
+
+            if ($document === null) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
         }
 
-        return $model;
+        return $document;
     }
 }

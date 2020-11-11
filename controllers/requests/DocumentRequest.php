@@ -11,6 +11,7 @@ class DocumentRequest extends \yii\base\Model
 {
     public $name;
     public $description;
+    public $access;
     public $from;
     public $registeredAt;
     public $to;
@@ -35,6 +36,7 @@ class DocumentRequest extends \yii\base\Model
             [['name', 'from', 'to', 'number'], 'string', 'max' => 255],
             ['file', 'file', 'skipOnEmpty' => false,],
             ['description', 'string'],
+            ['access', 'boolean'],
         ];
     }
 
@@ -52,6 +54,7 @@ class DocumentRequest extends \yii\base\Model
             'receivers' => \Yii::t('TrackerIssuesModule.views', 'Receivers'),
             'registeredAt' => \Yii::t('TrackerIssuesModule.views', 'Registered at'),
             'space' => \Yii::t('TrackerIssuesModule.views', 'Space'),
+            'access' => \Yii::t('TrackerIssuesModule.views', 'Accessible to all'),
         ];
     }
 }

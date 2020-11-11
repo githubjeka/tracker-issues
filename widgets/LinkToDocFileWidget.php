@@ -12,6 +12,7 @@ use yii\helpers\Url;
 
 class LinkToDocFileWidget extends Widget
 {
+    /** @var Document|null */
     public $document;
     public $icon = '<i class="fa fa-download"></i>';
     public $text;
@@ -24,13 +25,12 @@ class LinkToDocFileWidget extends Widget
             return '';
         }
 
-        if (!Document::find()
+        if (!$this->document->access_for_all && !Document::find()
             ->readable(\Yii::$app->user->identity, true)
             ->byId($this->document->id)
             ->exists()) {
             return \Yii::t('TrackerIssuesModule.views', 'Viewing the file is denied');
         }
-
 
         if (empty($this->text)) {
             $this->text = \Yii::t('TrackerIssuesModule.views', 'Show the file');

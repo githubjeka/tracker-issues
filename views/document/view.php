@@ -91,6 +91,13 @@ $user = $userClass::findOne($model->created_by);
                                     '</mark>',
                             ],
                             [
+                                'label' => Yii::t('TrackerIssuesModule.views', 'Accessible to all'),
+                                'format' => 'raw',
+                                'value' => $model->access_for_all
+                                    ? '<i class="fa fa-check-circle text-bold text-success"></i>'
+                                    : '<i class="fa fa-ban text-bold text-danger"></i>'
+                            ],
+                            [
                                 'attribute' => 'number',
                                 'format' => 'html',
                                 'value' => "<b>{$model->number}</b>",
@@ -195,100 +202,100 @@ $user = $userClass::findOne($model->created_by);
     </div>
 
     <?php if (!\Yii::$app->user->isGuest && Document::find()
-        ->readable(\Yii::$app->user->identity, true)
-        ->byId($model->id)
-        ->exists()) : ?>
+            ->readable(\Yii::$app->user->identity, true)
+            ->byId($model->id)
+            ->exists()) : ?>
 
-    <div class="panel">
-        <div class="panel-heading">
-            <h1 class="panel-title text-uppercase">
+        <div class="panel">
+            <div class="panel-heading">
+                <h1 class="panel-title text-uppercase">
         <span class="fa-stack fa-lg">
           <i class="fa fa-square-o fa-stack-2x"></i>
           <i class="fa fa-tasks fa-stack-1x"></i>
         </span> <?= Yii::t('TrackerIssuesModule.views', 'Tracker issues') ?>:
-            </h1>
-        </div>
+                </h1>
+            </div>
 
-        <div class="panel-body">
-            <?php
-            $issues = $model
-                ->getIssues()
-                ->leftJoin(
-                    Link::tableName(),
-                    \tracker\models\Issue::tableName() . '.id = child_id'
-                )
-                ->andWhere('parent_id IS NULL')
-                ->orderBy([\tracker\models\Issue::tableName() . '.deadline' => SORT_ASC])
-                ->all();
-            ?>
-            <?php if (count($issues) > 0) : ?>
+            <div class="panel-body">
                 <?php
-                function subtaskRender(\tracker\models\Issue $issue, \yii\i18n\Formatter $formatter)
-                {
-                    echo Html::beginTag('li', ['class' => 'size']);
-
-                    echo Html::beginTag('i');
-                    echo Html::beginTag('small');
-                    echo StatusIssueWidget::widget(['status' => $issue->status]);
-                    if (empty($issue->deadline) && $issue->status === \tracker\enum\IssueStatusEnum::TYPE_WORK) {
-                        echo '&nbsp;';
-                        echo Html::beginTag('span', ['class' => 'label label-success']);
-                        echo Yii::t('TrackerIssuesModule.views', 'constantly');
-                        echo Html::endTag('span');
-                    }
-
-                    if ($issue->deadline) {
-                        echo '&nbsp;';
-                        echo Html::beginTag('span', [
-                            'data-toggle' => 'tooltip',
-                            'title' => Yii::t('TrackerIssuesModule.views', 'Deadline')
-                        ]);
-                        echo $formatter->asDate($issue->deadline);
-                        echo Html::endTag('span');
-                    }
-
-                    echo '&nbsp;';
-                    $user = $issue->content->getCreatedBy()->one();
-                    $createrImage = \humhub\modules\user\widgets\Image::widget([
-                            'user' => $user,
-                            'width' => 18,
-                        ]) . '&nbsp;' . $user->displayName;
-                    echo $createrImage;
-                    echo '&nbsp;';
-                    echo Html::endTag('small');
-                    echo Html::endTag('i');
-
-                    if ($issue->getContent()->one()->canView(\Yii::$app->user->identity)) {
-                        echo Html::beginTag('b');
-                        echo Html::a(
-                            $issue->description ? Html::encode($issue->description)
-                                : Yii::t('TrackerIssuesModule.base', 'Issue'),
-                            $issue->content->getUrl(),
-                            ['class' => 'text-info']
-                        );
-                        echo Html::endTag('b');
-                    } else {
-                        echo Html::encode($issue->description);
-                    }
-                    echo Html::beginTag('ul', ['style' => 'list-style: none;']);
-                    foreach ($issue->subtasks as $subtask) {
-                        subtaskRender($subtask, $formatter);
-                    }
-                    echo Html::endTag('ul');
-                    echo Html::endTag('li');
-                }
-
+                $issues = $model
+                    ->getIssues()
+                    ->leftJoin(
+                        Link::tableName(),
+                        \tracker\models\Issue::tableName() . '.id = child_id'
+                    )
+                    ->andWhere('parent_id IS NULL')
+                    ->orderBy([\tracker\models\Issue::tableName() . '.deadline' => SORT_ASC])
+                    ->all();
                 ?>
-                <ol>
-                    <?php foreach ($issues as $i => $issue) : ?>
-                        <?php subtaskRender($issue, $formatter) ?>
-                    <?php endforeach; ?>
-                </ol>
-            <?php else: ?>
-                <?= Yii::t('TrackerIssuesModule.views', 'No open issues...') ?>
-            <?php endif; ?>
+                <?php if (count($issues) > 0) : ?>
+                    <?php
+                    function subtaskRender(\tracker\models\Issue $issue, \yii\i18n\Formatter $formatter)
+                    {
+                        echo Html::beginTag('li', ['class' => 'size']);
+
+                        echo Html::beginTag('i');
+                        echo Html::beginTag('small');
+                        echo StatusIssueWidget::widget(['status' => $issue->status]);
+                        if (empty($issue->deadline) && $issue->status === \tracker\enum\IssueStatusEnum::TYPE_WORK) {
+                            echo '&nbsp;';
+                            echo Html::beginTag('span', ['class' => 'label label-success']);
+                            echo Yii::t('TrackerIssuesModule.views', 'constantly');
+                            echo Html::endTag('span');
+                        }
+
+                        if ($issue->deadline) {
+                            echo '&nbsp;';
+                            echo Html::beginTag('span', [
+                                'data-toggle' => 'tooltip',
+                                'title' => Yii::t('TrackerIssuesModule.views', 'Deadline')
+                            ]);
+                            echo $formatter->asDate($issue->deadline);
+                            echo Html::endTag('span');
+                        }
+
+                        echo '&nbsp;';
+                        $user = $issue->content->getCreatedBy()->one();
+                        $createrImage = \humhub\modules\user\widgets\Image::widget([
+                                'user' => $user,
+                                'width' => 18,
+                            ]) . '&nbsp;' . $user->displayName;
+                        echo $createrImage;
+                        echo '&nbsp;';
+                        echo Html::endTag('small');
+                        echo Html::endTag('i');
+
+                        if ($issue->getContent()->one()->canView(\Yii::$app->user->identity)) {
+                            echo Html::beginTag('b');
+                            echo Html::a(
+                                $issue->description ? Html::encode($issue->description)
+                                    : Yii::t('TrackerIssuesModule.base', 'Issue'),
+                                $issue->content->getUrl(),
+                                ['class' => 'text-info']
+                            );
+                            echo Html::endTag('b');
+                        } else {
+                            echo Html::encode($issue->description);
+                        }
+                        echo Html::beginTag('ul', ['style' => 'list-style: none;']);
+                        foreach ($issue->subtasks as $subtask) {
+                            subtaskRender($subtask, $formatter);
+                        }
+                        echo Html::endTag('ul');
+                        echo Html::endTag('li');
+                    }
+
+                    ?>
+                    <ol>
+                        <?php foreach ($issues as $i => $issue) : ?>
+                            <?php subtaskRender($issue, $formatter) ?>
+                        <?php endforeach; ?>
+                    </ol>
+                <?php else: ?>
+                    <?= Yii::t('TrackerIssuesModule.views', 'No open issues...') ?>
+                <?php endif; ?>
+            </div>
         </div>
-    </div>
     <?php endif; ?>
 
 </div>
