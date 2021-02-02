@@ -23,6 +23,8 @@ class Module extends ContentContainerModule
     public $id = 'tracker-issues';
 
     public $documentRootPath;
+    /** @var bool */
+    public $showOnTopMenu = true;
 
     public $resourcesPath = 'resources';
 
@@ -63,11 +65,6 @@ class Module extends ContentContainerModule
         ];
     }
 
-    public static function getIdentifier()
-    {
-        return 'tracker-issues';
-    }
-
     /**
      * @inheritdoc
      */
@@ -84,5 +81,10 @@ class Module extends ContentContainerModule
     public function getConfigUrl()
     {
         return Url::to(['/' . $this->getIdentifier() . '/config']);
+    }
+
+    public static function getIdentifier()
+    {
+        return 'tracker-issues';
     }
 }

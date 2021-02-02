@@ -92,7 +92,12 @@ class Events extends \yii\base\BaseObject
             return;
         }
 
+        if (\Yii::$app->getModule('tracker-issues')->showOnTopMenu === false) {
+            return;
+        }
+
         $controller = \Yii::$app->controller;
+        /** @var  $module */
         $module = $controller->module;
 
         $event->sender->addItem([
